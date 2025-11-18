@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image-Rendering on Matheus Thurler</title><link>https://matheusthurler.com.br/categories/image-rendering/</link><description>Recent content in Image-Rendering on Matheus Thurler</description><generator>Hugo</generator><language>en-US</language><lastBuildDate>Tue, 16 Jan 2024 22:30:00 +0800</lastBuildDate><atom:link href="https://matheusthurler.com.br/categories/image-rendering/index.xml" rel="self" type="application/rss+xml"/><item><title>Image Rendering Test</title><link>https://matheusthurler.com.br/posts/image-rendering-test/</link><pubDate>Tue, 16 Jan 2024 22:30:00 +0800</pubDate><guid>https://matheusthurler.com.br/posts/image-rendering-test/</guid><description>&lt;h1 id="image-rendering-test"&gt;Image Rendering Test&lt;/h1&gt;
+&lt;p&gt;The Demo comes from &lt;a href="https://www.lightgalleryjs.com/demos/thumbnails/"target="_blank"
+ class="inline-flex items-center gap-1"
+&gt;LightGallery
+ &lt;svg id="external-link" class="h-3 w-3 flex-shrink-0"
+ fill="none"
+ stroke="currentColor"
+ viewBox="0 0 24 24"&gt;&lt;path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/&gt;&lt;/svg&gt;
+&lt;/a&gt;
+All images are from &lt;a href="https://unsplash.com/"target="_blank"
+ class="inline-flex items-center gap-1"
+&gt;Unsplash
+ &lt;svg id="external-link" class="h-3 w-3 flex-shrink-0"
+ fill="none"
+ stroke="currentColor"
+ viewBox="0 0 24 24"&gt;&lt;path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/&gt;&lt;/svg&gt;
+&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id="single-image"&gt;Single Image&lt;/h2&gt;
+&lt;p&gt;
+&lt;figure class="image-figure not-prose my-8" 
+ data-lightbox-enabled="true"
+ data-gallery-type="auto"&gt;
+ &lt;div class="image-container"&gt;
+ &lt;img
+ src="https://matheusthurler.com.br/posts/image-rendering-test/bundle.avif"
+ alt="https://unsplash.com/@danielleone)"
+ title="Photo by - Daniel Leone"
+ 
+ 
+ 
+ 
+ loading="lazy"
+ decoding="async"
+ data-gallery-src="https://matheusthurler.com.br/posts/image-rendering-test/bundle.avif"
+ data-gallery-alt="https://unsplash.com/@danielleone)"
+ data-gallery-title="Photo by - Daniel Leone" /&gt;&lt;/div&gt;
+
+ &lt;figcaption class="image-caption"&gt;
+ Photo by - Daniel Leone
+ &lt;/figcaption&gt;&lt;/figure&gt;&lt;/p&gt;</description></item></channel></rss>

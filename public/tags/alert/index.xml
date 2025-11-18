@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Alert on Matheus Thurler</title><link>https://matheusthurler.com.br/tags/alert/</link><description>Recent content in Alert on Matheus Thurler</description><generator>Hugo</generator><language>en-US</language><lastBuildDate>Sun, 01 Jun 2025 10:00:00 +0800</lastBuildDate><atom:link href="https://matheusthurler.com.br/tags/alert/index.xml" rel="self" type="application/rss+xml"/><item><title>GitHub Style Alert Test 1</title><link>https://matheusthurler.com.br/posts/test-alert/</link><pubDate>Sun, 01 Jun 2025 10:00:00 +0800</pubDate><guid>https://matheusthurler.com.br/posts/test-alert/</guid><description>&lt;h1 id="github-style-alert-testing"&gt;GitHub Style Alert Testing&lt;/h1&gt;
+&lt;p&gt;This article is used to test the new GitHub-style Alert feature and folding functionality.&lt;/p&gt;
+&lt;h2 id="alert-syntax"&gt;Alert Syntax&lt;/h2&gt;
+&lt;h3 id="note-alert"&gt;Note Alert&lt;/h3&gt;
+&lt;div
+ class="alert alert-note my-6 overflow-hidden rounded-lg transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md"
+ style="background-color: color-mix(in srgb, var(--color-note) 10%, transparent);
+ border-left-color: var(--color-note);
+ --hover-bg: color-mix(in srgb, var(--color-note) 15%, transparent);"
+ onmouseover="this.style.backgroundColor = this.style.getPropertyValue('--hover-bg')"
+ onmouseout="this.style.backgroundColor = 'color-mix(in srgb, var(--color-note) 10%, transparent)'"
+ role="alert"
+ aria-labelledby="alert-0-title"&gt;
+ 
+ &lt;div
+ class=" flex items-center justify-between px-6 py-6"
+ &gt;
+ &lt;div class="flex items-center gap-3"&gt;
+ 
+ &lt;h4
+ id="alert-0-title"
+ class="m-0 font-semibold text-foreground/90"&gt;
+ Note
+ &lt;/h4&gt;
+ &lt;/div&gt;
+
+ 
+ 
+ &lt;/div&gt;
+
+ 
+ &lt;div
+ id="alert-0-content"
+ class="alert-content px-6 pb-6"&gt;
+ &lt;div class="prose prose-sm text-foreground/90 max-w-none"&gt;
+ &lt;p&gt;This is a note alert box. Used to display useful information that users should be aware of, even when quickly browsing the content.&lt;/p&gt;</description></item></channel></rss>
