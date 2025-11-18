@@ -358,7 +358,6 @@ markup:
 outputs:
   home: ["HTML", "RSS", "JSON", "WebAppManifest"]
 
-# 自定义输出格式
 outputFormats:
   WebAppManifest:
     mediaType: "application/manifest+json"

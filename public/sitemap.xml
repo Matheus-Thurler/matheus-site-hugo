@@ -1,1 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://matheusthurler.com.br/en/sitemap.xml</loc><lastmod>2025-06-01T10:00:00+08:00</lastmod></sitemap><sitemap><loc>https://matheusthurler.com.br/pt/sitemap.xml</loc></sitemap></sitemapindex>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <sitemap>
+    <loc>http://localhost:1313/en/sitemap.xml</loc>
+    
+      <lastmod>2025-06-01T10:00:00+08:00</lastmod>
+    
+  </sitemap>
+  
+  <sitemap>
+    <loc>http://localhost:1313/pt/sitemap.xml</loc>
+    
+      <lastmod>2024-01-16T23:30:00+08:00</lastmod>
+    
+  </sitemap>
+  
+</sitemapindex>
