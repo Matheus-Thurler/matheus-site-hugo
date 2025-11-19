@@ -8,6 +8,7 @@ theme: "hugo-narrow"
 
 hasCJKLanguage: false
 enableEmoji: true
+timeZone: "America/Sao_Paulo"
 
 permalinks:
   posts: /posts/:slug/
@@ -27,20 +28,7 @@ languages:
     languageCode: pt-BR
     languageName: "Português"
     weight: 2
-  # de:
-  #   languageCode: de-DE
-  #   languageName: "Deutsch"
-  #   weight: 5
-  # es:
-  #   languageCode: es-ES
-  #   languageName: "Español"
-  #   weight: 6
-  # ru:
-  #   languageCode: ru-RU
-  #   languageName: "Русский"
-  #   weight: 7
 
-# 分类法配置
 taxonomies:
   category: categories
   tag: tags
@@ -78,8 +66,6 @@ menus:
     #   params:
     #     icon: rss
 
-
-  # footer menu
   footer:
     - name: About
       pageRef: /about
@@ -123,7 +109,7 @@ menus:
 params:
   # Basic site info with SEO
   description: "A modern, clean, and minimal Hugo theme built with Tailwind CSS 4.0. Support custom themes, dark mode, and responsive design."
-  keywords: ["Hugo", "Blog", "Theme", "Technology", "Programming"]
+  keywords: ["Hugo", "Blog", "Matheus Thurler", "DevOps", "Kubernetes", "Platform Engineer", "Technology", "Programming"]
   defaultAuthor: "Matheus Thurler"
   language: "en-US"
   shortName: "Matheus Thurler"  # PWA
@@ -139,8 +125,9 @@ params:
 
   author:
     name: "Matheus Thurler"
-    title: "A Clean and Minimal Hugo Theme teste"
-    description: "Focused on content and user experience."
+    title: "A personal blog and portfolio site of Matheus Thurler"
+    description: "A personal blog and portfolio site of Matheus Thurler, focused on sharing knowledge about technology, programming, and DevOps."
+
     avatar: "https://media.licdn.com/dms/image/v2/D4D03AQGuIuu9aRhlkw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1724237499593?e=1764806400&v=beta&t=wCTavIQmee0-xtjP4Uta4cmE-QAqIz1xusVpRYqw67I"
     social:
       - name: "GitHub"
@@ -206,16 +193,19 @@ params:
     #   name: "Twitter"
     #   order: 11
 
-
   home:
     recentPostsCount: 5 # Number of recent posts to show on the home page
+    recentYoutubeVideo1: "https://www.youtube.com/embed/Q4nsWELn4mg?si=ClcVQCEJQNdmDRlk"
+    recentYoutubeVideo2: "https://www.youtube.com/embed/E-EvR4fykIc?si=C32uOw_bnrA5nkuN"
+    recentYoutubeVideoLink1: "https://www.youtube.com/watch?v=Q4nsWELn4mg"
+    recentYoutubeVideoLink2: "https://www.youtube.com/embed/E-EvR4fykIc?si=C32uOw_bnrA5nkuN"
 
   # custom partials files should be placed at "~/layouts/_partials/content/" folder.
   home_custom:
     enabled: true
     files:
       - custom_1.html
-      # - custom_2.html
+      - custom_2.html
 
   post:
     showRelated: true           # show related posts
@@ -231,32 +221,21 @@ params:
 
   # comments
   comments:
-    enabled: false
+    enabled: true
     # giscus, disqus, utterances, waline, artalk, twikoo
     system: "giscus"
-
     giscus:
-      repo: "tom2almighty/hugo-narrow-giscus"
-      repoId: "R_kgDOO2gwLg"
-      category: "General"
-      categoryId: "DIC_kwDOO2gwLs4CrEaf"
-      mapping: "pathname"
-      strict: "0"
-      reactionsEnabled: "1"
-      emitMetadata: "0"
-      inputPosition: "bottom"
-      theme: "preferred_color_scheme"
-      lang: "en"
-
-    disqus:
-      shortname: ""
-
-
-    utterances:
-      repo: "" 
-      issueTerm: "pathname"
-      label: "comment"
-      theme: "preferred-color-scheme"
+      repo: "Matheus-Thurler/matheus-site-hugo"           # GitHub repository
+      repoId: "R_kgDOQYHuEQ"                # Repository ID
+      category: "Announcements"  
+      categoryId: "DIC_kwDOQYHuEc4Cx73e"       # Category ID
+      mapping: "pathname"            # Mapping method
+      strict: "0"                    # Strict matching
+      reactionsEnabled: "1"          # Enable reactions
+      emitMetadata: "0"             # Metadata
+      inputPosition: "bottom"        # Input box position
+      theme: "preferred_color_scheme" # Theme
+      lang: "en"                    # Langu
 
 
   analytics:

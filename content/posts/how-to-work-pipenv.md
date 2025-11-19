@@ -1,14 +1,15 @@
 ---
 title: How to Use pipenv
-date: 2024-01-16T23:30:00+08:00
+date: 2024-01-16
 description: "Learn how to use Pipenv to manage Python project dependencies and virtual environments effortlessly. A step-by-step tutorial from installation to advanced usage.."
 cover: https://media-site-matheus-nuxt.s3.amazonaws.com/posts/pipenv/thumb/pipenv.jpeg
 readingTime: "3"
-katex: true
-mermaid: true
-tags: ['Math', 'Mermaid', 'python']
+katex: false
+mermaid: false
+tags: ['python']
+categories: ['python']
 ---
-
+<!-- {{< youtube 0RKpf3rK57I >}} -->
 Python's default package manager, `pip`, is excellent for installing packages. However, when it comes to managing project-specific dependencies and virtual environments, `pip` alone can feel a bit basic. Developers often find themselves juggling `pip` with `virtualenv` (or Python's built-in `venv` module), manually creating environments, activating them via specific scripts, and managing `requirements.txt` files.
 
 This is where **Pipenv** comes to the rescue! Pipenv is the "officially recommended Python packaging tool from Python.org", designed to bring the best of all packaging worlds to the Python developer. It automatically creates and manages a virtual environment for your projects, and it manages your project dependencies in a `Pipfile` and `Pipfile.lock`, offering a more robust and deterministic build process.

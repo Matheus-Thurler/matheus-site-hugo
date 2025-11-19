@@ -4,6 +4,7 @@ date: 2024-01-15T10:00:00+08:00
 cover: '/images/placeholder/1a.jpg'
 summary: "Content Placeholder"
 categories: ["Test"]
+draft: true
 tags: ["markdown", "prose", "style"]
 ---
 

@@ -4,28 +4,27 @@
 */}}
 
 <div class="bg-card border-border rounded-xl border p-6 shadow-sm mb-6">
-  <h2 class="text-foreground text-2xl font-bold mb-4">✨ 特色项目</h2>
+  <h2 class="text-foreground text-2xl font-bold mb-4">🎥 {{ i18n "custom.recentVideos" }}</h2>
   
   <div class="grid gap-4 md:grid-cols-2">
-    <!-- 项目卡片 1 -->
     <div class="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors">
-      <h3 class="text-foreground font-semibold mb-2">项目名称 1</h3>
+      <h3 class="text-foreground font-semibold mb-2">{{ i18n "custom.watch_on_youtube" }}</h3>
       <p class="text-muted-foreground text-sm mb-3">
-        这是一个示例项目的简短描述，用于测试自定义内容功能。
+        </p>
+        <iframe width="360" height="215" src="{{ .Site.Params.home.recentYoutubeVideo1 }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </p>
-      <a href="#" class="text-primary hover:underline text-sm font-medium">
-        了解更多 →
+      <a href="{{ .Site.Params.home.recentYoutubeVideoLink1 }}" target="_blank" class="text-primary hover:underline text-sm font-medium">
+        {{ i18n "custom.watch_video" }}
       </a>
     </div>
-
-    <!-- 项目卡片 2 -->
     <div class="bg-muted/50 rounded-lg p-4 hover:bg-muted transition-colors">
-      <h3 class="text-foreground font-semibold mb-2">项目名称 2</h3>
+      <h3 class="text-foreground font-semibold mb-2">{{ i18n "custom.watch_on_youtube" }}</h3>
       <p class="text-muted-foreground text-sm mb-3">
-        这是另一个示例项目的简短描述，展示多个自定义内容。
+        </p>
+        <iframe width="360" height="215" src="{{ .Site.Params.home.recentYoutubeVideo2 }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
       </p>
-      <a href="#" class="text-primary hover:underline text-sm font-medium">
-        了解更多 →
+      <a href="{{ .Site.Params.home.recentYoutubeVideoLink2 }}" target="_blank" class="text-primary hover:underline text-sm font-medium">
+        {{ i18n "custom.watch_video" }}
       </a>
     </div>
   </div>

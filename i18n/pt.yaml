@@ -211,8 +211,8 @@ toc:
   navigation: "Navegação no índice"
   empty: "Nenhum título neste artigo"
   tip: "Clique para pular para a seção"
-
 # Code block related
+
 code:
   copied: "Copiado"
   selected: "Selecionado"
@@ -220,5 +220,14 @@ code:
   expand: "Expandir"
   clickToExpand: "Clique para expandir e ver mais"
 
+# Custom
+custom:
+  announcement_title: "Curso Roadmap DevOps"
+  announcement_description: "Em breve um curso completo com a trilha de DevOps"
+  recentVideos: "Vídeos Recentes"
+  wacth_on_youtube: "Assista no Youtube"
+  watch_video: "Assistir Vídeo"
+
 # Links
+
 links: "Links"
