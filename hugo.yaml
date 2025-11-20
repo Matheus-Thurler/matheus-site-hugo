@@ -302,10 +302,10 @@ params:
 
 
   analytics:
-    enabled: false
+    enabled: true
     google:
-      enabled: false
-      id: "your-google-analytics-id"
+      enabled: true
+      id: "G-G73F8VFQNC"
 
   # Google AdSense
   googleAdsenseId: "pub-3348120452456400" # Coloque seu ID aqui (ex: pub-1234567890)
