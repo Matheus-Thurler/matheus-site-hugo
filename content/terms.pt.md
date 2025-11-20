@@ -3,6 +3,7 @@ title: "Termos de Uso"
 date: 2024-01-01
 layout: "page"
 url: /terms/
+comments_disabled: true
 ---
 
 **Última atualização: 19 de Novembro de 2025**

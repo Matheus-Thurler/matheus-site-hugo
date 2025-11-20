@@ -3,6 +3,7 @@ title: "Política de Privacidade"
 date: 2024-01-01
 layout: "page"
 url: /privacy/
+comments_disabled: true
 ---
 
 **Última atualização: 19 de Novembro de 2025**
