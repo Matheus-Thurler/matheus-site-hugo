@@ -1,0 +1,11 @@
+{{ if .Site.Params.googleAdsenseId }}
+<div class="my-8 flex justify-center overflow-hidden">
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
+        data-ad-format="fluid" data-ad-client="{{ .Site.Params.googleAdsenseId }}"
+        data-ad-slot='{{ .slot | default "auto" }}'></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <span class="text-xs text-gray-400 mt-1">Advertisement</span>
+</div>
+{{ end }}

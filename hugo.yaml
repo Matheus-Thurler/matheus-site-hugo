@@ -28,6 +28,59 @@ languages:
     languageCode: pt-BR
     languageName: "Português"
     weight: 2
+    menus:
+      main:
+        - name: nav.posts
+          pageRef: /posts
+          weight: 10
+          params:
+            icon: posts
+        - name: nav.categories
+          pageRef: /categories
+          weight: 20
+          params:
+            icon: categories
+        - name: nav.tags
+          pageRef: /tags
+          weight: 30
+          params:
+            icon: tags
+        - name: nav.archives
+          pageRef: /archives
+          weight: 40
+          params:
+            icon: archive
+        - name: nav.about
+          pageRef: /about
+          weight: 50
+          params:
+            icon: about
+      footer:
+        - name: Sobre
+          pageRef: /about
+          weight: 10
+          params:
+            icon: about
+        - name: Contato
+          url: mailto:contato@matheusthurler.com.br
+          weight: 20
+          params:
+            icon: contact
+        - name: Feed RSS
+          url: /index.xml
+          weight: 30
+          params:
+            icon: rss
+        - name: Privacidade
+          pageRef: /privacy
+          weight: 40
+          params:
+            icon: info
+        - name: Termos
+          pageRef: /terms
+          weight: 50
+          params:
+            icon: info
 
 taxonomies:
   category: categories
@@ -82,6 +135,16 @@ menus:
       weight: 30
       params:
         icon: rss
+    - name: Privacy
+      pageRef: /privacy
+      weight: 40
+      params:
+        icon: info
+    - name: Terms
+      pageRef: /terms
+      weight: 50
+      params:
+        icon: info
 
   # footer social link
   # social:
@@ -243,6 +306,9 @@ params:
     google:
       enabled: false
       id: "your-google-analytics-id"
+
+  # Google AdSense
+  googleAdsenseId: "pub-3348120452456400" # Coloque seu ID aqui (ex: pub-1234567890)
 
 
   katex:

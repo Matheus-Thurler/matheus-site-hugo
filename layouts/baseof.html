@@ -30,6 +30,10 @@
         }
       })();
     </script>
+    {{ if .Site.Params.googleAdsenseId }}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ .Site.Params.googleAdsenseId }}"
+     crossorigin="anonymous"></script>
+    {{ end }}
   </head>
 
   <body class="bg-background text-foreground min-h-screen antialiased">
