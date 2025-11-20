@@ -2,6 +2,7 @@
 title: "Terms of Service"
 date: 2024-01-01
 layout: "page"
+url: /terms/
 comments_disabled: true
 ---
 

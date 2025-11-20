@@ -2,7 +2,7 @@
 title: "Termos de Uso"
 date: 2024-01-01
 layout: "page"
-url: /terms/
+url: /pt/terms/
 comments_disabled: true
 ---
 

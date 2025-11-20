@@ -3,6 +3,7 @@ title: "Privacy Policy"
 date: 2024-01-01
 layout: "page"
 comments_disabled: true
+url: /privacy/
 ---
 
 **Last updated: November 19, 2025**

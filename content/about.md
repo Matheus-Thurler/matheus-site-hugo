@@ -15,7 +15,8 @@ layout: "about"
 #     description: "The world's largest code hosting platform. "
   
 
----## About Me
+---
+## About Me
 
 I'm Matheus Thurler, a passionate and experienced professional in the field of technology, with a strong focus on DevOps, cloud computing, and software development. My journey in IT began in 2012, and since then, I've been dedicated to continuous learning and applying best practices to deliver robust and scalable solutions.
 

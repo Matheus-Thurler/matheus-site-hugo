@@ -2,7 +2,7 @@
 title: "Política de Privacidade"
 date: 2024-01-01
 layout: "page"
-url: /privacy/
+url: /pt/privacy/
 comments_disabled: true
 ---
 
