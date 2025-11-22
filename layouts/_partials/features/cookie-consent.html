@@ -1,0 +1,41 @@
+{{/* Cookie Consent Banner */}}
+{{ $msg := "Este site usa cookies para melhorar sua experiência, analisar o tráfego e personalizar anúncios." }}
+{{ $more := "Saiba mais" }}
+{{ $accept := "Aceitar" }}
+
+<div id="cookie-consent"
+    class="fixed bottom-0 left-0 right-0 z-50 hidden p-4 bg-background border-t border-border shadow-lg md:p-6"
+    role="alert">
+    <div class="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 md:flex-row">
+        <div class="text-sm text-muted-foreground text-center md:text-left">
+            <p>
+                {{ i18n "cookie_consent.message" | default $msg }}
+                <a href="/privacy" class="text-primary hover:underline font-medium">{{ i18n "cookie_consent.learn_more"
+                    | default $more }}</a>.
+            </p>
+        </div>
+        <div class="flex gap-3">
+            <button id="cookie-accept"
+                class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition-colors">
+                {{ i18n "cookie_consent.accept" | default $accept }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const cookieConsent = document.getElementById('cookie-consent');
+        const acceptBtn = document.getElementById('cookie-accept');
+        const storageKey = 'cookie-consent-accepted';
+
+        if (!localStorage.getItem(storageKey)) {
+            cookieConsent.classList.remove('hidden');
+        }
+
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem(storageKey, 'true');
+            cookieConsent.classList.add('hidden');
+        });
+    })();
+</script>

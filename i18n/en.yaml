@@ -5,3 +5,9 @@ custom:
   recentVideos: "Recent Videos"
   wacth_on_youtube: "Watch on Youtube"
   watch_video: "Watch Video"
+
+# Cookie Consent
+cookie_consent:
+  message: "This site uses cookies to improve your experience, analyze traffic, and personalize ads."
+  learn_more: "Learn more"
+  accept: "Accept"

@@ -231,3 +231,9 @@ custom:
 # Links
 
 links: "Links"
+
+# Cookie Consent
+cookie_consent:
+  message: "Este site usa cookies para melhorar sua experiência, analisar o tráfego e personalizar anúncios."
+  learn_more: "Saiba mais"
+  accept: "Aceitar"
