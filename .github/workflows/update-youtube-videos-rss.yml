@@ -11,7 +11,7 @@ on:
   # Executar quando houver push na branch main (opcional)
   push:
     branches:
-      - main
+      - master
 
 jobs:
   update-videos:
