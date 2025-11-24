@@ -258,10 +258,6 @@ params:
 
   home:
     recentPostsCount: 5 # Number of recent posts to show on the home page
-    recentYoutubeVideo1: "https://www.youtube.com/embed/BB7wloVn3WE?si=0_o1kSsA93A9u-MP"
-    recentYoutubeVideo2: "https://www.youtube.com/embed/Q4nsWELn4mg?si=ClcVQCEJQNdmDRlk"
-    recentYoutubeVideoLink1: "https://youtu.be/BB7wloVn3WE"
-    recentYoutubeVideoLink2: "https://www.youtube.com/watch?v=Q4nsWELn4mg"
 
   # custom partials files should be placed at "~/layouts/_partials/content/" folder.
   home_custom:

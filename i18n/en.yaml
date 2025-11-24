@@ -5,6 +5,7 @@ custom:
   recentVideos: "Recent Videos"
   wacth_on_youtube: "Watch on Youtube"
   watch_video: "Watch Video"
+  videos_updated: "Last updated"
 
 # Cookie Consent
 cookie_consent:

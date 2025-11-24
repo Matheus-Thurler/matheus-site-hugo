@@ -1,0 +1,55 @@
+name: Update YouTube Videos (RSS)
+
+on:
+  # Executar automaticamente todos os dias às 08:00 UTC (05:00 BRT)
+  schedule:
+    - cron: '0 8 * * *'
+  
+  # Permitir execução manual
+  workflow_dispatch:
+  
+  # Executar quando houver push na branch main (opcional)
+  push:
+    branches:
+      - main
+
+jobs:
+  update-videos:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r scripts/requirements-rss.txt
+      
+      - name: Update YouTube videos via RSS
+        env:
+          # Não precisa de API Key! 🎉
+          # Use seu Channel ID (começa com UC) OU username (@handle)
+          YOUTUBE_CHANNEL_ID: ${{ vars.YOUTUBE_CHANNEL_ID }}
+          MAX_RECENT_VIDEOS: 2
+        run: |
+          python scripts/update-youtube-videos-rss.py
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code data/youtube.json || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push if changed
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/youtube.json
+          git commit -m "🎬 Update recent YouTube videos via RSS [automated]"
+          git push
