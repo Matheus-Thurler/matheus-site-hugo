@@ -25,9 +25,7 @@ Dados: data/youtube.json (atualizado automaticamente)
         <a href="{{ .watch_url }}" target="_blank" class="text-primary hover:underline text-sm font-medium">
           {{ i18n "custom.watch_video" }} →
         </a>
-        <span class="text-xs text-muted-foreground">
-          {{ dateFormat "02 Jan 2006" .published_at }}
-        </span>
+
       </div>
     </div>
     {{ end }}
