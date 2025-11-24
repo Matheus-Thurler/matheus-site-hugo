@@ -1,6 +1,6 @@
 ---
 title: "Goodbye Proxmox? Why I Migrated My Homelab to Apache CloudStack"
-date: 2025-11-23
+date: 2025-11-24
 description: "Discover the technical and career reasons that led me to migrate my Homelab from Proxmox and OpenStack to Apache CloudStack. Learn about my physical topology and how it simulates a real Datacenter environment."
 cover: /images/placeholder/cloudstack-logo.png
 readingTime: "10"

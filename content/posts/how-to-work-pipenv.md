@@ -6,6 +6,7 @@ cover: https://media-site-matheus-nuxt.s3.amazonaws.com/posts/pipenv/thumb/pipen
 readingTime: "3"
 katex: false
 mermaid: false
+draft: true
 tags: ['python']
 categories: ['python']
 ---

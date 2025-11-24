@@ -5,6 +5,7 @@ description: "Learn how to use Pipenv to manage Python project dependencies and 
 cover: https://media-site-matheus-nuxt.s3.amazonaws.com/posts/pipenv/thumb/pipenv.jpeg
 readingTime: "3"
 katex: false
+draft: true
 mermaid: false
 tags: ['python']
 ---
