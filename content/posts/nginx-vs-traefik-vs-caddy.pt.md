@@ -85,7 +85,7 @@ O **Caddy** é o servidor web que visa ser o mais fácil de usar. Seu lema é "H
 ## Veredito: Qual você deve escolher?
 
 *   **Escolha Nginx se:** Você precisa de performance bruta, cache avançado ou está trabalhando em um ambiente tradicional não containerizado.
-*   **Escolha Traefik se:** Você roda um **Homelab com Docker** ou Kubernetes. O recurso de auto-descoberta é um divisor de águas para microsserviços.
+*   **Escolha Traefik se:** Você roda um **ambiente de Produção com Docker** ou Kubernetes. O recurso de auto-descoberta é um divisor de águas para arquiteturas de microsserviços dinâmicas.
 *   **Escolha Caddy se:** Você quer o setup mais simples possível. É perfeito para sites pessoais, proxies simples e colocar HTTPS para rodar em segundos.
 
 No meu Homelab pessoal, embora tenha experimentado todos, atualmente uso o **Nginx** configurado como **API Gateway**.

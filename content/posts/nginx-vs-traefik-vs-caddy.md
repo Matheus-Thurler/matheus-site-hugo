@@ -85,7 +85,7 @@ In this post, we will compare these three giants to help you decide which one is
 ## Verdict: Which one should you choose?
 
 *   **Choose Nginx if:** You need raw performance, advanced caching, or are working in a traditional non-containerized environment.
-*   **Choose Traefik if:** You run a **Homelab with Docker** or Kubernetes. The auto-discovery feature is a game-changer for microservices.
+*   **Choose Traefik if:** You run a **Production environment with Docker** or Kubernetes. The auto-discovery feature is a game-changer for dynamic microservices architectures.
 *   **Choose Caddy if:** You want the simplest setup possible. It is perfect for personal sites, simple proxies, and getting HTTPS up and running in seconds.
 
 In my personal Homelab, although I have experimented with all of them, I currently use **Nginx** configured as an **API Gateway**.
