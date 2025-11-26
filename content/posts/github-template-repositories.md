@@ -1,8 +1,9 @@
 ---
 title: "Simplify Your Projects: How to Use GitHub Template Repositories"
 date: 2025-11-18
+slug: github-template-repositories
 description: "Tired of setting up projects from scratch? Discover how GitHub Template Repositories can save hours of work and ensure consistency across all your projects."
-cover: /images/placeholder/github-template-repositories.png
+cover: /images/covers/github-template-repositories.png
 readingTime: "10"
 katex: false
 mermaid: false

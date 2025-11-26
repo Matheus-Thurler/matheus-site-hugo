@@ -1,8 +1,9 @@
 ---
 title: "GitHub Actions Matrix Strategy: Testando Múltiplas Versões Simultaneamente"
-date: 2025-11-22
+date: 2025-08-24
+slug: github-actions-matrix-strategy
 description: "Aprenda a usar Matrix Strategy no GitHub Actions para testar seu código em múltiplas versões de linguagens, sistemas operacionais e dependências ao mesmo tempo, economizando tempo e garantindo compatibilidade."
-cover: /images/placeholder/github-actions-matrix.png
+cover: /images/covers/github-actions-matrix.png
 readingTime: "12"
 katex: false
 mermaid: false

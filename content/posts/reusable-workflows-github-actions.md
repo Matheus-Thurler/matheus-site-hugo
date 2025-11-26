@@ -1,8 +1,9 @@
 ---
 title: "MASTER Reusable Workflows and Say GOODBYE to Copy-Paste in Your CI/CD!"
-date: 2025-11-20
+date: 2025-06-24
+slug: reusable-workflows-github-actions
 description: "Learn to use Reusable Workflows in GitHub Actions to eliminate code duplication, centralize maintenance, and scale your CI/CD pipelines professionally."
-cover: /images/placeholder/github-actions-reusable-workflows.png
+cover: /images/covers/github-reusable-workflows.png
 readingTime: "12"
 katex: false
 mermaid: false

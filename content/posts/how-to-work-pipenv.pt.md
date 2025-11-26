@@ -1,6 +1,7 @@
 ---
 title: How to Use pipenv
 date: 2024-01-16T23:30:00+08:00
+slug: how-to-work-pipenv
 description: "Learn how to use Pipenv to manage Python project dependencies and virtual environments effortlessly. A step-by-step tutorial from installation to advanced usage.."
 cover: https://media-site-matheus-nuxt.s3.amazonaws.com/posts/pipenv/thumb/pipenv.jpeg
 readingTime: "3"
