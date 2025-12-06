@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+  workflow_run:
+    workflows: ["Update YouTube Videos (RSS)"]
+    types:
+      - completed
 
 jobs:
   deploy:
