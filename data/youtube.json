@@ -1,6 +1,15 @@
 {
   "recent_videos": [
     {
+      "id": "GbNccjPmavI",
+      "title": "O NGINX Ingress Controller Morreu? 💀 Entenda o NGINX Gateway Fabric",
+      "description": "Com a chegada e maturação da Gateway API no Kubernetes, a forma como expomos nossas aplicações está mudando. Mas será que isso significa o fim do clássico NGINX Ingress Controller?\n\nNeste vídeo, vamos...",
+      "published_at": "2025-12-06T20:19:13+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/GbNccjPmavI/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/GbNccjPmavI",
+      "watch_url": "https://youtu.be/GbNccjPmavI"
+    },
+    {
       "id": "BB7wloVn3WE",
       "title": "Adeus Proxmox? Por que migrei meu Homelab para o Apache CloudStack",
       "description": "Você ainda gerencia suas VMs  no Proxmox? Neste vídeo, explico os motivos técnicos e de carreira que me levaram a migrar meu Homelab de Proxmox e OpenStack para o Apache CloudStack.\n\nVou te mostrar mi...",
@@ -8,18 +17,9 @@
       "thumbnail": "https://i.ytimg.com/vi/BB7wloVn3WE/hqdefault.jpg",
       "embed_url": "https://www.youtube.com/embed/BB7wloVn3WE",
       "watch_url": "https://youtu.be/BB7wloVn3WE"
-    },
-    {
-      "id": "Q4nsWELn4mg",
-      "title": "Simplifique Seus Projetos: Como Usar Repositórios Template no GitHub",
-      "description": "🚀 Cansado de configurar projetos do zero e copiar e colar os mesmos arquivos de workflow CI/CD vez após vez? Chega de retrabalho! Neste vídeo, vamos resolver dois problemas de uma só vez e levar sua p...",
-      "published_at": "2025-06-24T18:36:49+00:00",
-      "thumbnail": "https://i.ytimg.com/vi/Q4nsWELn4mg/hqdefault.jpg",
-      "embed_url": "https://www.youtube.com/embed/Q4nsWELn4mg",
-      "watch_url": "https://youtu.be/Q4nsWELn4mg"
     }
   ],
-  "last_updated": "2025-12-06T08:18:06.416017",
+  "last_updated": "2025-12-06T20:38:44.144414",
   "total_videos": 2,
   "source": "rss_feed"
 }
