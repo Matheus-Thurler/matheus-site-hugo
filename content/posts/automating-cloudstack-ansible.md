@@ -6,6 +6,7 @@ cover: /images/covers/cloudstack-ansible.png
 readingTime: "8"
 katex: false
 mermaid: false
+draft: true
 tags: ['cloudstack', 'ansible', 'automation', 'devops', 'homelab']
 slug: automating-cloudstack-ansible
 categories: ['automation', 'cloud']
