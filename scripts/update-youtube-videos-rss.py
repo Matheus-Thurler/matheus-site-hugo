@@ -66,9 +66,55 @@ def extract_video_id_from_url(url: str) -> str:
     return None
 
 
+def is_short_video(entry) -> bool:
+    """
+    Detecta se um vídeo é um Short.
+    
+    Shorts podem ser identificados por:
+    - URL contendo '/shorts/'
+    - Título começando com '#' (comum em shorts)
+    - Descrição muito curta (menos de 50 caracteres)
+    
+    Args:
+        entry: Entrada do feed RSS
+        
+    Returns:
+        True se for um Short, False caso contrário
+    """
+    # Verificar URL por '/shorts/'
+    if hasattr(entry, 'link') and '/shorts/' in entry.link:
+        return True
+    
+    # Verificar se há links alternativos com '/shorts/'
+    if hasattr(entry, 'links'):
+        for link in entry.links:
+            if hasattr(link, 'href') and '/shorts/' in link.href:
+                return True
+    
+    # Verificar título - Shorts geralmente têm títulos curtos ou começam com #
+    title = entry.title if hasattr(entry, 'title') else ''
+    if title.startswith('#'):
+        return True
+    
+    # Verificar media:group por duração (se disponível)
+    # Shorts têm menos de 60 segundos
+    if hasattr(entry, 'media_group'):
+        for media in entry.media_group:
+            if hasattr(media, 'duration'):
+                try:
+                    duration = int(media.duration)
+                    if duration <= 60:
+                        return True
+                except (ValueError, TypeError):
+                    pass
+    
+    return False
+
+
 def get_latest_videos_from_rss(channel_identifier: str, max_results: int = 2) -> List[Dict]:
     """
     Busca os vídeos mais recentes de um canal do YouTube usando RSS Feed.
+    Filtra automaticamente os Shorts, retornando apenas vídeos normais.
     
     Args:
         channel_identifier: Channel ID ou username do canal
@@ -105,7 +151,15 @@ def get_latest_videos_from_rss(channel_identifier: str, max_results: int = 2) ->
                 return []
         
         videos = []
-        for entry in feed.entries[:max_results]:
+        shorts_skipped = 0
+        
+        for entry in feed.entries:
+            # Pular se for um Short
+            if is_short_video(entry):
+                shorts_skipped += 1
+                print(f"⏭️  Pulando Short: {entry.title[:50]}...")
+                continue
+            
             video_id = extract_video_id_from_url(entry.link)
             
             if not video_id:
@@ -132,6 +186,13 @@ def get_latest_videos_from_rss(channel_identifier: str, max_results: int = 2) ->
                 'watch_url': f'https://youtu.be/{video_id}'
             }
             videos.append(video_data)
+            
+            # Parar quando atingir o número desejado
+            if len(videos) >= max_results:
+                break
+        
+        if shorts_skipped > 0:
+            print(f"📊 {shorts_skipped} Short(s) ignorado(s)")
         
         return videos
         

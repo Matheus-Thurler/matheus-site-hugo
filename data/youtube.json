@@ -8,9 +8,18 @@
       "thumbnail": "https://i.ytimg.com/vi/GbNccjPmavI/hqdefault.jpg",
       "embed_url": "https://www.youtube.com/embed/GbNccjPmavI",
       "watch_url": "https://youtu.be/GbNccjPmavI"
+    },
+    {
+      "id": "BB7wloVn3WE",
+      "title": "Adeus Proxmox? Por que migrei meu Homelab para o Apache CloudStack",
+      "description": "Você ainda gerencia suas VMs  no Proxmox? Neste vídeo, explico os motivos técnicos e de carreira que me levaram a migrar meu Homelab de Proxmox e OpenStack para o Apache CloudStack.\n\nVou te mostrar mi...",
+      "published_at": "2025-11-23T15:48:02+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/BB7wloVn3WE/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/BB7wloVn3WE",
+      "watch_url": "https://youtu.be/BB7wloVn3WE"
     }
   ],
-  "last_updated": "2025-12-08T08:23:09.549470",
-  "total_videos": 1,
+  "last_updated": "2025-12-08T10:56:43.649241",
+  "total_videos": 2,
   "source": "rss_feed"
 }
