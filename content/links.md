@@ -27,6 +27,12 @@ links:
     image: "/images/icons/instagram.png"
     external: true
 
+  - title: "TikTok"
+    description: "@matheusthurler.devops"
+    url: "https://www.tiktok.com/@matheusthurler.devops"
+    image: "/images/icons/tiktok.png"
+    external: true
+
   - title: "GitHub"
     description: "Meus projetos open source"
     url: "https://github.com/Matheus-Thurler"
