@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="{{ site.LanguageCode }}" data-theme="{{ site.Params.colorScheme | default " default" }}">
+
+<head>
+    {{ partial "layout/head.html" . }}
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || 'system';
+            const colorScheme = localStorage.getItem('colorScheme') || '{{ site.Params.colorScheme | default "shadcn" }}';
+            document.documentElement.setAttribute('data-theme', colorScheme);
+            function applyTheme() {
+                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            applyTheme();
+            if (theme === 'system') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+            }
+        })();
+    </script>
+</head>
+
+<body class="bg-background text-foreground min-h-screen antialiased">
+    <div class="min-h-screen flex items-center justify-center py-12">
+        <div class="w-full max-w-md mx-auto px-4">
+            <!-- Profile Section -->
+            <div class="text-center mb-8">
+                {{ $author := site.Params.author }}
+                <div class="mb-4">
+                    {{ if $author.avatar }}
+                    <img src="{{ $author.avatar }}" alt="{{ $author.name }}"
+                        class="w-24 h-24 rounded-full mx-auto border-4 border-primary/20 shadow-lg object-cover" />
+                    {{ else }}
+                    <div
+                        class="w-24 h-24 rounded-full mx-auto bg-primary text-primary-foreground flex items-center justify-center text-3xl font-bold shadow-lg">
+                        {{ substr ($author.name | default site.Title) 0 1 | upper }}
+                    </div>
+                    {{ end }}
+                </div>
+                <h1 class="text-2xl font-bold text-foreground mb-1">{{ $author.name | default site.Title }}</h1>
+                <p class="text-muted-foreground text-sm">DevOps Engineer & Content Creator</p>
+            </div>
+
+            <!-- Links Section with PNG icons -->
+            <div class="space-y-3">
+                {{ range .Params.links }}
+                <a href="{{ .url }}" target="{{ if .external }}_blank{{ else }}_self{{ end }}"
+                    rel="{{ if .external }}noopener noreferrer{{ end }}"
+                    class="group block w-full bg-card border border-border hover:border-primary/50 rounded-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <div class="flex items-center gap-4">
+                        {{ if .image }}
+                        <div
+                            class="flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img src="{{ .image }}" alt="{{ .title }}" class="w-7 h-7 object-contain" />
+                        </div>
+                        {{ else if .icon }}
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center">
+                            {{ partial "features/icon.html" (dict "name" .icon "size" "md") }}
+                        </div>
+                        {{ end }}
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-foreground">{{ .title }}</h3>
+                            {{ if .description }}
+                            <p class="text-sm text-muted-foreground truncate">{{ .description }}</p>
+                            {{ end }}
+                        </div>
+                        <div class="flex-shrink-0 text-muted-foreground group-hover:translate-x-1 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                {{ end }}
+            </div>
+
+            <!-- Social Icons -->
+            {{ $author := site.Params.author }}
+            {{ if $author.social }}
+            <div class="mt-8 flex justify-center gap-3">
+                {{ range $author.social }}
+                <a href="{{ .url }}" target="_blank" rel="noopener noreferrer"
+                    class="w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    title="{{ .name }}">
+                    {{ if .icon }}
+                    {{ partial "features/icon.html" (dict "name" .icon "size" "sm") }}
+                    {{ end }}
+                </a>
+                {{ end }}
+            </div>
+            {{ end }}
+
+            <!-- Footer -->
+            <div class="mt-10 text-center space-y-2">
+                <a href="/"
+                    class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Visitar site completo
+                </a>
+                <p class="text-xs text-muted-foreground/60">© {{ now.Year }} {{ $author.name }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
