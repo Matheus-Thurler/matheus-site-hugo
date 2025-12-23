@@ -75,12 +75,12 @@ languages:
           pageRef: /privacy
           weight: 40
           params:
-            icon: info
+            icon: info-circle
         - name: Termos
           pageRef: /terms
           weight: 50
           params:
-            icon: info
+            icon: info-circle
 
 taxonomies:
   category: categories
@@ -139,12 +139,12 @@ menus:
       pageRef: /privacy
       weight: 40
       params:
-        icon: info
+        icon: info-circle
     - name: Terms
       pageRef: /terms
       weight: 50
       params:
-        icon: info
+        icon: info-circle
 
   # footer social link
   # social:
