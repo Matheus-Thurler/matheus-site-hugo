@@ -1,6 +1,15 @@
 {
   "recent_videos": [
     {
+      "id": "joP5JzS9Bro",
+      "title": "🚀 Instalação COMPLETA do Apache CloudStack com Ansible | Tutorial Passo a Passo",
+      "description": "Automatize a instalação do CloudStack no seu homelab usando Ansible! Tutorial completo do zero, incluindo DEMO de deploy de cluster Kubernetes.\n💻 REQUISITOS:\n- Rocky Linux 9 (testado e usado 100%) ou ...",
+      "published_at": "2026-01-28T15:09:11+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/joP5JzS9Bro/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/joP5JzS9Bro",
+      "watch_url": "https://youtu.be/joP5JzS9Bro"
+    },
+    {
       "id": "GbNccjPmavI",
       "title": "O NGINX Ingress Controller Morreu? 💀 Entenda o NGINX Gateway Fabric",
       "description": "Com a chegada e maturação da Gateway API no Kubernetes, a forma como expomos nossas aplicações está mudando. Mas será que isso significa o fim do clássico NGINX Ingress Controller?\n\nNeste vídeo, vamos...",
@@ -8,18 +17,9 @@
       "thumbnail": "https://i.ytimg.com/vi/GbNccjPmavI/hqdefault.jpg",
       "embed_url": "https://www.youtube.com/embed/GbNccjPmavI",
       "watch_url": "https://youtu.be/GbNccjPmavI"
-    },
-    {
-      "id": "BB7wloVn3WE",
-      "title": "Adeus Proxmox? Por que migrei meu Homelab para o Apache CloudStack",
-      "description": "Você ainda gerencia suas VMs  no Proxmox? Neste vídeo, explico os motivos técnicos e de carreira que me levaram a migrar meu Homelab de Proxmox e OpenStack para o Apache CloudStack.\n\nVou te mostrar mi...",
-      "published_at": "2025-11-23T15:48:02+00:00",
-      "thumbnail": "https://i.ytimg.com/vi/BB7wloVn3WE/hqdefault.jpg",
-      "embed_url": "https://www.youtube.com/embed/BB7wloVn3WE",
-      "watch_url": "https://youtu.be/BB7wloVn3WE"
     }
   ],
-  "last_updated": "2026-01-28T08:23:38.031663",
+  "last_updated": "2026-01-28T15:11:07.754586",
   "total_videos": 2,
   "source": "rss_feed"
 }
