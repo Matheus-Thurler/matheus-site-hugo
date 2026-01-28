@@ -104,7 +104,7 @@ Após assistir ao vídeo e instalar o CloudStack, você pode:
 ## Recursos Adicionais
 
 - 📖 [Documentação Oficial do CloudStack](https://docs.cloudstack.apache.org/)
-- 💻 [Repositório do Ansible Installer](https://github.com/Matheus-Thurler/ansible-cloudstack-installer)
+- 💻 [Repositório do Ansible Installer](https://github.com/Matheus-Thurler/ansible-cloudstack)
 - 🏠 [Meu Homelab Setup]({{< ref "about-my-homelab" >}})
 
 ## Contribua!
