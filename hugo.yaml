@@ -171,13 +171,13 @@ menus:
 
 params:
   # Basic site info with SEO
-  description: "A modern, clean, and minimal Hugo theme built with Tailwind CSS 4.0. Support custom themes, dark mode, and responsive design."
+  description: "A personal blog and portfolio site of Matheus Thurler, focused on sharing knowledge about technology, programming, and DevOps."
   keywords: ["Hugo", "Blog", "Matheus Thurler", "DevOps", "Kubernetes", "Platform Engineer", "Technology", "Programming"]
   defaultAuthor: "Matheus Thurler"
   language: "en-US"
   shortName: "Matheus Thurler"  # PWA
   images:
-  - "/images/og-default.avif"
+  - "/images/avatar.png"
 
   logo:
     image: "/images/logo.svg"  # Logo path rel to static folder, leave empty use site title and primary color
