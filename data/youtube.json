@@ -1,6 +1,15 @@
 {
   "recent_videos": [
     {
+      "id": "5_fiNmpHYNE",
+      "title": "O Fim do \"Na minha máquina funciona\": Como o Distrobox Salva seu PC!",
+      "description": "Cansado de quebrar o seu sistema instalando dezenas de bibliotecas concorrentes, PPAs obscuros e versões antigas de linguagens? Aprenda a se livrar do famoso problema do \"na minha máquina funciona\"!\n\n...",
+      "published_at": "2026-03-16T13:00:11+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/5_fiNmpHYNE/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/5_fiNmpHYNE",
+      "watch_url": "https://youtu.be/5_fiNmpHYNE"
+    },
+    {
       "id": "joP5JzS9Bro",
       "title": "🚀 Instalação COMPLETA do Apache CloudStack com Ansible | Tutorial Passo a Passo",
       "description": "Automatize a instalação do CloudStack no seu homelab usando Ansible! Tutorial completo do zero, incluindo DEMO de deploy de cluster Kubernetes.\n💻 REQUISITOS:\n- Rocky Linux 9 (testado e usado 100%) ou ...",
@@ -8,18 +17,9 @@
       "thumbnail": "https://i.ytimg.com/vi/joP5JzS9Bro/hqdefault.jpg",
       "embed_url": "https://www.youtube.com/embed/joP5JzS9Bro",
       "watch_url": "https://youtu.be/joP5JzS9Bro"
-    },
-    {
-      "id": "GbNccjPmavI",
-      "title": "O NGINX Ingress Controller Morreu? 💀 Entenda o NGINX Gateway Fabric",
-      "description": "Com a chegada e maturação da Gateway API no Kubernetes, a forma como expomos nossas aplicações está mudando. Mas será que isso significa o fim do clássico NGINX Ingress Controller?\n\nNeste vídeo, vamos...",
-      "published_at": "2025-12-06T20:19:13+00:00",
-      "thumbnail": "https://i.ytimg.com/vi/GbNccjPmavI/hqdefault.jpg",
-      "embed_url": "https://www.youtube.com/embed/GbNccjPmavI",
-      "watch_url": "https://youtu.be/GbNccjPmavI"
     }
   ],
-  "last_updated": "2026-03-16T08:49:19.127387",
+  "last_updated": "2026-03-16T13:28:44.134588",
   "total_videos": 2,
   "source": "rss_feed"
 }
