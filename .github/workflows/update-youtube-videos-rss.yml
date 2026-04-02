@@ -59,7 +59,7 @@ jobs:
           pr_url=$(gh pr create \
             --title "🎬 Update YouTube Videos (RSS)" \
             --body "Automated update of YouTube videos from RSS feed." \
-            --branch ${{ steps.create_pr.outputs.branch_name }} \
+            --head ${{ steps.create_pr.outputs.branch_name }} \
             --base master)
           
           gh pr merge "$pr_url" --auto --merge
