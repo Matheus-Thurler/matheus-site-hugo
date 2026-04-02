@@ -51,7 +51,7 @@ jobs:
             echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Create and Auto-merge PR
+      - name: Create and Merge PR
         if: steps.create_pr.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,4 +62,5 @@ jobs:
             --head ${{ steps.create_pr.outputs.branch_name }} \
             --base master)
           
-          gh pr merge "$pr_url" --auto --merge
+          # Tenta o merge direto (como as aprovações são 0, deve funcionar)
+          gh pr merge "$pr_url" --merge --delete-branch
