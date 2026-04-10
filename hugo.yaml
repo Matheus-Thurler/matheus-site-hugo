@@ -62,7 +62,7 @@ languages:
           params:
             icon: about
         - name: Contato
-          url: mailto:contato@matheusthurler.com.br
+          url: mailto:matheus@matheusthurler.com.br
           weight: 20
           params:
             icon: contact
@@ -126,7 +126,7 @@ menus:
       params:
         icon: about
     - name: Contact
-      url: mailto:contato@matheusthurler.com.br
+      url: mailto:matheus@matheusthurler.com.br
       weight: 20
       params:
         icon: contact
@@ -199,7 +199,7 @@ params:
         url: "https://instagram.com/maththurler.devops"
         icon: "instagram"
       - name: "Email"
-        url: "mailto:contato@matheusthurler.com.br"
+        url: "mailto:matheus@matheusthurler.com.br"
         icon: "email"
       - name: "YouTube"
         url: "https://youtube.com/@matheusthurler"
