@@ -1,25 +1,23 @@
 ---
 title: "Home"
 
-
 author:
     name: "Matheus Thurler"
-    title: "A personal blog and portfolio site of Matheus Thurler"
-    description: "A personal blog and portfolio site of Matheus Thurler, focused on sharing knowledge about technology, programming, and DevOps."
-
+    title: "DevOps & Platform Engineer | Google Cloud | SRE | AI"
+    description: "DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and Site Reliability Engineering. Creating content about DevOps, Cloud, and automation."
     avatar: "/images/avatar.png"
     social:
       - name: "GitHub"
         url: "https://github.com/Matheus-Thurler"
         icon: "github"
-      - name: "Instagram"
-        url: "https://instagram.com/maththurler.devops"
-        icon: "instagram"
-      - name: "Email"
-        url: "mailto:contato@matheusthurler.com.br"
-        icon: "email"
       - name: "YouTube"
         url: "https://youtube.com/@matheusthurler"
         icon: "youtube"
+      - name: "LinkedIn"
+        url: "https://linkedin.com/in/matheusthurler"
+        icon: "linkedin"
+      - name: "Email"
+        url: "mailto:matheus@matheusthurler.com.br"
+        icon: "email"
 
 ---

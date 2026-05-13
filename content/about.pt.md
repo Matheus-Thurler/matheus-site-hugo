@@ -1,37 +1,44 @@
 ---
-title: "About"
+title: "Sobre"
 layout: "about"
-# links:
-#   - name: "Hugo Docs"
-#     url: "https://gohugo.io"
-#     icon: "https://gohugo.io/favicon.ico"
-#     description: "The world's fastest static site generator"
-#   - name: "Tailwindcss"
-#     url: "https://tailwindcss.com"
-#     description: "CSS framework"
-#   - name: "GitHub"
-#     url: "https://github.com"
-#     icon: "https://github.com/fluidicon.png"
-#     description: "The world's largest code hosting platform. "
-  
-
 ---
 ## Sobre Mim
 
-Sou Matheus Thurler, um profissional apaixonado e experiente na área de tecnologia, com forte foco em DevOps, computação em nuvem e desenvolvimento de software. Minha jornada em TI começou em 2012 e, desde então, tenho me dedicado ao aprendizado contínuo e à aplicação das melhores práticas para entregar soluções robustas e escaláveis.
+Sou Matheus Thurler, DevOps & Platform Engineer na CI&T, baseado no Brasil. Meu foco é Google Cloud Platform, Infrastructure as Code e Site Reliability Engineering.
 
-## Minhas Especialidades
+Trabalho com tecnologia desde 2012, construindo e operando infraestrutura de produção em escala. Hoje meu foco é ajudar times a entregar software mais rápido e com mais confiabilidade através de platform engineering, automação e práticas cloud-native.
 
-- **DevOps e Nuvem:** Ampla experiência com AWS, Azure e Google Cloud Platform, implementando pipelines de CI/CD, infraestrutura como código (Terraform, CloudFormation) e conteinerização (Docker, Kubernetes).
-- **Linguagens de Programação:** Proficiente em Python, Go, Java e JavaScript, com um sólido entendimento de programação orientada a objetos e paradigmas funcionais.
-- **Bancos de Dados:** Experiência com bancos de dados relacionais (PostgreSQL, MySQL) e NoSQL (MongoDB, DynamoDB).
-- **Monitoramento e Logging:** Implementação de soluções de monitoramento (Prometheus, Grafana) e logging centralizado (ELK Stack, Splunk).
-- **Metodologias Ágeis:** Forte defensor dos princípios Ágeis, trabalhando com Scrum e Kanban para promover a colaboração e o desenvolvimento iterativo.
+Também mantenho um homelab com Apache CloudStack e Kubernetes — meu laboratório pessoal para testar ideias antes de irem para produção.
 
-## Minha Missão
+## Com o que trabalho
 
-Meu objetivo é alavancar minhas habilidades técnicas e experiência para ajudar organizações a construir sistemas eficientes, confiáveis e seguros. Acredito em compartilhar conhecimento e contribuir para a comunidade, por isso mantenho este blog para discutir tópicos de tecnologia, programação e DevOps.
+- **Cloud:** Google Cloud Platform (GKE, Cloud Run, Cloud Build, Vertex AI)
+- **Infrastructure as Code:** Terraform, Ansible, NixOS
+- **Containers & Orquestração:** Kubernetes, Docker, Helm, ArgoCD
+- **CI/CD:** GitHub Actions, Cloud Build, GitOps workflows
+- **Observabilidade:** Prometheus, Grafana, OpenTelemetry, Cloud Monitoring
+- **Linguagens:** Go, Python, Shell
 
-## Conecte-se Comigo
+## Conteúdo & Ensino
 
-Sinta-se à vontade para se conectar comigo nas redes sociais ou me enviar um e-mail. Estou sempre aberto a novas ideias, colaborações e discussões sobre tecnologia!
+Crio conteúdo em português sobre DevOps, Cloud e automação — conectando experimentos do homelab com infraestrutura de produção.
+
+- **YouTube:** Tutoriais, comparações de ferramentas e demos práticas em [@matheusthurler](https://youtube.com/@matheusthurler)
+- **Blog:** Artigos técnicos e guias detalhados aqui mesmo
+- **Curso:** Trilha completa de DevOps focada em GCP (em breve na Hotmart)
+
+## Objetivos Atuais
+
+- 🏆 Programa Google Cloud Innovator
+- 🤖 Google GEAR — IA Generativa para DevOps
+- 📚 Lançamento da trilha de cursos DevOps
+- 📝 Conteúdo semanal no YouTube e neste blog
+
+## Vamos Conversar
+
+Estou sempre aberto a conversas sobre DevOps, arquitetura cloud e criação de conteúdo.
+
+- [GitHub](https://github.com/Matheus-Thurler)
+- [YouTube](https://youtube.com/@matheusthurler)
+- [LinkedIn](https://linkedin.com/in/matheusthurler)
+- [Email](mailto:matheus@matheusthurler.com.br)
