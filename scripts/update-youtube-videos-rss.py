@@ -253,12 +253,9 @@ def main():
     videos = get_latest_videos_from_rss(channel_identifier, MAX_VIDEOS)
     
     if not videos:
-        print("\n❌ Nenhum vídeo encontrado.")
-        print("\n💡 Possíveis soluções:")
-        print("1. Verifique se o Channel ID está correto")
-        print("2. Se está usando username, tente o Channel ID completo")
-        print("3. Verifique se o canal tem vídeos públicos")
-        sys.exit(1)
+        print("\n⚠️  Nenhum vídeo novo encontrado (RSS pode estar temporariamente indisponível).")
+        print("Mantendo dados existentes. Nenhuma alteração feita.")
+        sys.exit(0)
     
     # Exibir vídeos encontrados
     print(f"✅ {len(videos)} vídeo(s) encontrado(s):")

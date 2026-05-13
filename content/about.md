@@ -1,37 +1,44 @@
 ---
 title: "About"
 layout: "about"
-# links:
-#   - name: "Hugo Docs"
-#     url: "https://gohugo.io"
-#     icon: "https://gohugo.io/favicon.ico"
-#     description: "The world's fastest static site generator"
-#   - name: "Tailwindcss"
-#     url: "https://tailwindcss.com"
-#     description: "CSS framework"
-#   - name: "GitHub"
-#     url: "https://github.com"
-#     icon: "https://github.com/fluidicon.png"
-#     description: "The world's largest code hosting platform. "
-  
-
 ---
 ## About Me
 
-I'm Matheus Thurler, a passionate and experienced professional in the field of technology, with a strong focus on DevOps, cloud computing, and software development. My journey in IT began in 2012, and since then, I've been dedicated to continuous learning and applying best practices to deliver robust and scalable solutions.
+I'm Matheus Thurler, a DevOps & Platform Engineer at CI&T based in Brazil. I specialize in Google Cloud Platform, Infrastructure as Code, and Site Reliability Engineering.
 
-## My Expertise
+I've been working in tech since 2012, building and operating production infrastructure at scale. Today my focus is on helping teams ship faster and more reliably through platform engineering, automation, and cloud-native practices.
 
-- **DevOps & Cloud:** Extensive experience with AWS, Azure, and Google Cloud Platform, implementing CI/CD pipelines, infrastructure as code (Terraform, CloudFormation), and containerization (Docker, Kubernetes).
-- **Programming Languages:** Proficient in Python, Go, Java, and JavaScript, with a solid understanding of object-oriented programming and functional paradigms.
-- **Databases:** Experience with relational databases (PostgreSQL, MySQL) and NoSQL databases (MongoDB, DynamoDB).
-- **Monitoring & Logging:** Implementation of monitoring solutions (Prometheus, Grafana) and centralized logging (ELK Stack, Splunk).
-- **Agile Methodologies:** Strong advocate for Agile principles, working with Scrum and Kanban to foster collaboration and iterative development.
+I also run a homelab with Apache CloudStack and Kubernetes — my personal playground for testing ideas before they hit production.
 
-## My Mission
+## What I Work With
 
-My goal is to leverage my technical skills and experience to help organizations build efficient, reliable, and secure systems. I believe in sharing knowledge and contributing to the community, which is why I maintain this blog to discuss technology, programming, and DevOps topics.
+- **Cloud:** Google Cloud Platform (GKE, Cloud Run, Cloud Build, Vertex AI)
+- **Infrastructure as Code:** Terraform, Ansible, NixOS
+- **Containers & Orchestration:** Kubernetes, Docker, Helm, ArgoCD
+- **CI/CD:** GitHub Actions, Cloud Build, GitOps workflows
+- **Observability:** Prometheus, Grafana, OpenTelemetry, Cloud Monitoring
+- **Languages:** Go, Python, Shell
 
-## Connect with Me
+## Content & Teaching
 
-Feel free to connect with me on social media or send me an email. I'm always open to new ideas, collaborations, and discussions about technology!
+I create content in Portuguese about DevOps, Cloud, and automation — bridging the gap between homelab experiments and production-grade infrastructure.
+
+- **YouTube:** Tutorials, tool comparisons, and hands-on demos at [@matheusthurler](https://youtube.com/@matheusthurler)
+- **Blog:** Deep dives and written guides right here
+- **Course:** A complete DevOps learning path focused on GCP (coming soon on Hotmart)
+
+## Current Goals
+
+- 🏆 Google Cloud Innovator program
+- 🤖 Google GEAR — Generative AI for DevOps
+- 📚 Launching a DevOps course series
+- 📝 Weekly content on YouTube and this blog
+
+## Let's Connect
+
+I'm always open to conversations about DevOps, cloud architecture, and content creation.
+
+- [GitHub](https://github.com/Matheus-Thurler)
+- [YouTube](https://youtube.com/@matheusthurler)
+- [LinkedIn](https://linkedin.com/in/matheusthurler)
+- [Email](mailto:contato@matheusthurler.com.br)
