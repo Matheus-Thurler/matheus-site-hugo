@@ -222,8 +222,8 @@ code:
 
 # Custom
 custom:
-  announcement_title: "Curso Roadmap DevOps"
-  announcement_description: "Em breve um curso completo com a trilha de DevOps"
+  announcement_title: "Curso DevOps — Foco em Google Cloud"
+  announcement_description: "Uma trilha completa de DevOps focada em GCP. De fundamentos Linux até Kubernetes em produção. Em breve!"
   recentVideos: "Vídeos Recentes"
   wacth_on_youtube: "Assista no Youtube"
   watch_video: "Assistir Vídeo"

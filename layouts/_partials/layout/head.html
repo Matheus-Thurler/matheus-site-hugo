@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-<title>{{- if .IsHome -}}{{ site.Title }}{{- else if .Title -}}{{ .Title }} | {{ site.Title }}{{- else -}}{{ site.Title
+<title>{{- if .IsHome -}}{{ site.Title }} | DevOps & Cloud Engineer{{- else if .Title -}}{{ .Title }} | {{ site.Title }}{{- else -}}{{ site.Title
   }}{{- end -}}</title>
 
 <meta name="description"
@@ -10,7 +10,7 @@
 <meta name="keywords"
   content="{{- with .Params.tags -}}{{ delimit . `, ` }}{{- else -}}{{- with site.Params.keywords -}}{{ delimit . `, ` }}{{- end -}}{{- end -}}" />
 <meta name="author"
-  content="{{- with .Params.author -}}{{ . }}{{- else -}}{{ site.Params.defaultAuthor }}{{- end -}}" />
+  content="{{- with .Params.author -}}{{- if reflect.IsMap . -}}{{ .name }}{{- else -}}{{ . }}{{- end -}}{{- else -}}{{ site.Params.defaultAuthor }}{{- end -}}" />
 <meta name="language" content="{{ site.Params.language | default site.LanguageCode }}" />
 
 <meta name="robots" content="{{- with .Params.robots -}}{{ . }}{{- else -}}index, follow{{- end -}}" />

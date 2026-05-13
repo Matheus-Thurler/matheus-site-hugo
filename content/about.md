@@ -41,4 +41,4 @@ I'm always open to conversations about DevOps, cloud architecture, and content c
 - [GitHub](https://github.com/Matheus-Thurler)
 - [YouTube](https://youtube.com/@matheusthurler)
 - [LinkedIn](https://linkedin.com/in/matheusthurler)
-- [Email](mailto:contato@matheusthurler.com.br)
+- [Email](mailto:matheus@matheusthurler.com.br)
