@@ -1,21 +1,75 @@
-{{/* 
-  自定义内容示例 2 - 公告栏
-  文件位置: layouts/_partials/content/custom_2.html
-*/}}
+{{/* Newsletter Signup Widget */}}
+{{ $subscribeUrl := site.Params.newsletter.subscribeUrl | default "#" }}
 
-<div class="bg-primary/10 border-primary/30 rounded-xl border p-6 shadow-sm mb-6">
-  <div class="flex items-start gap-3">
-    <div class="text-primary text-2xl flex-shrink-0">
-      📢
-    </div>
-    <div class="flex-1">
-      <h3 class="text-foreground font-semibold mb-2">{{ i18n "custom.announcement_title" }}</h3>
-      <p class="text-foreground/80 text-sm leading-relaxed">
-        {{ i18n "custom.announcement_description" }}
-      </p>
-      <p class="text-muted-foreground text-xs mt-3">
-        {{ now.Format "2006-01-02" }}
+<div class="bg-card border-border rounded-xl border p-6 shadow-sm mb-6">
+  <div class="flex flex-col items-center text-center gap-4">
+    <div class="text-primary text-3xl">📬</div>
+    <div>
+      <h3 class="text-foreground text-lg font-semibold mb-2">Newsletter DevOps & Cloud</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed mb-4">
+        Receba conteúdo sobre DevOps, GCP, Kubernetes e AI direto no email. Sem spam, cancele quando quiser.
       </p>
     </div>
+    <form
+      id="newsletter-form"
+      action="{{ $subscribeUrl }}"
+      method="POST"
+      class="w-full max-w-md flex flex-col sm:flex-row gap-2"
+    >
+      <input
+        type="email"
+        name="email"
+        required
+        placeholder="seu@email.com"
+        class="bg-muted border-border text-foreground placeholder:text-muted-foreground flex-1 rounded-lg border px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+        aria-label="Email para newsletter"
+      />
+      <input
+        type="text"
+        name="name"
+        required
+        placeholder="Seu nome"
+        class="bg-muted border-border text-foreground placeholder:text-muted-foreground flex-1 rounded-lg border px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
+        aria-label="Nome"
+      />
+      <button
+        type="submit"
+        class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors whitespace-nowrap"
+      >
+        Inscrever
+      </button>
+    </form>
+    <p id="newsletter-msg" class="text-sm hidden"></p>
   </div>
 </div>
+
+<script>
+document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const form = e.target;
+  const msg = document.getElementById('newsletter-msg');
+  const data = { email: form.email.value, name: form.name.value };
+
+  try {
+    const res = await fetch(form.action, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    msg.classList.remove('hidden', 'text-red-400');
+    if (res.ok) {
+      msg.classList.add('text-green-400');
+      msg.textContent = 'Inscrito com sucesso! 🎉';
+      form.reset();
+    } else {
+      msg.classList.add('text-red-400');
+      msg.textContent = json.error || 'Erro ao inscrever. Tente novamente.';
+    }
+  } catch {
+    msg.classList.remove('hidden');
+    msg.classList.add('text-red-400');
+    msg.textContent = 'Erro de conexão. Tente novamente.';
+  }
+});
+</script>

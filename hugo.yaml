@@ -258,6 +258,9 @@ params:
   home:
     recentPostsCount: 5 # Number of recent posts to show on the home page
 
+  newsletter:
+    subscribeUrl: "https://us-central1-matheus-cloud-pessoal.cloudfunctions.net/subscribe"
+
   # custom partials files should be placed at "~/layouts/_partials/content/" folder.
   home_custom:
     enabled: true
