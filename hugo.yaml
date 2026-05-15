@@ -1,6 +1,6 @@
 baseURL: https://matheusthurler.com.br/
 languageCode: en-US
-defaultContentLanguage: pt
+defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 title: Matheus Thurler
 theme: "hugo-narrow"

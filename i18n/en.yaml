@@ -1,3 +1,224 @@
+# Navigation
+nav:
+  menu: "Menu"
+  home: "Home"
+  posts: "Posts"
+  tags: "Tags"
+  categories: "Categories"
+  about: "About"
+  contact: "Contact"
+  archive: "Archive"
+  archives: "Archives"
+  search: "Search"
+  breadcrumb: "Breadcrumb"
+  pagination: "Pagination"
+  prev: "Previous"
+  next: "Next"
+  prev_page: "Previous Page"
+  next_page: "Next Page"
+  page_info: "Page {{ .current }} of {{ .total }}"
+  total_pages: "{{ .count }} pages"
+  back_home: "Back to Home"
+  post_navigation: "Post Navigation"
+
+# Theme
+theme:
+  toggle: "Toggle Theme"
+  light: "Light"
+  dark: "Dark"
+  system: "System"
+  auto: "Auto"
+
+# Footer
+footer:
+  copyright: "Copyright"
+  all_rights_reserved: "All rights reserved"
+  about_us: "About Us"
+  contact_us: "Contact Us"
+  privacy_policy: "Privacy Policy"
+  terms_of_service: "Terms of Service"
+  rss_feed: "RSS Feed"
+
+# Home
+home:
+  recent_posts: "Recent Posts"
+  showing_posts: "Showing the most recent"
+  posts: "posts"
+  view_all_posts: "View all posts"
+
+# Posts
+post:
+  read_more: "Read more"
+  published_on: "Published on"
+  updated_on: "Updated on"
+  tags: "Tags"
+  categories: "Categories"
+  share: "Share"
+  previous: "Previous"
+  next: "Next"
+  related_posts: "Related Posts"
+  reading_time: "Reading time"
+  no_posts: "No posts"
+  no_posts_desc: "No posts published yet. Check back later."
+  list_desc: "All published posts, sorted by date."
+  total_posts: "{{ .count }} posts"
+  author: "Author"
+  words: "words"
+  words_count: "Word count"
+  no_previous: "No previous post"
+  no_next: "No next post"
+  no_previous_desc: "This is the first post"
+  no_next_desc: "This is the most recent post"
+  view_more_posts: "View more posts"
+  reading_time_unit: "minutes"
+
+# Pagination
+pagination:
+  previous: "Previous"
+  next: "Next"
+  page: "Page"
+  of: "of"
+  pages: "pages"
+
+# Search
+search:
+  placeholder: "Search posts..."
+  clear: "Clear"
+  close: "Close"
+  loading: "Searching..."
+  empty_title: "Start searching"
+  empty_description: "Type keywords to search"
+  no_results_title: "No results"
+  no_results_description: "Try different keywords"
+  results_count: "%d results found"
+  match_score: "Relevance"
+  hint_navigate: "Navigate"
+  hint_select: "Select"
+  hint_close: "Close"
+  hint_shortcut: "Shortcut"
+
+# Form
+form:
+  name: "Name"
+  email: "Email"
+  message: "Message"
+  subject: "Subject"
+  send: "Send"
+  required: "Required"
+
+# Time
+time:
+  minute: "minute"
+  minutes: "minutes"
+  hour: "hour"
+  hours: "hours"
+  day: "day"
+  days: "days"
+  week: "week"
+  weeks: "weeks"
+  month: "month"
+  months: "months"
+  year: "year"
+  years: "years"
+  ago: "ago"
+  date_format: "01/02/2006"
+  date_format_short: "01/02"
+  month_format: "01/2006"
+
+# Archives
+archives:
+  desc: "Browse all posts in chronological order."
+  posts_count: "posts"
+  no_posts: "No posts yet"
+  no_posts_desc: "No posts have been published yet. Please check back later."
+  total_posts: "{{ .count }} posts total"
+  timeline: "Timeline view"
+
+# Taxonomy
+taxonomy:
+  total_tags: "{{ .count }} tags total"
+  total_categories: "{{ .count }} categories total"
+  total_terms: "{{ .count }} terms total"
+  tags_desc: "Browse all tags to discover interesting content."
+  categories_desc: "Browse all categories to discover interesting content."
+  desc: "Browse all categories to discover interesting content."
+  no_terms: "No categories yet"
+  no_terms_desc: "No categories have been created yet. Please check back later."
+
+# Taxonomy term pages
+term:
+  tag_desc: "All posts tagged \"{{ .tag }}\""
+  category_desc: "All posts in category \"{{ .category }}\""
+  desc: "All posts under \"{{ .term }}\""
+  total_posts: "{{ .count }} posts total"
+  date_range: "Sorted by date"
+  no_posts: "No posts yet"
+  no_posts_tag: "No posts under this tag yet."
+  no_posts_category: "No posts in this category yet."
+  no_posts_desc: "No posts in this category yet."
+
+# Common
+common:
+  error: "Error"
+  success: "Success"
+  open: "Open"
+  save: "Save"
+  cancel: "Cancel"
+  confirm: "Confirm"
+  delete: "Delete"
+  edit: "Edit"
+  view: "View"
+  back: "Back"
+  more: "More"
+
+# License
+license:
+  author: "Author"
+  link: "Link"
+  type: "License"
+  cc_by_nc_sa_desc: "This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License."
+  cc_by_desc: "This work is licensed under a Creative Commons Attribution 4.0 International License."
+
+# Comments
+comments:
+  not_configured: "Comments system not configured"
+  not_configured_desc: "Please enable the comments system in site configuration"
+  giscus_not_configured: "Giscus comments system not configured"
+  disqus_not_configured: "Disqus comments system not configured"
+  waline_not_configured: "Waline comments system not configured"
+
+# Bottom Dock
+dock:
+  back: "Back"
+  toc: "Table of Contents"
+  search: "Search"
+  comments: "Comments"
+  back_to_top: "Back to top"
+  top: "Top"
+
+# Alert
+alert:
+  note: "Note"
+  tip: "Tip"
+  important: "Important"
+  warning: "Warning"
+  caution: "Caution"
+
+# TOC
+toc:
+  title: "Table of Contents"
+  navigation: "TOC navigation"
+  empty: "No headings in this post"
+  tip: "Click to jump to section"
+
+# Code block
+code:
+  copied: "Copied"
+  selected: "Selected"
+  collapse: "Collapse"
+  expand: "Expand"
+  clickToExpand: "Click to expand and see more"
+
 # Custom
 custom:
   announcement_title: "DevOps Course — Google Cloud Focus"
@@ -6,6 +227,9 @@ custom:
   wacth_on_youtube: "Watch on Youtube"
   watch_video: "Watch Video"
   videos_updated: "Last updated"
+
+# Links
+links: "Links"
 
 # Cookie Consent
 cookie_consent:
