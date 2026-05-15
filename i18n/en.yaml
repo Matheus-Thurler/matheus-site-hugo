@@ -231,6 +231,18 @@ custom:
 # Links
 links: "Links"
 
+# Newsletter
+newsletter:
+  title: "DevOps & Cloud Newsletter"
+  desc: "Get content about DevOps, GCP, Kubernetes and AI straight to your inbox. No spam, unsubscribe anytime."
+  email_placeholder: "your@email.com"
+  email_label: "Email for newsletter"
+  name_placeholder: "Your name"
+  name_label: "Name"
+  subscribe: "Subscribe"
+  success: "Subscribed successfully! 🎉"
+  error_msg: "Error subscribing. Please try again."
+
 # Cookie Consent
 cookie_consent:
   message: "This site uses cookies to improve your experience, analyze traffic, and personalize ads."

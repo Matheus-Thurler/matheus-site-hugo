@@ -29,10 +29,18 @@
       {{- end -}}
     {{- end -}}
     {{- if eq $targetURL "/" -}}
-      {{- $targetURL = printf "/%s/" $nextLang.Lang -}}
+      {{- if eq $nextLang.Lang site.Language.Lang -}}
+        {{- $targetURL = "/" -}}
+      {{- else -}}
+        {{- $targetURL = printf "/%s/" $nextLang.Lang -}}
+      {{- end -}}
     {{- end -}}
   {{- else -}}
-    {{- $targetURL = printf "/%s/" $nextLang.Lang -}}
+    {{- if eq $nextLang.Lang site.Language.Lang -}}
+      {{- $targetURL = "/" -}}
+    {{- else -}}
+      {{- $targetURL = printf "/%s/" $nextLang.Lang -}}
+    {{- end -}}
   {{- end -}}
 
   <div class="relative">
@@ -61,10 +69,18 @@
         {{- end -}}
       {{- end -}}
       {{- if eq $targetURL "/" -}}
-        {{- $targetURL = printf "/%s/" $lang -}}
+        {{- if eq $lang site.Language.Lang -}}
+          {{- $targetURL = "/" -}}
+        {{- else -}}
+          {{- $targetURL = printf "/%s/" $lang -}}
+        {{- end -}}
       {{- end -}}
     {{- else -}}
-      {{- $targetURL = printf "/%s/" $lang -}}
+      {{- if eq $lang site.Language.Lang -}}
+        {{- $targetURL = "/" -}}
+      {{- else -}}
+        {{- $targetURL = printf "/%s/" $lang -}}
+      {{- end -}}
     {{- end -}}
 
     {{- $languageMenuContent = printf "%s<a href=\"%s\" class=\"text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex w-full items-center rounded-md px-4 py-2 text-sm transition-all duration-200 ease-out focus:outline-none\" role=\"menuitem\"%s><span class=\"font-medium\">%s</span></a>" $languageMenuContent $targetURL (cond $isCurrent " aria-current=\"true\"" "") $langName -}}

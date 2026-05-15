@@ -233,6 +233,18 @@ custom:
 
 links: "Links"
 
+# Newsletter
+newsletter:
+  title: "Newsletter DevOps & Cloud"
+  desc: "Receba conteúdo sobre DevOps, GCP, Kubernetes e AI direto no email. Sem spam, cancele quando quiser."
+  email_placeholder: "seu@email.com"
+  email_label: "Email para newsletter"
+  name_placeholder: "Seu nome"
+  name_label: "Nome"
+  subscribe: "Inscrever"
+  success: "Inscrito com sucesso! 🎉"
+  error_msg: "Erro ao inscrever. Tente novamente."
+
 # Cookie Consent
 cookie_consent:
   message: "Este site usa cookies para melhorar sua experiência, analisar o tráfego e personalizar anúncios."

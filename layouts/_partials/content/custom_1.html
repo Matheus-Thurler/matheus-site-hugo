@@ -5,9 +5,9 @@
   <div class="flex flex-col items-center text-center gap-4">
     <div class="text-primary text-3xl">📬</div>
     <div>
-      <h3 class="text-foreground text-lg font-semibold mb-2">Newsletter DevOps & Cloud</h3>
+      <h3 class="text-foreground text-lg font-semibold mb-2">{{ i18n "newsletter.title" }}</h3>
       <p class="text-muted-foreground text-sm leading-relaxed mb-4">
-        Receba conteúdo sobre DevOps, GCP, Kubernetes e AI direto no email. Sem spam, cancele quando quiser.
+        {{ i18n "newsletter.desc" }}
       </p>
     </div>
     <form
@@ -20,23 +20,23 @@
         type="email"
         name="email"
         required
-        placeholder="seu@email.com"
+        placeholder="{{ i18n "newsletter.email_placeholder" }}"
         class="bg-muted border-border text-foreground placeholder:text-muted-foreground flex-1 rounded-lg border px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-        aria-label="Email para newsletter"
+        aria-label="{{ i18n "newsletter.email_label" }}"
       />
       <input
         type="text"
         name="name"
         required
-        placeholder="Seu nome"
+        placeholder="{{ i18n "newsletter.name_placeholder" }}"
         class="bg-muted border-border text-foreground placeholder:text-muted-foreground flex-1 rounded-lg border px-4 py-2.5 text-sm focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none"
-        aria-label="Nome"
+        aria-label="{{ i18n "newsletter.name_label" }}"
       />
       <button
         type="submit"
         class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-5 py-2.5 text-sm font-medium transition-colors whitespace-nowrap"
       >
-        Inscrever
+        {{ i18n "newsletter.subscribe" }}
       </button>
     </form>
     <p id="newsletter-msg" class="text-sm hidden"></p>
@@ -60,16 +60,16 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     msg.classList.remove('hidden', 'text-red-400');
     if (res.ok) {
       msg.classList.add('text-green-400');
-      msg.textContent = 'Inscrito com sucesso! 🎉';
+      msg.textContent = '{{ i18n "newsletter.success" }}';
       form.reset();
     } else {
       msg.classList.add('text-red-400');
-      msg.textContent = json.error || 'Erro ao inscrever. Tente novamente.';
+      msg.textContent = json.error || '{{ i18n "newsletter.error_msg" }}';
     }
   } catch {
     msg.classList.remove('hidden');
     msg.classList.add('text-red-400');
-    msg.textContent = 'Erro de conexão. Tente novamente.';
+    msg.textContent = '{{ i18n "newsletter.error_msg" }}';
   }
 });
 </script>
