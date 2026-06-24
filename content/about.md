@@ -29,10 +29,11 @@ I create content in Portuguese about DevOps, Cloud, and automation — bridging 
 
 ## Current Goals
 
-- 🏆 Google Cloud Innovator program
-- 🤖 Google GEAR — Generative AI for DevOps
-- 📚 Launching a DevOps course series
-- 📝 Weekly content on YouTube and this blog
+- Google Cloud Innovator program
+- Google Developer Experts (Cloud)
+- Google GEAR — Generative AI for DevOps
+- Launching a DevOps course series
+- Weekly content on YouTube and this blog
 
 ## Let's Connect
 
