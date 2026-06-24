@@ -29,10 +29,11 @@ Crio conteúdo em português sobre DevOps, Cloud e automação — conectando ex
 
 ## Objetivos Atuais
 
-- 🏆 Programa Google Cloud Innovator
-- 🤖 Google GEAR — IA Generativa para DevOps
-- 📚 Lançamento da trilha de cursos DevOps
-- 📝 Conteúdo semanal no YouTube e neste blog
+- Programa Google Cloud Innovator
+- Google Developer Experts (Cloud)
+- Google GEAR — IA Generativa para DevOps
+- Lançamento da trilha de cursos DevOps
+- Conteúdo semanal no YouTube e neste blog
 
 ## Vamos Conversar
 
