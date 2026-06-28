@@ -21,7 +21,7 @@ import json
 import sys
 import re
 from pathlib import Path
-from typing import List, Dict
+from typing import List, Dict, Optional
 from datetime import datetime
 
 try:
@@ -201,6 +201,36 @@ def get_latest_videos_from_rss(channel_identifier: str, max_results: int = 2) ->
         return []
 
 
+def video_content_for_compare(videos: List[Dict]) -> List[Dict]:
+    """Campos que afetam o site — ignora last_updated e metadados de sync."""
+    return [
+        {
+            'id': v['id'],
+            'title': v['title'],
+            'description': v['description'],
+            'published_at': v['published_at'],
+            'thumbnail': v['thumbnail'],
+            'embed_url': v['embed_url'],
+            'watch_url': v['watch_url'],
+        }
+        for v in videos
+    ]
+
+
+def load_existing_videos(output_file: Path) -> Optional[List[Dict]]:
+    if not output_file.exists():
+        return None
+    with open(output_file, encoding='utf-8') as f:
+        data = json.load(f)
+    return data.get('recent_videos')
+
+
+def videos_unchanged(existing: Optional[List[Dict]], new_videos: List[Dict]) -> bool:
+    if existing is None:
+        return False
+    return video_content_for_compare(existing) == video_content_for_compare(new_videos)
+
+
 def save_videos_to_json(videos: List[Dict], output_file: Path):
     """Salva a lista de vídeos no arquivo JSON."""
     data = {
@@ -209,14 +239,13 @@ def save_videos_to_json(videos: List[Dict], output_file: Path):
         'total_videos': len(videos),
         'source': 'rss_feed'
     }
-    
-    # Criar diretório se não existir
+
     output_file.parent.mkdir(parents=True, exist_ok=True)
-    
-    # Salvar JSON com formatação bonita
+
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    
+        f.write('\n')
+
     print(f"✅ Arquivo atualizado: {output_file}")
 
 
@@ -267,10 +296,14 @@ def main():
             desc_preview = video['description'][:80] + '...' if len(video['description']) > 80 else video['description']
             print(f"     📝 {desc_preview}")
     
-    # Salvar no arquivo JSON
+    existing = load_existing_videos(OUTPUT_FILE)
+    if videos_unchanged(existing, videos):
+        print("\nℹ️  Vídeos inalterados em relação ao RSS. Nenhuma alteração no arquivo.")
+        sys.exit(0)
+
     print(f"\n💾 Salvando em {OUTPUT_FILE}...")
     save_videos_to_json(videos, OUTPUT_FILE)
-    
+
     print("\n✨ Atualização concluída com sucesso!")
     print(f"📊 Total de vídeos: {len(videos)}")
     print(f"📁 Arquivo: {OUTPUT_FILE.relative_to(PROJECT_ROOT)}")

@@ -2,8 +2,8 @@ name: Update YouTube Videos (RSS)
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Roda todo dia à meia-noite
-  workflow_dispatch: # Permite rodar manualmente
+    - cron: '0 0 * * *' # Roda todo dia à meia-noite UTC
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,6 +12,8 @@ permissions:
 jobs:
   update-rss:
     runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.create_pr.outputs.has_changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +32,9 @@ jobs:
           pip install -r scripts/requirements-rss.txt
 
       - name: Run update script
+        env:
+          YOUTUBE_CHANNEL_ID: ${{ vars.YOUTUBE_CHANNEL_ID }}
+          YOUTUBE_CHANNEL_USERNAME: '@matheusthurler'
         run: python scripts/update-youtube-videos-rss.py
 
       - name: Commit and Push to a new branch
@@ -37,18 +42,18 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          
+
           BRANCH_NAME="automation/update-youtube-$(date +%Y%m%d%H%M%S)"
-          git checkout -b $BRANCH_NAME
-          
+          git checkout -b "$BRANCH_NAME"
+
           if [[ -n "$(git status --porcelain)" ]]; then
-            git add .
-            git commit -m "🎬 Update recent YouTube videos via RSS [automated]"
-            git push origin $BRANCH_NAME
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            git add data/youtube.json
+            git commit -m "chore(youtube): update recent videos via RSS"
+            git push origin "$BRANCH_NAME"
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "branch_name=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
           else
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create and Merge PR
@@ -57,10 +62,39 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pr_url=$(gh pr create \
-            --title "🎬 Update YouTube Videos (RSS)" \
+            --title "chore(youtube): update recent videos via RSS" \
             --body "Automated update of YouTube videos from RSS feed." \
-            --head ${{ steps.create_pr.outputs.branch_name }} \
+            --head "${{ steps.create_pr.outputs.branch_name }}" \
             --base master)
-          
-          # Tenta o merge direto (como as aprovações são 0, deve funcionar)
+
           gh pr merge "$pr_url" --merge --delete-branch
+
+  deploy:
+    needs: update-rss
+    if: needs.update-rss.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          submodules: true
+          fetch-depth: 0
+
+      - name: Install Hugo with deploy support
+        run: |
+          curl -L -o hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v0.152.2/hugo_extended_withdeploy_0.152.2_linux-amd64.tar.gz
+          tar -xvf hugo.tar.gz
+          sudo mv hugo /usr/local/bin/
+          hugo version
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL }}
+          channelId: live
+          projectId: matheus-cloud-pessoal
