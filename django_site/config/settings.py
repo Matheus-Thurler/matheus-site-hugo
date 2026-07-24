@@ -563,6 +563,11 @@ if not DEBUG:
     # Without this, admin login succeeds then immediately returns to the login page.
     SESSION_COOKIE_NAME = '__session'
     CSRF_USE_SESSIONS = True  # csrftoken cookie is also stripped by Firebase CDN
+
+    # Cloud Run / Docker health probes hit /health/ with Host: 127.0.0.1
+    for _probe_host in ('127.0.0.1', 'localhost'):
+        if _probe_host not in ALLOWED_HOSTS:
+            ALLOWED_HOSTS.append(_probe_host)
 else:
     # Development settings
     SECURE_SSL_REDIRECT = False
