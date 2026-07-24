@@ -111,16 +111,16 @@
   {{ content }}
 </article>
 
-<!-- AdSense (loaded after cookie consent via consent.js) -->
-{% if google_adsense_id %}
-<div class="adsense-slot my-8 hidden p-4 bg-card border border-border rounded-2xl text-center overflow-x-auto" data-ad-slot="9876543210">
-    <p class="text-xs text-muted-foreground mb-2">Advertisement</p>
-    <ins class="adsbygoogle block"
-         style="display:block"
-         data-ad-client="{{ google_adsense_id }}"
-         data-ad-slot="9876543210"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
+<!-- AdSense in-article (loaded after cookie consent via consent.js) -->
+{% if google_adsense_client_id %}
+<div class="adsense-slot my-8 hidden flex flex-col items-center justify-center overflow-hidden">
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-layout="in-article"
+         data-ad-format="fluid"
+         data-ad-client="{{ google_adsense_client_id }}"
+         data-ad-slot="{{ google_adsense_slot }}"></ins>
+    <span class="text-xs text-muted-foreground mt-2">Advertisement</span>
 </div>
 {% endif %}
 

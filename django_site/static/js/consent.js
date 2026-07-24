@@ -48,9 +48,18 @@
       .catch(function () {});
   }
 
+  function adsenseClientId() {
+    var id = window.__ADSENSE_ID__ || "";
+    if (id.indexOf("ca-pub-") === 0) return id;
+    if (id.indexOf("pub-") === 0) return "ca-" + id;
+    return id;
+  }
+
   function loadAdSense() {
     if (!window.__ADSENSE_ID__) return;
     if (!document.querySelector(".adsense-slot")) return;
+
+    var clientId = adsenseClientId();
 
     var link = document.createElement("link");
     link.rel = "preconnect";
@@ -60,7 +69,7 @@
 
     loadScript(
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
-        window.__ADSENSE_ID__,
+        clientId,
       { crossorigin: "anonymous" }
     )
       .then(function () {

@@ -429,6 +429,16 @@ GOOGLE_ANALYTICS_ID = 'G-G73F8VFQNC'
 
 # Google AdSense
 GOOGLE_ADSENSE_ID = 'pub-3348120452456400'
+GOOGLE_ADSENSE_SLOT = 'auto'  # in-article fluid (same as Hugo)
+
+
+def adsense_client_id(publisher_id=GOOGLE_ADSENSE_ID):
+    """Normalize publisher id to ca-pub-… for AdSense script tags."""
+    if publisher_id.startswith('ca-pub-'):
+        return publisher_id
+    if publisher_id.startswith('pub-'):
+        return f'ca-{publisher_id}'
+    return publisher_id
 
 # Code highlighting
 CODEBLOCK_COLLAPSE_ENABLED = True
@@ -596,12 +606,17 @@ CONTENT_SECURITY_POLICY = {
             "'unsafe-inline'",
             'https://www.googletagmanager.com',
             'https://pagead2.googlesyndication.com',
+            'https://googleads.g.doubleclick.net',
+            'https://www.google.com',
             'https://giscus.app',
         ),
         'style-src': ("'self'", "'unsafe-inline'"),
         'img-src': (
             "'self'",
             'https://pagead2.googlesyndication.com',
+            'https://googleads.g.doubleclick.net',
+            'https://www.google.com',
+            'https://www.gstatic.com',
             'https://img.youtube.com',
             'https://i.ytimg.com',
             'https://avatars.githubusercontent.com',
@@ -610,7 +625,15 @@ CONTENT_SECURITY_POLICY = {
             'data:',
             'blob:',
         ),
-        'frame-src': ("'self'", 'https://www.youtube.com', 'https://img.youtube.com', 'https://giscus.app'),
+        'frame-src': (
+            "'self'",
+            'https://www.youtube.com',
+            'https://img.youtube.com',
+            'https://giscus.app',
+            'https://googleads.g.doubleclick.net',
+            'https://tpc.googlesyndication.com',
+            'https://www.google.com',
+        ),
         'connect-src': (
             "'self'",
             'https://api.github.com',
@@ -621,6 +644,8 @@ CONTENT_SECURITY_POLICY = {
             'https://*.google-analytics.com',
             'https://www.googletagmanager.com',
             'https://pagead2.googlesyndication.com',
+            'https://googleads.g.doubleclick.net',
+            'https://ep1.adtrafficquality.google',
         ),
         'font-src': ("'self'", 'https://fonts.gstatic.com'),
         'media-src': ("'self'", 'https://img.youtube.com', 'https://i.ytimg.com'),

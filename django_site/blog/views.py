@@ -373,3 +373,12 @@ def robots_txt(request):
 def health_check(request):
     """Lightweight liveness probe for Cloud Run deploy smoke tests."""
     return JsonResponse({'status': 'ok'})
+
+
+def ads_txt(request):
+    """AdSense ads.txt at site root (required for revenue verification)."""
+    from django.conf import settings
+
+    publisher = settings.GOOGLE_ADSENSE_ID.removeprefix('ca-')
+    body = f'google.com, {publisher}, DIRECT, f08c47fec0942fa0\n'
+    return HttpResponse(body, content_type='text/plain; charset=utf-8')
