@@ -56,7 +56,7 @@ def site_settings(request):
         'analytics_self_hosted': getattr(settings, 'ANALYTICS_SELF_HOSTED', True),
         'google_analytics_id': settings.GOOGLE_ANALYTICS_ID,
         'google_adsense_id': settings.GOOGLE_ADSENSE_ID,
-        'google_adsense_client_id': settings.adsense_client_id(),
+        'google_adsense_client_id': settings.GOOGLE_ADSENSE_CLIENT_ID,
         'google_adsense_slot': settings.GOOGLE_ADSENSE_SLOT,
         'reading_progress_enabled': settings.READING_PROGRESS_ENABLED,
         'reading_progress_height': settings.READING_PROGRESS_HEIGHT,

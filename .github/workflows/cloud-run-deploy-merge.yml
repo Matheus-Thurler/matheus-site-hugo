@@ -133,10 +133,20 @@ jobs:
 
           echo "Production URL: ${PROD_URL}"
 
+          for attempt in $(seq 1 12); do
+            if curl -fsS "${PROD_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'; then
+              break
+            fi
+            sleep 5
+          done
+
           curl -fsS "${PROD_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'
           echo "✓ /health/"
 
           curl -fsS "${PROD_URL}/ads.txt" | grep -q 'pub-3348120452456400'
           echo "✓ /ads.txt"
 
-          curl -fsS -o /dev/null -w "posts: %{http_code}\n" "${PROD_URL}/posts/"
+          code="$(curl -sS -o /dev/null -w '%{http_code}' "${PROD_URL}/posts/")"
+          echo "posts: ${code}"
+          test "$code" = "200"
+          echo "✓ /posts/"
