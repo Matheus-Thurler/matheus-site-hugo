@@ -67,4 +67,7 @@ user.save()
 print(f"Admin ready: {user.email} (username={user.username})")
 PY
 
-echo "Login: https://matheus-blog-rrqajqgnaq-rj.a.run.app/admin/"
+uv run python manage.py axes_reset_username "$USERNAME" 2>/dev/null || true
+uv run python manage.py axes_reset 2>/dev/null || true
+
+echo "Login: https://matheusthurler.com.br/admin/ (username=$USERNAME, not email)"

@@ -558,6 +558,11 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
 
     WHITENOISE_MAX_AGE = 60 * 60 * 24 * 30  # 30 days — Lighthouse cache lifetime
+
+    # Firebase Hosting → Cloud Run rewrites strip every cookie except __session.
+    # Without this, admin login succeeds then immediately returns to the login page.
+    SESSION_COOKIE_NAME = '__session'
+    CSRF_USE_SESSIONS = True  # csrftoken cookie is also stripped by Firebase CDN
 else:
     # Development settings
     SECURE_SSL_REDIRECT = False
@@ -583,7 +588,9 @@ AXES_ENABLED = True
 AXES_FAILURE_LIMIT = 5  # Number of failed attempts before lockout
 AXES_COOLOFF_TIME = 1  # 1 hour lockout after failed attempts
 AXES_LOCK_OUT_AT_FAILURE = True
-AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
+# Firebase Hosting → Cloud Run: client IP is not reliable (often 169.254.x.x).
+# Lock by username only to avoid shared-IP false lockouts.
+AXES_LOCKOUT_PARAMETERS = ['username']
 AXES_RESET_ON_SUCCESS = True  # Reset failure count on successful login
 
 # =============================================================================
