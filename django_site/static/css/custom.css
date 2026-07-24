@@ -198,6 +198,76 @@ article.group > a:active > div,
   line-height: 1.2;
 }
 
+/* Cookie consent — centered banner + button row */
+#cookie-consent {
+  transform: translateX(-50%) translateY(1rem);
+  pointer-events: none;
+}
+
+#cookie-consent.cookie-consent--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.cookie-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.cookie-consent-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 7.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cookie-consent-btn:active {
+  transform: scale(0.98);
+}
+
+.cookie-consent-btn--accept {
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+}
+
+.cookie-consent-btn--accept:hover {
+  filter: brightness(1.08);
+}
+
+.cookie-consent-btn--reject {
+  background-color: var(--color-muted);
+  color: var(--color-foreground);
+  border-color: var(--color-border);
+}
+
+.cookie-consent-btn--reject:hover {
+  filter: brightness(1.06);
+}
+
+.cookie-consent-close {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Post meta card — author row spacing (Tailwind pt-* not in compiled bundle) */
 .post-meta-author {
   margin-top: 0.75rem;
@@ -228,15 +298,13 @@ article.group > a:active > div,
     padding-bottom: 1rem;
   }
 
-  #cookie-accept,
-  #cookie-reject {
-    min-height: 44px;
-    min-width: 44px;
+  .cookie-consent-actions {
+    flex-direction: column;
   }
 
-  #cookie-close {
-    min-width: 44px;
-    min-height: 44px;
+  .cookie-consent-btn {
+    width: 100%;
+    max-width: 16rem;
   }
 
   .newsletter-form button[type="submit"] {

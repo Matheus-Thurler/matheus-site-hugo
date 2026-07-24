@@ -100,10 +100,9 @@
   }
 
   function hideBanner(banner) {
-    banner.classList.add("opacity-0", "translate-y-4");
+    banner.classList.remove("cookie-consent--visible");
     window.setTimeout(function () {
       banner.classList.add("hidden");
-      banner.classList.remove("opacity-0", "translate-y-4", "opacity-100", "translate-y-0");
     }, 300);
   }
 
@@ -127,7 +126,7 @@
 
     window.requestAnimationFrame(function () {
       banner.classList.remove("hidden", "pointer-events-none");
-      banner.classList.add("opacity-100", "translate-y-0");
+      banner.classList.add("cookie-consent--visible");
     });
 
     document.getElementById("cookie-accept")?.addEventListener("click", function () {
