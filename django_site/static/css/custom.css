@@ -52,11 +52,27 @@ a:focus:not(:focus-visible),
 }
 
 /* Card links: avoid primary background flash while pressed */
+article.group > a,
+.post-list article > a {
+  -webkit-tap-highlight-color: transparent;
+  color: inherit;
+}
+
+article.group > a:link,
+article.group > a:visited,
+.post-list article > a:link,
+.post-list article > a:visited {
+  color: inherit;
+}
+
 article.group > a:active > div,
-.post-list article > a:active > div {
-  background-color: var(--color-card);
-  border-color: var(--color-border);
-  transform: none;
+article.group > a:active .post-card,
+.post-list article > a:active > div,
+.post-list article > a:active .post-card {
+  background-color: var(--color-card) !important;
+  border-color: var(--color-border) !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 /* Newsletter — centered stack + form layout */

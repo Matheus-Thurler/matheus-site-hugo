@@ -130,9 +130,29 @@
       })();
     </script>
 
-    <link rel="preload" href="{% static 'css/compiled.css' %}" as="style">
-    <link rel="stylesheet" href="{% static 'css/compiled.css' %}" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="{% static 'css/compiled.css' %}"></noscript>
+    <style>
+      /* Critical paint — avoid purple link flash before compiled.css loads */
+      html.dark {
+        background-color: #1a1a1a;
+        color: #eceff4;
+      }
+      html:not(.dark) {
+        background-color: #eceff4;
+        color: #2e3440;
+      }
+      body {
+        background-color: inherit;
+        color: inherit;
+      }
+      a,
+      a:link,
+      a:visited {
+        color: inherit;
+        text-decoration: inherit;
+      }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'css/compiled.css' %}">
     {% block syntax_highlight_css %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     {% if show_toc %}

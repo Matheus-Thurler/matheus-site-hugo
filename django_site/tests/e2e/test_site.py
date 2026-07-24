@@ -191,7 +191,7 @@ class TestPostDetail:
         expect(linkedin_link).to_be_visible()
 
     def test_comments_section(self, page: Page):
-        """Verifica seção de comentários (Giscus após consent)."""
+        """Verifica seção de comentários (Giscus carrega sem depender de cookie consent)."""
         page.goto("/posts/nginx-vs-traefik-vs-caddy/")
 
         comments = page.locator("#comments")

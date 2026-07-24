@@ -1,6 +1,6 @@
 /**
- * Cookie consent + lazy-load third-party scripts (GA, AdSense, Giscus).
- * Scripts load only after explicit user acceptance (LGPD/GDPR).
+ * Cookie consent + lazy-load tracking scripts (GA, AdSense).
+ * Giscus loads on comment pages without marketing consent (functional widget).
  */
 (function () {
   "use strict";
@@ -114,7 +114,12 @@
   function loadThirdParties() {
     loadGoogleAnalytics();
     loadAdSense();
-    loadGiscus();
+  }
+
+  function initGiscusIfPresent() {
+    if (document.getElementById("giscus-root")) {
+      loadGiscus();
+    }
   }
 
   function hideBanner(banner) {
@@ -159,6 +164,7 @@
   }
 
   function init() {
+    initGiscusIfPresent();
     if (localStorage.getItem(CONSENT_KEY) === "accepted") {
       loadThirdParties();
     }
