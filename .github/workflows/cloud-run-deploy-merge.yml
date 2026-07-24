@@ -133,8 +133,7 @@ jobs:
           gcloud run services update "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
             --project "${{ env.GCP_PROJECT_ID }}" \
-            --min-instances 1 \
-            --update-env-vars 'ALLOWED_HOSTS=matheusthurler.com.br,www.matheusthurler.com.br,.a.run.app,matheus-cloud-pessoal.web.app,matheus-cloud-pessoal.firebaseapp.com,127.0.0.1,localhost'
+            --min-instances 1
 
       - name: Deploy Firebase Hosting (CDN → Cloud Run)
         run: bash scripts/firebase-deploy.sh
