@@ -1,0 +1,57 @@
+# Matheus Thurler Blog
+
+> DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and Site Reliability Engineering.
+
+## About
+
+This is a bilingual (English/Portuguese) technical blog covering:
+
+- Google Cloud Platform (GCP) tutorials
+- Kubernetes & container orchestration
+- Terraform & Infrastructure as Code
+- CI/CD pipelines and DevOps practices
+- Site Reliability Engineering (SRE)
+- Platform Engineering
+- AI/LLM integration in DevOps workflows
+
+## Author
+
+- **Name**: Matheus Thurler
+- **Role**: DevOps & Platform Engineer | Google Cloud | SRE | AI
+- **GitHub**: https://github.com/Matheus-Thurler
+- **YouTube**: https://youtube.com/@matheusthurler
+- **LinkedIn**: https://linkedin.com/in/matheusthurler
+
+## Topics
+
+### Cloud & Infrastructure
+- Google Cloud Platform
+- Kubernetes
+- Terraform
+- Cloud SQL, GKE, Cloud Run
+
+### DevOps & SRE
+- CI/CD pipelines
+- GitOps
+- Monitoring & observability
+- Incident response
+
+### Platform Engineering
+- Internal Developer Platforms (IDP)
+- Self-service infrastructure
+- Developer experience
+
+### AI in DevOps
+- LLM integration
+- AI-powered automation
+- Intelligent monitoring
+
+## Languages
+
+- English (default)
+- Portuguese (Brazil) - /pt/
+
+## Contact
+
+- Email: matheus@matheusthurler.com.br
+- GitHub: https://github.com/Matheus-Thurler

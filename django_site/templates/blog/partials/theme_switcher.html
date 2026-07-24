@@ -1,0 +1,41 @@
+{% if show_theme_switch %}
+<div id="theme-switcher" class="fixed bottom-4 right-4 z-50">
+    <button id="theme-btn" class="w-12 h-12 rounded-full bg-[#4C566A] text-[#E5E9F0] shadow-lg flex items-center justify-center hover:bg-[#88C0D0] hover:text-[#2E3440] transition-all" aria-label="Toggle theme">
+        <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg id="theme-icon-dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+    </button>
+</div>
+
+<script>
+    const themeBtn = document.getElementById('theme-btn');
+    const lightIcon = document.getElementById('theme-icon-light');
+    const darkIcon = document.getElementById('theme-icon-dark');
+    const html = document.documentElement;
+
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme') || 'nord-dark';
+    html.className = savedTheme;
+    updateIcons(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const newTheme = html.classList.contains('nord-dark') ? 'nord-light' : 'nord-dark';
+        html.className = newTheme;
+        localStorage.setItem('theme', newTheme);
+        updateIcons(newTheme);
+    });
+
+    function updateIcons(theme) {
+        if (theme === 'nord-light') {
+            lightIcon.classList.add('hidden');
+            darkIcon.classList.remove('hidden');
+        } else {
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        }
+    }
+</script>
+{% endif %}

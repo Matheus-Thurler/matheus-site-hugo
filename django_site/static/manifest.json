@@ -1,0 +1,20 @@
+{
+  "name": "Matheus Thurler",
+  "short_name": "MT",
+  "description": "DevOps & Platform Engineer focused on Google Cloud",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#1a1a1a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/static/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "en",
+  "categories": ["technology", "education"]
+}

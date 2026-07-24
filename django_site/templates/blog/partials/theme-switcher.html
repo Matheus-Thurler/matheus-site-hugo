@@ -1,0 +1,15 @@
+<!-- Theme Switcher - Hugo Style -->
+<div class="relative">
+  <button id="theme-switch-btn" class="dropdown-toggle border-border bg-background text-muted-foreground hover:text-primary hover:bg-muted/60 focus:ring-primary/20 flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-300 ease-out hover:scale-105 focus:ring-2 focus:outline-none active:scale-95" data-dropdown-type="color-scheme" aria-label="Switch color scheme" aria-expanded="false" aria-haspopup="true">
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z" />
+    </svg>
+  </button>
+
+  <div id="theme-dropdown" class="dropdown-menu border-border bg-popover/95 absolute top-12 right-0 z-[60] hidden w-44 rounded-lg border p-1 shadow-lg backdrop-blur-sm transition-all duration-200 ease-out" data-dropdown-type="color-scheme">
+    <button data-color-scheme="default" class="text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex w-full items-center rounded-md px-4 py-2 text-sm transition-all duration-200 ease-out focus:outline-none">Default</button>
+    <button data-color-scheme="nord" class="text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex w-full items-center rounded-md px-4 py-2 text-sm transition-all duration-200 ease-out focus:outline-none">Nord</button>
+    <button data-color-scheme="claude" class="text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex w-full items-center rounded-md px-4 py-2 text-sm transition-all duration-200 ease-out focus:outline-none">Claude</button>
+    <button data-color-scheme="dracula" class="text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground flex w-full items-center rounded-md px-4 py-2 text-sm transition-all duration-200 ease-out focus:outline-none">Dracula</button>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Categories | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+    <h1 class="text-foreground text-3xl font-bold mb-8">Categories</h1>
+
+    <div class="grid gap-4 md:grid-cols-2">
+        {% for category in categories %}
+        <a href="{% url 'blog:category' category.slug %}" class="bg-card border-border hover:bg-muted/40 flex items-center justify-between rounded-xl border p-6 transition-all">
+            <div>
+                <h2 class="text-foreground text-lg font-semibold">{{ category.name }}</h2>
+                {% if category.description %}
+                <p class="text-muted-foreground text-sm">{{ category.description|truncatechars:60 }}</p>
+                {% endif %}
+            </div>
+            <span class="text-muted-foreground text-2xl">→</span>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

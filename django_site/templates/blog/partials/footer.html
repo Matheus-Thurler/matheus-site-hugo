@@ -1,0 +1,24 @@
+<footer class="mx-auto max-w-4xl px-4 py-8">
+  <div class="px-6 py-6">
+    {% if footer_menu %}
+    <nav class="mb-6">
+      <div class="flex flex-wrap items-center justify-center gap-1">
+        {% for item in footer_menu %}
+        <a
+          href="{{ item.url }}"
+          {% if item.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+          class="nav-link hover:text-primary hover:bg-primary/10 text-muted-foreground flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105">
+          <span>{{ item.name }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </nav>
+    {% endif %}
+
+    <div class="border-border mb-6 border-t"></div>
+
+    <div class="text-muted-foreground text-center text-sm">
+      <p>&copy; {% now "Y" %} {{ site_name }}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

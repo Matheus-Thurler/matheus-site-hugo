@@ -1,0 +1,50 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Generate post with AI" %} | {{ block.super }}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% trans "Home" %}</a>
+  &rsaquo; <a href="{% url 'admin:blog_post_changelist' %}">{% trans "Posts" %}</a>
+  &rsaquo; {% trans "Generate with AI" %}
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{% trans "Generate post with AI" %}</h1>
+
+<p class="help">
+  {% trans "Describe the post in your own words. Gemini will create a draft you can review and publish from the admin." %}
+  {% if not gemini_configured %}
+  <strong style="color:#c0392b;display:block;margin-top:0.5rem;">
+    {% trans "GEMINI_API_KEY is not set — add it to your .env before generating." %}
+  </strong>
+  {% endif %}
+</p>
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  <fieldset class="module aligned">
+    {% for field in form %}
+    <div class="form-row{% if field.errors %} errors{% endif %}">
+      {{ field.errors }}
+      <div>
+        <label for="{{ field.id_for_label }}"{% if field.field.required %} class="required"{% endif %}>{{ field.label }}:</label>
+        {{ field }}
+        {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </fieldset>
+  <div class="submit-row">
+    <input type="submit" value="{% trans 'Generate draft' %}" class="default" {% if not gemini_configured %}disabled{% endif %}>
+    <a href="{% url 'admin:blog_post_changelist' %}" class="button cancel-link">{% trans "Cancel" %}</a>
+  </div>
+</form>
+
+<p class="help" style="margin-top:1.5rem;">
+  {% trans "Model:" %} <code>{{ gemini_model }}</code>.
+  {% trans "Posts are saved as drafts — nothing is published automatically." %}
+</p>
+{% endblock %}

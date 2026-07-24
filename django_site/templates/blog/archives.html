@@ -1,0 +1,38 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{% if lang == 'pt' %}Arquivos{% else %}Archives{% endif %} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-[#ECEFF4]">{% if lang == 'pt' %}Arquivos{% else %}Archives{% endif %}</h1>
+    </header>
+
+    {% if posts_by_year %}
+    {% for year, year_posts in posts_by_year.items %}
+    <section class="mb-8">
+        <h2 class="text-2xl font-bold text-[#88C0D0] mb-4">{{ year }}</h2>
+        <div class="space-y-2">
+            {% for post in year_posts %}
+            <a href="{{ post.get_absolute_url }}" class="flex items-center gap-4 p-3 bg-[#3B4252] rounded-lg hover:bg-[#4C566A] transition-colors group">
+                <time class="text-sm text-[#4C566A] w-20 flex-shrink-0">
+                    {{ post.published_at|date:"M d" }}
+                </time>
+                <span class="text-[#E5E9F0] group-hover:text-[#88C0D0] transition-colors">
+                    {{ post.get_title }}
+                </span>
+                {% if post.category %}
+                <span class="ml-auto text-xs px-2 py-1 bg-[#5E81AC] text-[#ECEFF4] rounded">
+                    {{ post.category.name }}
+                </span>
+                {% endif %}
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+    {% else %}
+    <p class="text-[#4C566A] text-center py-12">{% if lang == 'pt' %}Nenhum post encontrado.{% else %}No posts found.{% endif %}</p>
+    {% endif %}
+</div>
+{% endblock %}

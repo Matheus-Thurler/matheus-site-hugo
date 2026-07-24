@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default:'en' }}" data-theme="{{ color_scheme|default:'nord' }}" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ECEFF4" media="(prefers-color-scheme: light)">
+    <meta name="color-scheme" content="dark light">
+    <meta name="generator" content="Django {{ request.META.SERVER_SOFTWARE|default:'Blog' }}">
+    <meta name="application-name" content="{{ site_name }}">
+    <meta name="apple-mobile-web-app-title" content="{{ site_name }}">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <!-- SEO -->
+    <meta name="description" content="{{ description|default:site_description }}">
+    <meta name="author" content="{{ author_name }}">
+    <meta name="keywords" content="{% for k in site_keywords %}{{ k }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="rating" content="general">
+    <meta name="distribution" content="global">
+    <meta name="revisit-after" content="7 days">
+    <meta name="language" content="{{ lang|default:'en' }}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    {% if lang == 'pt' %}
+    <link rel="alternate" hreflang="en" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path|slice:'3:' }}">
+    <link rel="alternate" hreflang="pt" href="{{ request.build_absolute_uri }}">
+    <link rel="alternate" hreflang="x-default" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path|slice:'3:' }}">
+    {% else %}
+    <link rel="alternate" hreflang="en" href="{{ request.build_absolute_uri }}">
+    <link rel="alternate" hreflang="pt" href="{{ request.scheme }}://{{ request.get_host }}/pt{{ request.path }}">
+    <link rel="alternate" hreflang="x-default" href="{{ request.build_absolute_uri }}">
+    {% endif %}
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="{{ site_name }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:locale" content="{% if lang == 'pt' %}pt_BR{% else %}en_US{% endif %}">
+    <meta property="og:locale:alternate" content="{% if lang == 'pt' %}en_US{% else %}pt_BR{% endif %}">
+    <meta property="og:title" content="{% block og_title %}{{ site_name }}{% endblock %}">
+    <meta property="og:description" content="{{ description|default:site_description }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/og-default.avif{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ site_name }}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@{{ author_name|slugify }}">
+    <meta name="twitter:creator" content="@{{ author_name|slugify }}">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ site_name }}{% endblock %}">
+    <meta name="twitter:description" content="{{ description|default:site_description }}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/og-default.avif{% endblock %}">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "{% block schema_type %}WebSite{% endblock %}",
+        "name": "{{ site_name }}",
+        "alternateName": "Matheus Thurler Blog",
+        "url": "{{ request.scheme }}://{{ request.get_host }}/",
+        "description": "{{ description|default:site_description|escapejs }}",
+        "inLanguage": ["en", "pt-BR"],
+        "author": {
+            "@type": "Person",
+            "name": "{{ author_name }}",
+            "url": "{{ request.scheme }}://{{ request.get_host }}/",
+            "sameAs": [
+                "{{ author_github }}",
+                "{{ author_youtube }}",
+                "{{ author_linkedin }}"
+            ],
+            "jobTitle": "{{ author_title|escapejs }}",
+            "knowsAbout": ["DevOps", "Google Cloud Platform", "Kubernetes", "Terraform", "CI/CD", "Site Reliability Engineering", "Platform Engineering"]
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "{{ author_name }}"
+        }
+    }
+    </script>
+
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+
+    {% load static %}
+
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/logo.svg' %}">
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site_name }}" href="/index.xml">
+
+    <!-- DNS prefetch (third-party scripts load after consent) -->
+    <link rel="dns-prefetch" href="https://img.youtube.com">
+    <link rel="dns-prefetch" href="https://i.ytimg.com">
+    <link rel="dns-prefetch" href="https://giscus.app">
+
+    <!-- Third-party config (loaded by consent.js after acceptance) -->
+    <script>
+      window.__ANALYTICS_ENABLED__ = {{ analytics_enabled|yesno:"true,false" }};
+      window.__ANALYTICS_SELF_HOSTED__ = {{ analytics_self_hosted|yesno:"true,false" }};
+      window.__GA_ID__ = "{{ google_analytics_id|escapejs }}";
+      window.__ADSENSE_ID__ = "{{ google_adsense_id|escapejs }}";
+    </script>
+
+    <script>
+      (function () {
+        const theme = localStorage.getItem('theme') || '{{ default_color_mode|default:"dark"|escapejs }}';
+        const colorScheme = localStorage.getItem('colorScheme') || '{{ color_scheme|default:"nord"|escapejs }}';
+        document.documentElement.setAttribute('data-theme', colorScheme);
+
+        function applyTheme() {
+          if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+
+        applyTheme();
+
+        if (theme === 'system') {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+        }
+      })();
+    </script>
+
+    <link rel="preload" href="{% static 'css/compiled.css' %}" as="style">
+    <link rel="stylesheet" href="{% static 'css/compiled.css' %}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{% static 'css/compiled.css' %}"></noscript>
+    <link rel="stylesheet" href="{% static 'css/chroma.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% if show_toc %}
+    <link rel="stylesheet" href="{% static 'css/toc.css' %}">
+    {% endif %}
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-background text-foreground min-h-screen antialiased flex flex-col">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {% if reading_progress_enabled %}
+      {% if show_reading_progress != False %}
+        {% include "blog/partials/reading_progress.html" %}
+      {% endif %}
+    {% endif %}
+
+    {% include "blog/partials/header.html" %}
+
+    <main id="main-content" class="mx-auto max-w-4xl w-full flex-1 px-4 py-6" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include "blog/partials/footer.html" %}
+
+    {% if show_dock %}
+    {% include "blog/partials/dock.html" %}
+    {% endif %}
+
+    {% if show_toc %}
+    {% include "blog/partials/toc_card.html" %}
+    {% endif %}
+
+    {% include "blog/partials/search_modal.html" %}
+    {% include "blog/partials/cookie_consent.html" %}
+
+    <script src="{% static 'js/consent.js' %}" defer></script>
+    <script src="{% static 'js/search.js' %}" defer></script>
+    <script src="{% static 'js/dock.js' %}" defer></script>
+    <script src="{% static 'js/main.js' %}" defer></script>
+    {% if analytics_self_hosted %}
+    <script src="{% static 'js/analytics-track.js' %}" defer></script>
+    {% endif %}
+    {% if show_toc %}
+    <script src="{% static 'js/gumshoe.polyfills.min.js' %}" defer></script>
+    <script src="{% static 'js/toc.js' %}" defer></script>
+    {% endif %}
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

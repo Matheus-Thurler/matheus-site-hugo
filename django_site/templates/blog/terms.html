@@ -1,0 +1,76 @@
+{% extends "blog/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Terms of Service" %} | {{ site_name }}{% endblock %}
+{% block description %}{% trans "Terms of Service for Matheus Thurler's blog." %}{% endblock %}
+
+{% block extra_head %}
+<meta name="robots" content="index, follow">
+<meta name="author" content="{{ site_name }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% trans 'Terms of Service' %} | {{ site_name }}">
+<meta property="og:description" content="{% trans 'Terms of Service for Matheus Thurler\'s blog.' %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+<article class="prose prose-neutral dark:prose-invert max-w-none">
+    <h1 class="text-4xl font-bold mb-2">{% trans "Terms of Service" %}</h1>
+    <p class="text-muted-foreground text-sm">{% blocktrans with date="January 2025" %}Last updated: {{ date }}{% endblocktrans %}</p>
+
+    <p class="lead">{% blocktrans %}Welcome to {{ site_name }}. By accessing or using our website, you agree to be bound by these Terms of Service.{% endblocktrans %}</p>
+
+    <h2>1. {% trans "Acceptance of Terms" %}</h2>
+    <p>{% trans "By accessing this website, you confirm that you accept these Terms of Service and that you agree to comply with them. If you do not agree with any part of these terms, you must not use this website." %}</p>
+
+    <h2>2. {% trans "Use of the Website" %}</h2>
+    <p>{% trans "You may use this website for lawful purposes only and in accordance with these Terms. You agree not to use this website:" %}</p>
+    <ul>
+        <li>{% trans "In any way that violates any applicable local, national, or international law or regulation" %}</li>
+        <li>{% trans "To transmit any unsolicited or unauthorized advertising or promotional material" %}</li>
+        <li>{% trans "To knowingly transmit any data or send or upload any material that contains viruses or other harmful programs" %}</li>
+        <li>{% trans "To attempt to gain unauthorized access to our website or any part of it" %}</li>
+    </ul>
+
+    <h2>3. {% trans "Intellectual Property Rights" %}</h2>
+    <p>{% trans "Unless otherwise stated, this website and its content (including but not limited to text, graphics, logos, images, code samples, and software) are owned by Matheus Thurler and are protected by copyright and other intellectual property laws." %}</p>
+    <p>{% trans "You may view, download, and print content from this website for personal, non-commercial use, provided you retain all copyright and other proprietary notices." %}</p>
+
+    <h3>{% trans "Content License" %}</h3>
+    <p>{% trans "Unless otherwise indicated, blog posts are licensed under" %} <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">{% trans "Creative Commons Attribution 4.0 International License (CC BY 4.0)" %}</a>.</p>
+
+    <h2>4. {% trans "User-Generated Content" %}</h2>
+    <p>{% trans "Comments posted via Giscus (GitHub Discussions) are subject to GitHub's Terms of Service. You are solely responsible for the content you post and the consequences of posting it." %}</p>
+
+    <h2>5. {% trans "Third-Party Links and Services" %}</h2>
+    <p>{% trans "This website may contain links to third-party websites or services, including YouTube, GitHub, Google AdSense, and Google Analytics. We are not responsible for the content, privacy practices, or accuracy of any third-party site or service." %}</p>
+
+    <h2>6. {% trans "Disclaimer of Warranties" %}</h2>
+    <p>{% trans "This website is provided on an 'AS IS' and 'AS AVAILABLE' basis. To the fullest extent permitted by law, we disclaim all warranties, express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, and non-infringement." %}</p>
+
+    <h3>{% trans "Technical Content Disclaimer" %}</h3>
+    <p>{% trans "The technical content on this blog (tutorials, code samples, configurations) is provided for educational purposes only. We make no warranties about the accuracy, reliability, or suitability of the information. Always test in a non-production environment first." %}</p>
+
+    <h2>7. {% trans "Limitation of Liability" %}</h2>
+    <p>{% trans "To the fullest extent permitted by applicable law, Matheus Thurler shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of data, profits, or business opportunities, arising from or related to your use of this website." %}</p>
+
+    <h2>8. {% trans "Indemnification" %}</h2>
+    <p>{% trans "You agree to indemnify and hold harmless Matheus Thurler from any claim, demand, loss, or expense (including attorneys' fees) arising from your use of this website or violation of these Terms." %}</p>
+
+    <h2>9. {% trans "Changes to These Terms" %}</h2>
+    <p>{% trans "We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting on this page. Your continued use of the website following any changes constitutes your acceptance of the new Terms." %}</p>
+
+    <h2>10. {% trans "Governing Law" %}</h2>
+    <p>{% trans "These Terms shall be governed by and construed in accordance with the laws of Brazil, without regard to its conflict of law provisions." %}</p>
+
+    <h2>11. {% trans "Contact" %}</h2>
+    <p>{% trans "If you have questions about these Terms, please contact:" %}</p>
+    <ul>
+        <li><strong>{% trans "Email" %}:</strong> <a href="mailto:{{ author_email }}">{{ author_email }}</a></li>
+        <li><strong>{% trans "GitHub" %}:</strong> <a href="{{ author_github }}" target="_blank" rel="noopener noreferrer">{{ author_github }}</a></li>
+    </ul>
+
+    <hr>
+    <p class="text-sm text-muted-foreground">{% blocktrans %}These terms are effective as of January 2025.{% endblocktrans %}</p>
+</article>
+{% endblock %}

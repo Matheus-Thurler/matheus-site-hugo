@@ -1,0 +1,36 @@
+{% extends "blog/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Contact" %} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-xl">
+    <h1 class="text-foreground text-3xl font-bold mb-4">{% trans "Contact" %}</h1>
+    <p class="text-muted-foreground mb-8">{% trans "Send a message — I'll reply by email." %}</p>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="mb-4 p-4 rounded-lg bg-primary/10 text-primary">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {{ form.website }}
+        {% for field in form.visible_fields %}
+        <div>
+            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-foreground mb-1">
+                {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+            <p class="text-red-400 text-sm mt-1">{{ field.errors.0 }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary px-6 py-2 rounded-lg">
+            {% trans "Send message" %}
+        </button>
+    </form>
+</div>
+{% endblock %}

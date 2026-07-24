@@ -1,0 +1,59 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{% if lang == 'pt' %}Buscar{% else %}Search{% endif %} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-[#ECEFF4] mb-4">{% if lang == 'pt' %}Buscar Posts{% else %}Search Posts{% endif %}</h1>
+
+        <form action="{% url 'blog:search' %}" method="get" class="flex gap-4">
+            <input type="text" name="q" value="{{ query }}" placeholder="{% if lang == 'pt' %}Digite sua busca...{% else %}Enter your search...{% endif %}" class="flex-1 px-4 py-2 bg-[#3B4252] border border-[#4C566A] rounded-lg text-[#E5E9F0] placeholder-[#4C566A] focus:outline-none focus:border-[#88C0D0]">
+            <button type="submit" class="px-6 py-2 bg-[#5E81AC] text-[#ECEFF4] rounded-lg hover:bg-[#81A1C1] transition-colors">
+                {% if lang == 'pt' %}Buscar{% else %}Search{% endif %}
+            </button>
+        </form>
+    </header>
+
+    {% if query %}
+    <div class="mb-6">
+        <p class="text-[#4C566A]">
+            {% if lang == 'pt' %}
+            Resultados para "{{ query }}": {{ posts|length }} encontrado(s)
+            {% else %}
+            Results for "{{ query }}": {{ posts|length }} found
+            {% endif %}
+        </p>
+    </div>
+
+    {% if posts %}
+    <div class="grid gap-6">
+        {% for post in posts %}
+        <article class="bg-[#3B4252] rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+            {% if post.category %}
+            <span class="inline-block px-2 py-1 text-xs font-medium bg-[#5E81AC] text-[#ECEFF4] rounded mb-2">
+                {{ post.category.name }}
+            </span>
+            {% endif %}
+            <h2 class="text-xl font-semibold text-[#ECEFF4] mb-2 hover:text-[#88C0D0] transition-colors">
+                <a href="{{ post.get_absolute_url }}">{{ post.get_title }}</a>
+            </h2>
+            <p class="text-[#D8DEE9] mb-3">{{ post.get_description|truncatewords:40 }}</p>
+            <div class="flex items-center gap-4 text-sm text-[#4C566A]">
+                {% if post.published_at %}
+                <time>{{ post.published_at|date:"M d, Y" }}</time>
+                {% endif %}
+                <span>&bull;</span>
+                <span>{{ post.reading_time }} min read</span>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-[#4C566A] text-center py-12">
+        {% if lang == 'pt' %}Nenhum resultado encontrado.{% else %}No results found.{% endif %}
+    </p>
+    {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

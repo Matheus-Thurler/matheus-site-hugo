@@ -1,0 +1,5 @@
+# Cron schedules (UTC) — same as content-automation Cloud Scheduler
+# 08:00 BRT = 11:00 UTC — daily content check
+0 11 * * * cd /app && python manage.py run_scheduled_jobs --job=check_content >> /var/log/cron.log 2>&1
+# 20:00 BRT Sunday = 23:00 UTC Sunday — weekly curation
+0 23 * * 0 cd /app && python manage.py run_scheduled_jobs --job=curate >> /var/log/cron.log 2>&1

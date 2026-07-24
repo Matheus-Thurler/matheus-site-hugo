@@ -1,0 +1,25 @@
+{
+  "recent_videos": [
+    {
+      "id": "5_fiNmpHYNE",
+      "title": "O Fim do \"Na minha máquina funciona\": Como o Distrobox Salva seu PC!",
+      "description": "Cansado de quebrar o seu sistema instalando dezenas de bibliotecas concorrentes, PPAs obscuros e versões antigas de linguagens? Aprenda a se livrar do famoso problema do \"na minha máquina funciona\"!",
+      "published_at": "2026-03-16T13:00:11+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/5_fiNmpHYNE/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/5_fiNmpHYNE",
+      "watch_url": "https://youtu.be/5_fiNmpHYNE"
+    },
+    {
+      "id": "joP5JzS9Bro",
+      "title": "🚀 Instalação COMPLETA do Apache CloudStack com Ansible | Tutorial Passo a Passo",
+      "description": "Automatize a instalação do CloudStack no seu homelab usando Ansible! Tutorial completo do zero, incluindo DEMO de deploy de cluster Kubernetes.",
+      "published_at": "2026-01-28T15:09:11+00:00",
+      "thumbnail": "https://i.ytimg.com/vi/joP5JzS9Bro/hqdefault.jpg",
+      "embed_url": "https://www.youtube.com/embed/joP5JzS9Bro",
+      "watch_url": "https://youtu.be/joP5JzS9Bro"
+    }
+  ],
+  "last_updated": "2026-06-28T01:58:52.612133",
+  "total_videos": 2,
+  "source": "rss_feed"
+}

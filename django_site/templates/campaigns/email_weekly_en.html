@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<body style="font-family:system-ui,sans-serif;background:#2E3440;color:#ECEFF4;padding:24px">
+<h1 style="color:#88C0D0">Weekly DevOps Digest</h1>
+{% if posts %}
+<h2>Latest posts</h2>
+<ul>
+{% for post in posts %}
+<li><a href="{{ site_url }}/posts/{{ post.slug }}/" style="color:#A3BE8C">{{ post.title_en }}</a></li>
+{% endfor %}
+</ul>
+{% endif %}
+{% if curated %}
+<h2>Community picks</h2>
+<ul>
+{% for item in curated %}
+<li><a href="{{ item.url }}" style="color:#A3BE8C">{{ item.title }}</a> — {{ item.ai_summary|truncatewords:20 }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<p><a href="{{ site_url }}">matheusthurler.com.br</a></p>
+</body>
+</html>

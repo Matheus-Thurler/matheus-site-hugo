@@ -1,0 +1,34 @@
+# Override for PostgreSQL — use with:
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml up --build
+
+services:
+  web:
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_ENGINE: postgresql
+      POSTGRES_HOST: db
+      POSTGRES_DB: "${POSTGRES_DB:-blog}"
+      POSTGRES_USER: "${POSTGRES_USER:-blog}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-blog}"
+    volumes:
+      - media_data:/app/media
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB:-blog}"
+      POSTGRES_USER: "${POSTGRES_USER:-blog}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-blog}"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-blog} -d ${POSTGRES_DB:-blog}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pg_data:

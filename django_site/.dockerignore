@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Local data
+db.sqlite3
+staticfiles/
+lighthouse-reports/
+test-results/
+playwright-report/
+
+# Secrets & env
+.env
+.env.*
+!.env.example
+
+# Git & IDE
+.git/
+.gitignore
+.vscode/
+.claude/
+
+# Docs & dev
+*.md
+!README.md
+tests/
+pytest.ini
+
+# Media (mount via volume in compose)
+media/

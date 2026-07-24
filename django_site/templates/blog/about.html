@@ -1,0 +1,102 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block title %}About | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+    <!-- Breadcrumb -->
+    <nav class="text-muted-foreground text-sm mb-6">
+        <a href="/" class="hover:text-primary">Home</a>
+        <span class="mx-2">/</span>
+        <span>About</span>
+    </nav>
+
+    <h1 class="text-foreground text-3xl font-bold mb-8">About</h1>
+
+    <!-- Table of Contents -->
+    <nav class="toc mb-8 p-4 bg-card border-border rounded-xl">
+        <ul class="space-y-2">
+            <li><a href="#about-me" class="text-primary hover:underline">About Me</a></li>
+            <li><a href="#what-i-work-with" class="text-primary hover:underline">What I Work With</a></li>
+            <li><a href="#content-teaching" class="text-primary hover:underline">Content & Teaching</a></li>
+            <li><a href="#current-goals" class="text-primary hover:underline">Current Goals</a></li>
+            <li><a href="#lets-connect" class="text-primary hover:underline">Let's Connect</a></li>
+        </ul>
+    </nav>
+
+    <!-- About Me -->
+    <section id="about-me" class="mb-12">
+        <h2 class="text-foreground text-2xl font-bold mb-4">About Me</h2>
+        <div class="prose prose-neutral dark:prose-invert max-w-none">
+            <p class="text-muted-foreground leading-relaxed">{{ author.description|default:"DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and Site Reliability Engineering." }}</p>
+        </div>
+    </section>
+
+    <!-- What I Work With -->
+    <section id="what-i-work-with" class="mb-12">
+        <h2 class="text-foreground text-2xl font-bold mb-4">What I Work With</h2>
+        <ul class="space-y-2 text-muted-foreground">
+            <li><strong class="text-foreground">Cloud:</strong> Google Cloud Platform (GKE, Cloud Run, Cloud Build, Vertex AI)</li>
+            <li><strong class="text-foreground">IaC:</strong> Terraform, Ansible, NixOS</li>
+            <li><strong class="text-foreground">Containers:</strong> Kubernetes, Docker, Helm, ArgoCD</li>
+            <li><strong class="text-foreground">CI/CD:</strong> GitHub Actions, Cloud Build, GitOps workflows</li>
+            <li><strong class="text-foreground">Platform Engineering:</strong> Internal Developer Platforms, Backstage, Service Catalog</li>
+        </ul>
+    </section>
+
+    <!-- Content & Teaching -->
+    <section id="content-teaching" class="mb-12">
+        <h2 class="text-foreground text-2xl font-bold mb-4">Content & Teaching</h2>
+        <div class="prose prose-neutral dark:prose-invert max-w-none">
+            <p class="text-muted-foreground leading-relaxed">{{ author.content_teaching|default:"I create tutorials and educational content about DevOps, Cloud Native technologies, and Platform Engineering. My goal is to help others learn complex topics through practical, real-world examples." }}</p>
+        </div>
+        <ul class="mt-4 space-y-2 text-muted-foreground">
+            {% if author.youtube %}
+            <li><strong class="text-foreground">YouTube:</strong> <a href="{{ author.youtube }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">@matheusthurler</a></li>
+            {% endif %}
+            {% if author.github %}
+            <li><strong class="text-foreground">GitHub:</strong> <a href="{{ author.github }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">@matheusthurler</a></li>
+            {% endif %}
+            {% if author.linkedin %}
+            <li><strong class="text-foreground">LinkedIn:</strong> <a href="{{ author.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Matheus Thurler</a></li>
+            {% endif %}
+        </ul>
+    </section>
+
+    <!-- Current Goals -->
+    <section id="current-goals" class="mb-12">
+        <h2 class="text-foreground text-2xl font-bold mb-4">Current Goals</h2>
+        <ul class="space-y-2 text-muted-foreground">
+            {% if goals_list %}
+                {% for goal in goals_list %}
+                <li>{{ goal }}</li>
+                {% endfor %}
+            {% else %}
+            <li>Google Cloud Innovator program</li>
+            <li>Contributing to open source projects</li>
+            <li>Building a community around Platform Engineering</li>
+            {% endif %}
+        </ul>
+    </section>
+
+    <!-- Let's Connect -->
+    <section id="lets-connect" class="mb-12">
+        <h2 class="text-foreground text-2xl font-bold mb-4">Let's Connect</h2>
+        <ul class="space-y-2 text-muted-foreground">
+            {% if author.github %}
+            <li><a href="{{ author.github }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">GitHub</a></li>
+            {% endif %}
+            {% if author.youtube %}
+            <li><a href="{{ author.youtube }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">YouTube</a></li>
+            {% endif %}
+            {% if author.linkedin %}
+            <li><a href="{{ author.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">LinkedIn</a></li>
+            {% endif %}
+            {% if author.email %}
+            <li><a href="mailto:{{ author.email }}" class="text-primary hover:underline">Email</a></li>
+            {% endif %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

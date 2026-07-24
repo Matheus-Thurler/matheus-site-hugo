@@ -1,0 +1,42 @@
+<div
+  id="reading-progress-container"
+  class="reading-progress-container pointer-events-none fixed top-0 right-0 left-0 z-50 transition-opacity duration-300 ease-out"
+  data-height="{{ reading_progress_height|default:3 }}"
+  data-smooth-scroll="true"
+  data-hide-on-complete="false">
+  <div class="reading-progress-bg w-full"></div>
+  <div
+    id="reading-progress-bar"
+    class="from-primary to-primary/80 reading-progress-bar transition-all duration-150 ease-out absolute top-0 left-0 w-0 bg-gradient-to-r"></div>
+</div>
+
+<script>
+  (function () {
+    "use strict";
+    const progressContainer = document.getElementById("reading-progress-container");
+    const progressBar = document.getElementById("reading-progress-bar");
+    if (!progressContainer || !progressBar) return;
+
+    function calculateProgress() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollableHeight <= 0) return 0;
+      return Math.min(Math.max((scrollTop / scrollableHeight) * 100, 0), 100);
+    }
+
+    let ticking = false;
+    function requestTick() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          progressBar.style.width = calculateProgress() + "%";
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    window.addEventListener("resize", requestTick, { passive: true });
+    requestTick();
+  })();
+</script>

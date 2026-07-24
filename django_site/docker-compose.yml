@@ -1,0 +1,59 @@
+# Matheus Thurler Blog — Docker Compose
+#
+# SQLite (default, dev/local):
+#   docker compose up --build
+#
+# PostgreSQL (prod-like):
+#   docker compose -f docker-compose.yml -f docker-compose.postgres.yml up --build
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${WEB_PORT:-8000}:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DB_ENGINE: sqlite
+      DATABASE_PATH: /app/data/db.sqlite3
+      DEBUG: "${DEBUG:-True}"
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS:-localhost,127.0.0.1,web}"
+      DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY:-change-me-in-production}"
+    volumes:
+      - sqlite_data:/app/data
+      - media_data:/app/media
+    restart: unless-stopped
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DB_ENGINE: sqlite
+      DATABASE_PATH: /app/data/db.sqlite3
+      DEBUG: "${DEBUG:-False}"
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS:-localhost,127.0.0.1,web}"
+      DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY:-change-me-in-production}"
+    volumes:
+      - sqlite_data:/app/data
+      - media_data:/app/media
+    command: >
+      sh -c "apt-get update && apt-get install -y --no-install-recommends cron &&
+             python manage.py migrate --noinput &&
+             crontab /app/docker/crontab &&
+             cron -f"
+    profiles:
+      - scheduler
+    restart: unless-stopped
+    depends_on:
+      - web
+
+volumes:
+  sqlite_data:
+  media_data:

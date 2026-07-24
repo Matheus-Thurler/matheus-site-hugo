@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Posts | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+    <header class="mb-6 md:mb-8">
+        <h1 class="text-foreground text-2xl font-bold md:text-3xl">All Posts</h1>
+    </header>
+
+    {% if posts %}
+    <div class="post-list space-y-4 pb-8">
+        {% for post in posts %}
+        {% include "blog/partials/post_card.html" %}
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <nav class="flex justify-center gap-2 pb-8">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="bg-card border-border hover:bg-primary/10 rounded-lg border px-4 py-2 text-sm">Previous</a>
+        {% endif %}
+        <span class="text-muted-foreground flex items-center px-4 py-2 text-sm">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="bg-card border-border hover:bg-primary/10 rounded-lg border px-4 py-2 text-sm">Next</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+    {% else %}
+    <p class="text-muted-foreground">No posts found.</p>
+    {% endif %}
+</div>
+{% endblock %}

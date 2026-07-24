@@ -1,0 +1,62 @@
+{% comment %}Hugo card-base.html equivalent{% endcomment %}
+<article class="group">
+  <a href="{{ post.get_absolute_url }}" class="block">
+    <div class="post-card bg-card border-border hover:bg-primary/5 hover:border-primary/20 focus:ring-primary/20 relative flex flex-col overflow-hidden rounded-xl border transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg focus:ring-2 focus:outline-none">
+
+      <div class="block md:hidden">
+        {% if post.cover_url %}
+        <div class="aspect-[2/1] overflow-hidden">
+          <img src="{{ post.cover_url }}" alt="{{ post.get_title }}" width="800" height="400" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" decoding="async">
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="post-card-cover absolute top-0 right-0 hidden h-full transition-opacity duration-300 group-hover:opacity-90 md:block">
+        {% if post.cover_url %}
+        <img src="{{ post.cover_url }}" alt="{{ post.get_title }}" width="320" height="240" class="h-full w-full object-cover" loading="lazy" decoding="async">
+        {% endif %}
+      </div>
+
+      <div class="post-card-cover-gradient absolute top-0 right-0 hidden h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 md:block bg-gradient-to-l from-primary/5"></div>
+
+      <div class="post-card-content relative z-10 flex flex-1 flex-col p-6">
+        <h3 class="text-foreground group-hover:text-primary mb-4 text-lg font-semibold leading-tight transition-colors duration-200">
+          {{ post.get_title }}
+        </h3>
+
+        {% if post.get_description %}
+        <p class="text-muted-foreground mb-4 text-sm leading-relaxed">
+          {{ post.get_description|truncatechars:140 }}
+        </p>
+        {% endif %}
+
+        <div class="mt-auto text-sm text-muted-foreground">
+          <div class="flex flex-wrap items-center gap-3">
+            {% if post.published_at %}
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <time datetime="{{ post.published_at|date:'Y-m-d' }}" class="font-medium">{% if lang == 'pt' %}{{ post.published_at|date:"d/m/Y" }}{% else %}{{ post.published_at|date:"M d, Y" }}{% endif %}</time>
+            </div>
+            {% endif %}
+            {% if post.reading_time %}
+            <div class="flex items-center gap-1.5">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span class="font-medium">{% if lang == 'pt' %}{{ post.reading_time }} min de leitura{% else %}{{ post.reading_time }} min read{% endif %}</span>
+            </div>
+            {% endif %}
+          </div>
+
+          {% if post.tags.all %}
+          <div class="flex flex-wrap items-center gap-1.5 mt-2">
+            {% for tag in post.tags.all|slice:":3" %}
+            <span class="bg-muted/50 border-muted/30 flex items-center gap-1 rounded-md border px-2 py-0.5">
+              <span class="text-xs font-medium">{{ tag.name }}</span>
+            </span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </a>
+</article>

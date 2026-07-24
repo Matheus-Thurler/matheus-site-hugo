@@ -1,0 +1,95 @@
+{% extends "blog/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Privacy Policy" %} | {{ site_name }}{% endblock %}
+{% block description %}{% trans "Privacy Policy for Matheus Thurler's blog. Learn about data collection, cookies, and your rights under GDPR/LGPD." %}{% endblock %}
+
+{% block extra_head %}
+<meta name="robots" content="index, follow">
+<meta name="author" content="{{ site_name }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{% trans 'Privacy Policy' %} | {{ site_name }}">
+<meta property="og:description" content="{% trans 'Privacy Policy for Matheus Thurler\'s blog.' %}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock %}
+
+{% block content %}
+<article class="prose prose-neutral dark:prose-invert max-w-none">
+    <h1 class="text-4xl font-bold mb-2">{% trans "Privacy Policy" %}</h1>
+    <p class="text-muted-foreground text-sm">{% blocktrans with date="January 2025" %}Last updated: {{ date }}{% endblocktrans %}</p>
+
+    <p class="lead">{% blocktrans %}This Privacy Policy describes how {{ site_name }} ("we", "our", "us") collects, uses, and protects your information when you visit our website.{% endblocktrans %}</p>
+
+    <h2>1. {% trans "Information We Collect" %}</h2>
+    <p>{% trans "We do not directly collect personal information through this blog. However, third-party services integrated into our site may collect data according to their own privacy policies:" %}</p>
+
+    <h3>{% trans "Automatically Collected Information" %}</h3>
+    <ul>
+        <li>{% trans "IP address (anonymized where possible)" %}</li>
+        <li>{% trans "Browser type and version" %}</li>
+        <li>{% trans "Operating system" %}</li>
+        <li>{% trans "Pages visited and time spent" %}</li>
+        <li>{% trans "Referring website" %}</li>
+    </ul>
+
+    <h2>2. {% trans "Cookies and Tracking Technologies" %}</h2>
+    <p>{% trans "We use cookies and similar tracking technologies to enhance your browsing experience. Cookies are small text files stored on your device. You can control cookies through your browser settings." %}</p>
+
+    <h3>{% trans "Types of cookies we use:" %}</h3>
+    <ul>
+        <li><strong>{% trans "Essential cookies" %}</strong>: {% trans "Required for basic site functionality (theme preferences, language)." %}</li>
+        <li><strong>{% trans "Analytics cookies" %}</strong>: {% trans "Help us understand how visitors interact with our site." %}</li>
+        <li><strong>{% trans "Advertising cookies" %}</strong>: {% trans "Used to display relevant ads via Google AdSense." %}</li>
+    </ul>
+
+    <h2>3. {% trans "Third-Party Services" %}</h2>
+
+    <h3>Google Analytics</h3>
+    <p>{% trans "We use Google Analytics to analyze site traffic. Google Analytics uses cookies to collect information about your use of our site. This information is used to create reports about site usage." %}</p>
+    <p>{% trans "You can opt-out by installing the" %} <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">{% trans "Google Analytics Opt-out Browser Add-on" %}</a>.</p>
+
+    <h3>Google AdSense</h3>
+    <p>{% trans "We use Google AdSense to display ads. Google AdSense uses cookies to serve ads based on your prior visits to our site or other sites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to our site and/or other sites on the Internet." %}</p>
+    <p>{% trans "You can opt-out of personalized advertising by visiting" %} <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">{% trans "Google Ads Settings" %}</a>.</p>
+
+    <h3>Giscus (GitHub Discussions)</h3>
+    <p>{% trans "Comments are powered by Giscus, which uses GitHub Discussions. When you comment, your GitHub profile information may be visible. Giscus is subject to GitHub's Privacy Policy." %}</p>
+
+    <h2>4. {% trans "Your Rights (GDPR/LGPD)" %}</h2>
+    <p>{% trans "Under the General Data Protection Regulation (GDPR) and the Brazilian General Data Protection Law (LGPD), you have the following rights:" %}</p>
+    <ul>
+        <li>{% trans "Right to access your personal data" %}</li>
+        <li>{% trans "Right to rectification of inaccurate data" %}</li>
+        <li>{% trans "Right to erasure ('right to be forgotten')" %}</li>
+        <li>{% trans "Right to restrict or object to processing" %}</li>
+        <li>{% trans "Right to data portability" %}</li>
+        <li>{% trans "Right to withdraw consent at any time" %}</li>
+    </ul>
+    <p>{% trans "To exercise these rights, contact us at" %} <a href="mailto:{{ author_email }}">{{ author_email }}</a>.</p>
+
+    <h2>5. {% trans "Data Retention" %}</h2>
+    <p>{% trans "We retain analytics data for 26 months (Google Analytics default). Comment data is stored on GitHub Discussions and is subject to GitHub's retention policies." %}</p>
+
+    <h2>6. {% trans "Children's Privacy" %}</h2>
+    <p>{% trans "Our site is not intended for children under 13 (or under 16 in the EU/UK). We do not knowingly collect personal information from children." %}</p>
+
+    <h2>7. {% trans "International Data Transfers" %}</h2>
+    <p>{% trans "Some of our service providers (Google, GitHub) may transfer and process your data in countries outside your country of residence, including the United States. These transfers are governed by Standard Contractual Clauses or adequacy decisions." %}</p>
+
+    <h2>8. {% trans "Security" %}</h2>
+    <p>{% trans "We implement appropriate technical and organizational measures to protect your information. However, no method of transmission over the Internet is 100% secure." %}</p>
+
+    <h2>9. {% trans "Changes to This Policy" %}</h2>
+    <p>{% trans "We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page with an updated date." %}</p>
+
+    <h2>10. {% trans "Contact" %}</h2>
+    <p>{% trans "If you have questions about this Privacy Policy, please contact:" %}</p>
+    <ul>
+        <li><strong>{% trans "Email" %}:</strong> <a href="mailto:{{ author_email }}">{{ author_email }}</a></li>
+        <li><strong>{% trans "GitHub" %}:</strong> <a href="{{ author_github }}" target="_blank" rel="noopener noreferrer">{{ author_github }}</a></li>
+    </ul>
+
+    <hr>
+    <p class="text-sm text-muted-foreground">{% blocktrans %}This policy is effective as of January 2025 and complies with GDPR (EU) and LGPD (Brazil).{% endblocktrans %}</p>
+</article>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% load i18n %}
+<section class="mt-10 md:mt-12" id="comments">
+    <h2 class="text-xl font-bold mb-5 md:text-2xl md:mb-6">{% trans "Comentarios" %}</h2>
+</section>
+
+{% if giscus_repo %}
+<section class="mt-10 md:mt-12">
+    <div class="giscus-container overflow-hidden rounded-2xl border border-border">
+        <div
+            id="giscus-root"
+            data-repo="{{ giscus_repo }}"
+            data-repo-id="{{ giscus_repo_id }}"
+            data-category="{{ giscus_category }}"
+            data-category-id="{{ giscus_category_id }}"
+            data-mapping="{{ giscus_mapping|default:'pathname' }}"
+            data-reactions-enabled="{{ giscus_reactions_enabled|yesno:'1,0' }}"
+            data-emit-metadata="{{ giscus_emit_metadata|yesno:'1,0' }}"
+            data-input-position="{{ giscus_input_position|default:'bottom' }}"
+            data-theme="{{ giscus_theme|default:'preferred_color_scheme' }}"
+            data-lang="{{ lang }}"
+        ></div>
+    </div>
+</section>
+
+<style>
+.giscus-container {
+    min-height: 400px;
+}
+
+.giscus-frame {
+    width: 100% !important;
+    border: none !important;
+}
+
+@media (max-width: 640px) {
+    .giscus-container {
+        margin: 0 -1rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .giscus-frame.giscus-frame {
+        min-width: 100% !important;
+    }
+}
+</style>
+{% endif %}
