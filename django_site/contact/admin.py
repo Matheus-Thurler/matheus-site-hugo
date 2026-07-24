@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from config.admin_mixins import DescriptiveAdminMixin
 from .models import ContactMessage
 
 
 @admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
+class ContactMessageAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('subject', 'name', 'email', 'is_read', 'created_at')
     list_filter = ('is_read', 'created_at')
     search_fields = ('name', 'email', 'subject', 'message')

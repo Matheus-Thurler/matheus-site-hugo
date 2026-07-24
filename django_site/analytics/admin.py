@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.db.models import Count
-from django.utils.html import format_html
 
+from config.admin_mixins import DescriptiveAdminMixin
 from .models import PageView
 
 
 @admin.register(PageView)
-class PageViewAdmin(admin.ModelAdmin):
+class PageViewAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('path', 'post_slug', 'referrer', 'created_at')
     list_filter = ('created_at',)
     search_fields = ('path', 'post_slug', 'referrer')

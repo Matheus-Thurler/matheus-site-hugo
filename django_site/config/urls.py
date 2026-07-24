@@ -9,6 +9,19 @@ from django.views.generic import TemplateView
 from blog.sitemaps import PostSitemap, StaticViewSitemap
 from blog.views import robots_txt, search_index
 from blog.feeds import LatestPostsFeed
+from config.admin_docs import ADMIN_HOME_INTRO, APP_SECTIONS
+
+_admin_index = admin.site.index
+
+
+def _admin_index_with_docs(request, extra_context=None):
+    extra_context = extra_context or {}
+    extra_context['admin_home_intro'] = ADMIN_HOME_INTRO
+    extra_context['admin_app_sections'] = APP_SECTIONS
+    return _admin_index(request, extra_context)
+
+
+admin.site.index = _admin_index_with_docs
 
 sitemaps = {
     'posts': PostSitemap,

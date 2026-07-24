@@ -1,10 +1,11 @@
 from django.contrib import admin
 
+from config.admin_mixins import DescriptiveAdminMixin
 from .models import PipelineJob
 
 
 @admin.register(PipelineJob)
-class PipelineJobAdmin(admin.ModelAdmin):
+class PipelineJobAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('job_type', 'status', 'started_at', 'finished_at', 'created_at')
     list_filter = ('job_type', 'status')
     readonly_fields = ('job_type', 'status', 'log', 'started_at', 'finished_at', 'created_at')

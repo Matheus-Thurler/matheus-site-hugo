@@ -1,0 +1,33 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="callout callout-info mb-4">
+  <h5 class="mb-2"><i class="fas fa-circle-info mr-1"></i> {% trans "Guia rápido" %}</h5>
+  <p class="mb-0">{{ admin_home_intro }}</p>
+</div>
+
+<div class="row">
+  {% for section in admin_app_sections %}
+  <div class="col-12 col-lg-6 mb-3">
+    <div class="card card-outline card-primary h-100">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="{{ section.icon }} mr-1"></i> {{ section.title }}
+        </h3>
+      </div>
+      <div class="card-body">
+        <p class="text-muted">{{ section.summary }}</p>
+        <ul class="mb-0 pl-3">
+          {% for name, detail in section.models %}
+          <li class="mb-1"><strong>{{ name }}:</strong> {{ detail }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{{ block.super }}
+{% endblock %}

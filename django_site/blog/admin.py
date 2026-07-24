@@ -1,38 +1,38 @@
 """Admin configuration for blog app."""
 from django.contrib import admin, messages
 from django.db import models
-from django import forms
 from django.shortcuts import redirect, render
 from django.urls import path, reverse
 from django.utils.translation import gettext_lazy as _
 from ckeditor.widgets import CKEditorWidget
 
+from config.admin_mixins import DescriptiveAdminMixin
 from .admin_forms import GeneratePostAIForm
 from .ai_posts import create_draft_post, generate_post_payload
 from .models import Author, Category, Tag, Post, Comment
 
 
 @admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
+class AuthorAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug', 'email')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name', 'email')
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
+class PostAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('title_en', 'author', 'category', 'status', 'published_at', 'created_at')
     list_filter = ('status', 'category', 'created_at', 'published_at')
     search_fields = ('title_en', 'title_pt', 'description_en', 'description_pt', 'content_en', 'content_pt')
@@ -46,20 +46,23 @@ class PostAdmin(admin.ModelAdmin):
     }
 
     fieldsets = (
-        (None, {
-            'fields': ('author', 'category', 'tags', 'slug', 'status', 'published_at')
+        (_('Publicação'), {
+            'fields': ('author', 'category', 'tags', 'slug', 'status', 'published_at'),
+            'description': _('status=published + published_at define visibilidade no site.'),
         }),
-        ('English Content', {
+        (_('English Content'), {
             'fields': ('title_en', 'description_en', 'content_en'),
             'classes': ('collapse',),
         }),
-        ('Portuguese Content', {
+        (_('Portuguese Content'), {
             'fields': ('title_pt', 'description_pt', 'content_pt'),
             'classes': ('collapse',),
+            'description': _('Deixe vazio para usar só EN ou marque use_ai_translation no admin shell.'),
         }),
-        ('SEO & Extras', {
+        (_('SEO & Extras'), {
             'fields': ('keywords', 'cover', 'featured_image', 'show_related', 'use_ai_translation'),
             'classes': ('collapse',),
+            'description': _('cover = imagem do card; featured_image = hero do post (opcional).'),
         }),
     )
 
@@ -101,6 +104,9 @@ class PostAdmin(admin.ModelAdmin):
             **self.admin_site.each_context(request),
             'form': form,
             'title': _('Generate post with AI'),
+            'admin_section_description': _(
+                'Gera rascunho EN ou PT via Gemini. Revise tom, links e código antes de publicar.'
+            ),
             'gemini_configured': gemini_configured,
             'gemini_model': getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash'),
             'opts': self.model._meta,
@@ -109,7 +115,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+class CommentAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('author', 'post', 'status', 'created_at')
     list_filter = ('status', 'created_at')
     search_fields = ('author__username', 'author__email', 'content', 'post__slug')

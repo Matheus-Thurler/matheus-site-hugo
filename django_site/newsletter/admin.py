@@ -4,6 +4,7 @@ from django.contrib import admin, messages
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
+from config.admin_mixins import DescriptiveAdminMixin
 from .models import Subscriber
 
 
@@ -31,7 +32,7 @@ def deactivate_subscribers(modeladmin, request, queryset):
 
 
 @admin.register(Subscriber)
-class SubscriberAdmin(admin.ModelAdmin):
+class SubscriberAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('email', 'name', 'language', 'is_active', 'subscribed_at')
     list_filter = ('is_active', 'language', 'subscribed_at')
     search_fields = ('email', 'name')
