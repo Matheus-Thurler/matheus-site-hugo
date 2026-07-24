@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
-# Deploy public/ to Firebase Hosting; treat unchanged site as success.
+# Deploy Firebase Hosting (live channel). Used by Django CI after Cloud Run promote.
 set -euo pipefail
 
 PROJECT_ID="${FIREBASE_PROJECT_ID:-matheus-cloud-pessoal}"
+CONFIG="${FIREBASE_CONFIG:-firebase.json}"
 
 npm install -g firebase-tools
 
 set +e
-output=$(firebase deploy --only hosting --project "$PROJECT_ID" --non-interactive 2>&1)
+output=$(firebase deploy --only hosting --project "$PROJECT_ID" --config "$CONFIG" --non-interactive 2>&1)
 code=$?
 set -e
 

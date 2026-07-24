@@ -96,5 +96,5 @@ jobs:
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL }}
 
-      - name: Deploy to Firebase Hosting
-        run: bash scripts/firebase-deploy.sh
+      - name: Deploy Hugo to backup channel
+        run: bash scripts/firebase-deploy-hugo-channel.sh

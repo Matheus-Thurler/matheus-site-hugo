@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "public": "public",
+    "cleanUrls": true,
+    "trailingSlash": true,
+    "ignore": [
+      "firebase.json",
+      "firebase.hugo.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

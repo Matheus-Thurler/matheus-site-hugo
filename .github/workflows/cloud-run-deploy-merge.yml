@@ -1,6 +1,6 @@
-# Deploy Django blog to Cloud Run (parallel to Firebase/Hugo on master).
+# Deploy Django blog to Cloud Run + Firebase Hosting CDN (parallel to Hugo on preview channel).
 # Blue-green: new revision gets 0% traffic until /health/ passes, then 100%.
-# Hugo stays on Firebase Hosting until DNS cutover — do not remove firebase workflows.
+# Live matheusthurler.com.br: Firebase CDN → Cloud Run. Hugo: channel hugo-backup.
 # Secrets: FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL (same GCP project SA)
 
 name: Deploy Django to Cloud Run on merge
@@ -11,6 +11,10 @@ on:
       - django-migration
     paths:
       - 'django_site/**'
+      - 'firebase.json'
+      - '.firebaserc'
+      - 'hosting/**'
+      - 'scripts/firebase-deploy.sh'
       - '.github/workflows/cloud-run-deploy-merge.yml'
   workflow_dispatch:
 
@@ -129,7 +133,11 @@ jobs:
           gcloud run services update "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
             --project "${{ env.GCP_PROJECT_ID }}" \
-            --min-instances 1
+            --min-instances 1 \
+            --update-env-vars 'ALLOWED_HOSTS=matheusthurler.com.br,www.matheusthurler.com.br,.a.run.app,matheus-cloud-pessoal.web.app,matheus-cloud-pessoal.firebaseapp.com'
+
+      - name: Deploy Firebase Hosting (CDN → Cloud Run)
+        run: bash scripts/firebase-deploy.sh
 
       - name: Verify production endpoints
         run: |
@@ -157,3 +165,13 @@ jobs:
           echo "posts: ${code}"
           test "$code" = "200"
           echo "✓ /posts/"
+
+          FB_URL="https://matheus-cloud-pessoal.web.app"
+          for attempt in $(seq 1 12); do
+            if curl -fsS "${FB_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'; then
+              break
+            fi
+            sleep 5
+          done
+          curl -fsS "${FB_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'
+          echo "✓ Firebase CDN ${FB_URL}/health/"

@@ -141,9 +141,15 @@ docker compose --profile scheduler up
 
 | Workflow | Trigger | Ação |
 |----------|---------|------|
-| `cloud-run-deploy-merge.yml` | push `django-migration` (`django_site/**`) | build → Artifact Registry → Cloud Run |
+| `cloud-run-deploy-merge.yml` | push `django-migration` | build → Cloud Run → **Firebase CDN (live)** |
 | `cloud-run-deploy-pull-request.yml` | PR com mudanças em `django_site/` | pytest + build Docker (sem deploy) |
-| `firebase-hosting-merge.yml` | push `master` | Hugo → Firebase (legado) |
+| `firebase-hosting-merge.yml` | push `master` | Hugo → channel **`hugo-backup`** (rollback) |
+
+**Arquitetura live:** `matheusthurler.com.br` → Firebase Hosting (CDN global) → Cloud Run (`matheus-blog`).
+
+**Rollback Hugo:** https://hugo-backup--matheus-cloud-pessoal.web.app (atualizado a cada push no `master`).
+
+Config: `firebase.json` (Django live) · `firebase.hugo.json` (Hugo estático no channel).
 
 Secret reutilizada: `FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL`.
 

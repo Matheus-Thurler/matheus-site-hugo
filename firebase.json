@@ -1,12 +1,33 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "hosting/public",
     "cleanUrls": true,
     "trailingSlash": true,
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/static/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "run": {
+          "serviceId": "matheus-blog",
+          "region": "southamerica-east1",
+          "pinTag": true
+        }
+      }
     ]
   }
 }

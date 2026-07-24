@@ -1,5 +1,4 @@
-# Deploy to Firebase Hosting on push to master (human merges and direct pushes).
-# YouTube automation deploys from update-youtube-videos-rss.yml when content changes.
+# Deploy Hugo to Firebase preview channel (rollback). Live site = Django via firebase.json on django-migration.
 
 name: Deploy to Firebase Hosting on merge
 on:
@@ -32,5 +31,5 @@ jobs:
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL }}
 
-      - name: Deploy to Firebase Hosting
-        run: bash scripts/firebase-deploy.sh
+      - name: Deploy Hugo to backup channel
+        run: bash scripts/firebase-deploy-hugo-channel.sh
