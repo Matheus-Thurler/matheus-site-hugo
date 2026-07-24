@@ -4,6 +4,10 @@
 {% block title %}{{ title }} | {{ site_name }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 
+{% block syntax_highlight_css %}
+<link rel="stylesheet" href="{% static 'css/chroma.css' %}">
+{% endblock %}
+
 {% block extra_head %}
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ description }}">

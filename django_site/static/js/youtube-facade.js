@@ -36,9 +36,19 @@
     });
   }
 
+  function scheduleIdle(fn) {
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(fn, { timeout: 2000 });
+    } else {
+      setTimeout(fn, 1);
+    }
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", function () {
+      scheduleIdle(init);
+    });
   } else {
-    init();
+    scheduleIdle(init);
   }
 })();

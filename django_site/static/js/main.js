@@ -131,9 +131,7 @@ class UIManager {
 
   // 设置移动端菜单 - 保持向后兼容，但现在使用统一的 setupDropdown
   setupMobileMenu() {
-    // 这个方法现在主要用于向后兼容
-    // 实际的事件处理由 setupDropdown("mobile-menu") 完成
-    console.log("移动端菜单使用统一的下拉菜单处理逻辑");
+    /* mobile menu uses setupDropdown("mobile-menu") */
   }
 
   setupEventListeners() {
@@ -310,9 +308,14 @@ class UIManager {
   }
 }
 
-// 页面加载完成后初始化UI管理器
-document.addEventListener("DOMContentLoaded", () => {
+function scheduleIdle(fn) {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(fn, { timeout: 2000 });
+  } else {
+    setTimeout(fn, 1);
+  }
+}
+
+scheduleIdle(function () {
   new UIManager();
 });
-
-console.log("Hugo site with advanced UI management loaded.");

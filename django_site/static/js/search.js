@@ -52,9 +52,6 @@
 
     // 绑定事件
     bindEvents();
-
-    // 预加载搜索数据
-    loadSearchData();
   }
 
   // 绑定事件
@@ -169,6 +166,11 @@
     if (!searchModal || isModalVisible) return;
 
     isModalVisible = true;
+
+    // 首次打开时再拉取索引，避免阻塞首屏（mobile TBT）
+    if (!searchData) {
+      loadSearchData();
+    }
 
     // 显示遮罩层和模态框
     searchOverlay.classList.remove("opacity-0", "pointer-events-none");
@@ -726,10 +728,20 @@
     isVisible: () => isModalVisible,
   };
 
-  // 页面加载完成后初始化
+  // 页面加载完成后初始化（空闲时再绑事件，减轻 mobile TBT）
+  function scheduleIdle(fn) {
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(fn, { timeout: 2000 });
+    } else {
+      setTimeout(fn, 1);
+    }
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("DOMContentLoaded", function () {
+      scheduleIdle(init);
+    });
   } else {
-    init();
+    scheduleIdle(init);
   }
 })();

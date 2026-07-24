@@ -133,7 +133,7 @@
     <link rel="preload" href="{% static 'css/compiled.css' %}" as="style">
     <link rel="stylesheet" href="{% static 'css/compiled.css' %}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{% static 'css/compiled.css' %}"></noscript>
-    <link rel="stylesheet" href="{% static 'css/chroma.css' %}">
+    {% block syntax_highlight_css %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
     {% if show_toc %}
     <link rel="stylesheet" href="{% static 'css/toc.css' %}">
@@ -170,10 +170,12 @@
     {% include "blog/partials/cookie_consent.html" %}
 
     <script src="{% static 'js/consent.js' %}" defer></script>
-    <script src="{% static 'js/youtube-facade.js' %}" defer></script>
     <script src="{% static 'js/search.js' %}" defer></script>
+    {% if show_dock %}
     <script src="{% static 'js/dock.js' %}" defer></script>
+    {% endif %}
     <script src="{% static 'js/main.js' %}" defer></script>
+    {% block deferred_scripts %}{% endblock %}
     {% if analytics_self_hosted %}
     <script src="{% static 'js/analytics-track.js' %}" defer></script>
     {% endif %}

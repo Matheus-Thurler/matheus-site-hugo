@@ -162,7 +162,15 @@
     if (localStorage.getItem(CONSENT_KEY) === "accepted") {
       loadThirdParties();
     }
-    initBanner();
+    scheduleIdle(initBanner);
+  }
+
+  function scheduleIdle(fn) {
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(fn, { timeout: 2500 });
+    } else {
+      setTimeout(fn, 1);
+    }
   }
 
   window.MTConsent = {

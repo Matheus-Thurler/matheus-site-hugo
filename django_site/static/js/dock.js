@@ -9,6 +9,15 @@
 (function () {
   "use strict";
 
+  function scheduleIdle(fn) {
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(fn, { timeout: 2000 });
+    } else {
+      setTimeout(fn, 1);
+    }
+  }
+
+  function initDock() {
   let lastScrollTop = 0;
   let isScrollingUp = false;
   let scrollThreshold = 100; // 滚动阈值
@@ -100,8 +109,8 @@
     };
   }
 
-  // 绑定滚动事件（使用节流）
-  window.addEventListener("scroll", throttle(handleScroll, 16)); // ~60fps
+  // 绑定滚动事件（passive + 空闲时注册，降低 mobile TBT）
+  window.addEventListener("scroll", throttle(handleScroll, 16), { passive: true });
 
   // 悬浮模式触发器事件处理
   if (floatTrigger && dockMode === "float") {
@@ -341,14 +350,9 @@
       hideDock();
       break;
   }
-
-  // 调试信息
-  if (
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-  ) {
-    console.log(
-      "Dock initialized successfully - positioned at perfect center bottom",
-    );
   }
+
+  const dock = document.getElementById("dock");
+  if (!dock) return;
+  scheduleIdle(initDock);
 })();

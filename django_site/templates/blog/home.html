@@ -3,6 +3,12 @@
 
 {% block title %}{{ author.name }} | DevOps & Cloud Engineer{% endblock %}
 
+{% block extra_head %}
+{% if author.avatar %}
+<link rel="preload" href="{% static author.avatar %}" as="image" type="image/webp" fetchpriority="high">
+{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="mx-auto max-w-4xl">
 
@@ -139,6 +145,9 @@
 {% endblock %}
 
 {% block extra_scripts %}
+{% if youtube_data.recent_videos %}
+<script src="{% static 'js/youtube-facade.js' %}" defer></script>
+{% endif %}
 <script>
 (function () {
   const form = document.getElementById('newsletter-form');
