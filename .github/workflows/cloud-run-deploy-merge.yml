@@ -59,7 +59,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Step 1: deploy new revision with tag + 0% production traffic (old revision keeps 100%)
+      # Deploy new revision with tag + 0% production traffic (current revision keeps 100%)
       - name: Deploy candidate revision (no traffic)
         uses: google-github-actions/deploy-cloudrun@v2
         with:
@@ -70,71 +70,53 @@ jobs:
           tag: ${{ env.DEPLOY_TAG }}
           no_traffic: true
 
-      - name: Wait for candidate revision to be ready
-        run: |
-          set -euo pipefail
-          SERVICE="${{ env.CLOUD_RUN_SERVICE }}"
-          REGION="${{ env.GCP_REGION }}"
-
-          echo "Waiting for Cloud Run Ready condition..."
-          for attempt in $(seq 1 60); do
-            REV="$(gcloud run revisions list \
-              --service="$SERVICE" \
-              --region="$REGION" \
-              --format='value(metadata.name)' \
-              --limit=1 \
-              --sort-by='~metadata.creationTimestamp')"
-
-            READY="$(gcloud run revisions describe "$REV" \
-              --region="$REGION" \
-              --format='value(status.conditions[?type=Ready].status)' 2>/dev/null || true)"
-
-            if [ "$READY" = "True" ]; then
-              echo "Revision $REV is Ready"
-              exit 0
-            fi
-
-            echo "Attempt $attempt/60: $REV not ready yet (status=$READY)"
-            sleep 5
-          done
-
-          echo "Candidate revision did not become Ready in time"
-          exit 1
-
+      # Real readiness = app responds (migrate + collectstatic + gunicorn). gcloud Ready filter is unreliable.
       - name: Smoke test candidate revision
+        id: smoke
         run: |
           set -euo pipefail
           SERVICE="${{ env.CLOUD_RUN_SERVICE }}"
           REGION="${{ env.GCP_REGION }}"
           TAG="${{ env.DEPLOY_TAG }}"
 
-          CANDIDATE_URL="$(gcloud run services describe "$SERVICE" \
-            --region="$REGION" \
-            --format="json" \
-            | python3 -c "import json,sys; t=json.load(sys.stdin).get('status',{}).get('traffic',[]); print(next((x.get('url','') for x in t if x.get('tag')=='$TAG'), ''))")"
+          CANDIDATE_URL="$(gcloud run services describe "$SERVICE" --region="$REGION" --format='json' \
+            | python3 -c "
+          import json, sys
+          tag = '${TAG}'
+          data = json.load(sys.stdin)
+          for entry in data.get('status', {}).get('traffic', []):
+              if entry.get('tag') == tag and entry.get('url'):
+                  print(entry['url'])
+                  sys.exit(0)
+          base = data.get('status', {}).get('url', '')
+          if base.startswith('https://'):
+              host = base[len('https://'):]
+              print(f'https://{tag}---{host}')
+          ")"
 
-          if [ -z "$CANDIDATE_URL" ]; then
-            BASE_URL="$(gcloud run services describe "$SERVICE" --region="$REGION" --format='value(status.url)')"
-            HOST="${BASE_URL#https://}"
-            CANDIDATE_URL="https://${TAG}---${HOST}"
-          fi
+          echo "Candidate URL: ${CANDIDATE_URL}"
+          echo "candidate_url=${CANDIDATE_URL}" >> "$GITHUB_OUTPUT"
 
-          echo "Smoke testing candidate at $CANDIDATE_URL/health/"
-
-          for attempt in $(seq 1 36); do
-            if curl -fsS --max-time 15 "${CANDIDATE_URL}/health/"; then
-              echo ""
-              echo "Candidate passed smoke test"
+          echo "Waiting for candidate /health/ (migrate + collectstatic may take several minutes)..."
+          for attempt in $(seq 1 60); do
+            if body="$(curl -fsS --max-time 20 "${CANDIDATE_URL}/health/" 2>/dev/null)" && echo "$body" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'; then
+              echo "Health OK: $body"
               exit 0
             fi
-            echo "Attempt $attempt/36 failed, retrying in 5s..."
-            sleep 5
+            echo "Attempt ${attempt}/60: not ready yet"
+            sleep 10
           done
 
-          echo "Candidate smoke test failed — production traffic unchanged"
+          echo "::error::Candidate smoke test failed — production traffic unchanged"
+          REV="$(gcloud run revisions list --service="$SERVICE" --region="$REGION" \
+            --format='value(metadata.name)' --limit=1 --sort-by='~metadata.creationTimestamp')"
+          echo "Latest revision: ${REV}"
+          gcloud logging read \
+            "resource.type=cloud_run_revision AND resource.labels.service_name=${SERVICE} AND resource.labels.revision_name=${REV}" \
+            --limit=30 --format='value(textPayload)' 2>/dev/null || true
           exit 1
 
-      # Step 2: shift 100% traffic to candidate; old revision scales to zero automatically
+      # Shift 100% traffic to candidate; previous revision scales to zero (min_instances=0)
       - name: Promote candidate to 100% traffic
         uses: google-github-actions/deploy-cloudrun@v2
         with:
@@ -143,8 +125,19 @@ jobs:
           region: ${{ env.GCP_REGION }}
           tag_traffic: ${{ env.DEPLOY_TAG }}=100
 
-      - name: Show service URL
+      - name: Verify production endpoints
         run: |
-          gcloud run services describe "${{ env.CLOUD_RUN_SERVICE }}" \
+          set -euo pipefail
+          PROD_URL="$(gcloud run services describe "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
-            --format 'value(status.url)'
+            --format 'value(status.url)')"
+
+          echo "Production URL: ${PROD_URL}"
+
+          curl -fsS "${PROD_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'
+          echo "✓ /health/"
+
+          curl -fsS "${PROD_URL}/ads.txt" | grep -q 'pub-3348120452456400'
+          echo "✓ /ads.txt"
+
+          curl -fsS -o /dev/null -w "posts: %{http_code}\n" "${PROD_URL}/posts/"
