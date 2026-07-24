@@ -233,3 +233,60 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author} - {self.post.slug}"
+
+
+class ProfileLink(models.Model):
+    """Editable link for the /links/ link-in-bio page."""
+
+    SECTION_CARD = 'card'
+    SECTION_SOCIAL = 'social'
+    SECTION_CHOICES = [
+        (SECTION_CARD, _('Card principal')),
+        (SECTION_SOCIAL, _('Ícone social (rodapé)')),
+    ]
+
+    section = models.CharField(
+        max_length=10,
+        choices=SECTION_CHOICES,
+        default=SECTION_CARD,
+        help_text=_('Cards aparecem na lista; ícones sociais ficam na fileira inferior.'),
+    )
+    title_en = models.CharField(max_length=200, blank=True)
+    title_pt = models.CharField(max_length=200, blank=True)
+    description_en = models.CharField(max_length=300, blank=True)
+    description_pt = models.CharField(max_length=300, blank=True)
+    url = models.CharField(
+        max_length=500,
+        blank=True,
+        help_text=_('URL externa, mailto: ou caminho (/about/). Deixe vazio se usar rota interna.'),
+    )
+    internal_route = models.CharField(
+        max_length=100,
+        blank=True,
+        help_text=_('Nome de rota Django (ex.: blog:home). Tem prioridade sobre URL.'),
+    )
+    external = models.BooleanField(
+        default=True,
+        help_text=_('Abre em nova aba quando marcado.'),
+    )
+    image = models.CharField(
+        max_length=200,
+        blank=True,
+        help_text=_('Ícone PNG em static/ (ex.: images/icons/youtube.png).'),
+    )
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        help_text=_('Ícone SVG: posts, github, youtube, linkedin, email.'),
+    )
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = _('Link da página /links/')
+        verbose_name_plural = _('Links da página /links/')
+        ordering = ['section', 'order', 'pk']
+
+    def __str__(self):
+        label = self.title_pt or self.title_en or self.url or self.internal_route
+        return f"{label} ({self.get_section_display()})"

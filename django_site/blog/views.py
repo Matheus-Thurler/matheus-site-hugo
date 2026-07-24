@@ -258,10 +258,38 @@ def about(request):
     return render(request, 'blog/about.html', context)
 
 
+def _resolve_links_page(lang):
+    """Build links page entries with resolved URLs."""
+    from blog.links_page import get_card_links
+
+    return get_card_links(lang)
+
+
+def _get_social_links():
+    from blog.links_page import get_social_links
+
+    return get_social_links()
+
+
 def links(request):
-    """Links page view."""
+    """Links page view (link-in-bio layout matching Hugo)."""
     lang = get_current_language()
-    return render(request, 'blog/links.html', {'lang': lang})
+    from django.conf import settings
+
+    context = {
+        'lang': lang,
+        'page_title': 'Links',
+        'page_description': (
+            'Todos os meus links importantes em um só lugar'
+            if lang == 'pt'
+            else 'All my important links in one place'
+        ),
+        'page_links': _resolve_links_page(lang),
+        'author_avatar': settings.AUTHOR_AVATAR,
+        'author_links_subtitle': settings.AUTHOR_LINKS_SUBTITLE,
+        'author_social': _get_social_links(),
+    }
+    return render(request, 'blog/links.html', context)
 
 
 def privacy(request):

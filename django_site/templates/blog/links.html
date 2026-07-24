@@ -1,63 +1,105 @@
-{% extends "blog/base.html" %}
+{% load static %}
+<!doctype html>
+<html lang="{{ lang|default:'en' }}" data-theme="{{ color_scheme|default:'nord' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ page_description }}">
+    <title>{{ page_title }} | {{ site_name }}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || '{{ default_color_mode|default:"dark"|escapejs }}';
+            const colorScheme = localStorage.getItem('colorScheme') || '{{ color_scheme|default:"nord"|escapejs }}';
+            document.documentElement.setAttribute('data-theme', colorScheme);
+            function applyTheme() {
+                if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            applyTheme();
+            if (theme === 'system') {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="{% static 'css/compiled.css' %}">
+</head>
+<body class="bg-background text-foreground min-h-screen antialiased">
+    <div class="min-h-screen flex items-center justify-center py-12">
+        <div class="w-full max-w-md mx-auto px-4">
+            <!-- Profile Section -->
+            <div class="text-center mb-8">
+                <div class="mb-4">
+                    <img src="{% static author_avatar %}" alt="{{ author_name }}"
+                        class="w-24 h-24 rounded-full mx-auto border-4 border-primary/20 shadow-lg object-cover" />
+                </div>
+                <h1 class="text-2xl font-bold text-foreground mb-1">{{ author_name }}</h1>
+                <p class="text-muted-foreground text-sm">{{ author_links_subtitle }}</p>
+            </div>
 
-{% block title %}{% if lang == 'pt' %}Links{% else %}Links{% endif %} | {{ site_name }}{% endblock %}
+            <!-- Links Section with PNG icons -->
+            <div class="space-y-3">
+                {% for link in page_links %}
+                <a href="{{ link.url }}"
+                    {% if link.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+                    class="group block w-full bg-card border border-border hover:border-primary/50 rounded-xl p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+                    <div class="flex items-center gap-4">
+                        {% if link.image %}
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
+                            <img src="{% static link.image %}" alt="{{ link.title }}" class="w-7 h-7 object-contain" />
+                        </div>
+                        {% elif link.icon %}
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-muted/50 flex items-center justify-center">
+                            {% include "blog/partials/site_icon.html" with name=link.icon class="h-5 w-5" %}
+                        </div>
+                        {% endif %}
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-foreground">{{ link.title }}</h3>
+                            {% if link.description %}
+                            <p class="text-sm text-muted-foreground truncate">{{ link.description }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="flex-shrink-0 text-muted-foreground group-hover:translate-x-1 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
 
-{% block content %}
-<div class="max-w-none">
-    <h1 class="text-3xl font-bold text-[#ECEFF4] mb-8">{% if lang == 'pt' %}Links Úteis{% else %}Useful Links{% endif %}</h1>
+            <!-- Social Icons -->
+            <div class="mt-8 flex justify-center gap-3">
+                {% for social in author_social %}
+                <a href="{{ social.url }}" target="_blank" rel="noopener noreferrer"
+                    class="w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                    title="{{ social.name }}">
+                    {% include "blog/partials/site_icon.html" with name=social.icon class="h-4 w-4" %}
+                </a>
+                {% endfor %}
+            </div>
 
-    <div class="grid gap-6 md:grid-cols-2">
-        <!-- Social -->
-        <section class="bg-[#3B4252] rounded-xl p-6">
-            <h2 class="text-xl font-semibold text-[#88C0D0] mb-4">{% if lang == 'pt' %}Redes Sociais{% else %}Social Media{% endif %}</h2>
-            <ul class="space-y-3">
-                <li>
-                    <a href="{{ author_github }}" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#88C0D0] transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                        GitHub
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ author_youtube }}" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#81A1C1] transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        YouTube
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ author_linkedin }}" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#5E81AC] transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
-                        LinkedIn
-                    </a>
-                </li>
-            </ul>
-        </section>
-
-        <!-- Resources -->
-        <section class="bg-[#3B4252] rounded-xl p-6">
-            <h2 class="text-xl font-semibold text-[#88C0D0] mb-4">{% if lang == 'pt' %}Recursos{% else %}Resources{% endif %}</h2>
-            <ul class="space-y-3">
-                <li>
-                    <a href="https://kubernetes.io/docs/" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#88C0D0] transition-colors">
-                        Kubernetes Docs
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.terraform.io/docs" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#88C0D0] transition-colors">
-                        Terraform Docs
-                    </a>
-                </li>
-                <li>
-                    <a href="https://cloud.google.com/docs" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#88C0D0] transition-colors">
-                        Google Cloud Docs
-                    </a>
-                </li>
-                <li>
-                    <a href="https://docs.github.com/" target="_blank" rel="noopener" class="flex items-center gap-3 text-[#E5E9F0] hover:text-[#88C0D0] transition-colors">
-                        GitHub Docs
-                    </a>
-                </li>
-            </ul>
-        </section>
+            <!-- Footer -->
+            <div class="mt-10 text-center space-y-2">
+                <a href="{% url 'blog:home' %}"
+                    class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Visitar site completo
+                </a>
+                <p class="text-xs text-muted-foreground/60">&copy; {% now "Y" %} {{ author_name }}</p>
+            </div>
+        </div>
     </div>
-</div>
-{% endblock %}
+</body>
+</html>

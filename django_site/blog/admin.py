@@ -9,7 +9,7 @@ from ckeditor.widgets import CKEditorWidget
 from config.admin_mixins import DescriptiveAdminMixin
 from .admin_forms import GeneratePostAIForm
 from .ai_posts import create_draft_post, generate_post_payload
-from .models import Author, Category, Tag, Post, Comment
+from .models import Author, Category, Tag, Post, Comment, ProfileLink
 
 
 @admin.register(Author)
@@ -128,3 +128,36 @@ class CommentAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     @admin.action(description='Reject selected comments')
     def reject_comments(self, request, queryset):
         queryset.update(status='rejected')
+
+
+@admin.register(ProfileLink)
+class ProfileLinkAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
+    list_display = ('title_en', 'section', 'url', 'internal_route', 'order', 'is_active')
+    list_filter = ('section', 'is_active')
+    list_editable = ('order', 'is_active')
+    search_fields = ('title_en', 'title_pt', 'url', 'internal_route')
+    ordering = ('section', 'order', 'pk')
+    fieldsets = (
+        (_('Visibilidade'), {
+            'fields': ('section', 'order', 'is_active'),
+            'description': _('Ordem menor aparece primeiro. Desative sem apagar.'),
+        }),
+        (_('Textos'), {
+            'fields': ('title_en', 'title_pt', 'description_en', 'description_pt'),
+            'description': _('Cards usam título e descrição; ícones sociais usam só o título como tooltip.'),
+        }),
+        (_('Destino'), {
+            'fields': ('url', 'internal_route', 'external'),
+            'description': _(
+                'Use internal_route para páginas do site (ex.: blog:home). '
+                'Para YouTube, GitHub etc., preencha url.'
+            ),
+        }),
+        (_('Ícone'), {
+            'fields': ('image', 'icon'),
+            'description': _(
+                'Cards: PNG em static (image) ou ícone SVG (icon). '
+                'Ícones sociais: preencha icon (github, youtube, linkedin, email).'
+            ),
+        }),
+    )

@@ -19,6 +19,7 @@ APP_SECTIONS = [
             (_('Gerar post com IA'), _('Rascunho via Gemini a partir de um brief — revisar antes de publicar.')),
             (_('Categorias / Tags'), _('Organização e URLs de arquivo (/categories/, /tags/).')),
             (_('Autor'), _('Perfil exibido na home e página About (bio, links sociais, avatar).')),
+            (_('Links /links/'), _('Cards e ícones sociais da página link-in-bio — edite URLs sem deploy.')),
             (_('Comentários'), _('Comentários Django no post (alternativa ao Giscus). Aprove ou rejeite aqui.')),
         ],
     },
@@ -127,6 +128,11 @@ MODEL_DESCRIPTIONS = {
     'blog.category': _('Agrupa posts por tema. Gera listagem em /categories/<slug>/'),
     'blog.tag': _('Tags livres nos posts. Gera listagem em /tags/<slug>/'),
     'blog.author': _('Perfil do autor na home e /about/. Campos goals: uma meta por linha.'),
+    'blog.profilelink': _(
+        'Links da página /links/ (estilo link-in-bio). '
+        'section=card → lista principal; section=social → ícones inferiores. '
+        'Altere url ou internal_route aqui; ordem pelo campo order.'
+    ),
     'blog.comment': _(
         'Comentários nativos Django (não confundir com Giscus/GitHub). '
         'Modere antes de aparecer no site se moderation estiver ativa.'

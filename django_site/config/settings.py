@@ -236,6 +236,119 @@ AUTHOR_GITHUB = 'https://github.com/Matheus-Thurler'
 AUTHOR_YOUTUBE = 'https://youtube.com/@matheusthurler'
 AUTHOR_LINKEDIN = 'https://linkedin.com/in/matheusthurler'
 AUTHOR_EMAIL = 'matheus@matheusthurler.com.br'
+AUTHOR_AVATAR = 'images/avatar.png'
+AUTHOR_LINKS_SUBTITLE = 'DevOps Engineer & Content Creator'
+
+AUTHOR_SOCIAL = [
+    {'name': 'GitHub', 'url': AUTHOR_GITHUB, 'icon': 'github'},
+    {'name': 'YouTube', 'url': AUTHOR_YOUTUBE, 'icon': 'youtube'},
+    {'name': 'LinkedIn', 'url': AUTHOR_LINKEDIN, 'icon': 'linkedin'},
+    {'name': 'Email', 'url': f'mailto:{AUTHOR_EMAIL}', 'icon': 'email'},
+]
+
+LINKS_PAGE_PT = [
+    {
+        'title': 'Canal no YouTube',
+        'description': 'Vídeos sobre DevOps, Kubernetes e Homelab',
+        'url': 'https://youtube.com/@matheusthurler',
+        'image': 'images/icons/youtube.png',
+        'external': True,
+    },
+    {
+        'title': 'Blog',
+        'description': 'Artigos técnicos sobre tecnologia',
+        'url_name': 'blog:home',
+        'icon': 'posts',
+        'external': False,
+    },
+    {
+        'title': 'LinkedIn',
+        'description': 'Meu perfil profissional',
+        'url': 'https://linkedin.com/in/matheus-thurler',
+        'image': 'images/icons/linkedin.png',
+        'external': True,
+    },
+    {
+        'title': 'Instagram',
+        'description': '@maththurler.devops',
+        'url': 'https://instagram.com/maththurler.devops',
+        'image': 'images/icons/instagram.png',
+        'external': True,
+    },
+    {
+        'title': 'TikTok',
+        'description': '@matheusthurler.devops',
+        'url': 'https://www.tiktok.com/@matheusthurler.devops',
+        'image': 'images/icons/tiktok.png',
+        'external': True,
+    },
+    {
+        'title': 'GitHub',
+        'description': 'Meus projetos open source',
+        'url': 'https://github.com/Matheus-Thurler',
+        'image': 'images/icons/github.png',
+        'external': True,
+    },
+    {
+        'title': 'Contato',
+        'description': 'contato@matheusthurler.com.br',
+        'url': 'mailto:contato@matheusthurler.com.br',
+        'image': 'images/icons/email.png',
+        'external': True,
+    },
+]
+
+LINKS_PAGE_EN = [
+    {
+        'title': 'YouTube Channel',
+        'description': 'Videos about DevOps, Kubernetes and Homelab',
+        'url': 'https://youtube.com/@matheusthurler',
+        'image': 'images/icons/youtube.png',
+        'external': True,
+    },
+    {
+        'title': 'Blog',
+        'description': 'Technical articles about technology',
+        'url_name': 'blog:home',
+        'icon': 'posts',
+        'external': False,
+    },
+    {
+        'title': 'LinkedIn',
+        'description': 'My professional profile',
+        'url': 'https://linkedin.com/in/matheus-thurler',
+        'image': 'images/icons/linkedin.png',
+        'external': True,
+    },
+    {
+        'title': 'Instagram',
+        'description': '@maththurler.devops',
+        'url': 'https://instagram.com/maththurler.devops',
+        'image': 'images/icons/instagram.png',
+        'external': True,
+    },
+    {
+        'title': 'TikTok',
+        'description': '@matheusthurler.devops',
+        'url': 'https://www.tiktok.com/@matheusthurler.devops',
+        'image': 'images/icons/tiktok.png',
+        'external': True,
+    },
+    {
+        'title': 'GitHub',
+        'description': 'My open source projects',
+        'url': 'https://github.com/Matheus-Thurler',
+        'image': 'images/icons/github.png',
+        'external': True,
+    },
+    {
+        'title': 'Contact',
+        'description': 'contato@matheusthurler.com.br',
+        'url': 'mailto:contato@matheusthurler.com.br',
+        'image': 'images/icons/email.png',
+        'external': True,
+    },
+]
 
 # UI Settings (from Hugo theme)
 SHOW_THEME_SWITCH = True
@@ -386,7 +499,7 @@ JAZZMIN_SETTINGS = {
         "axes": "fas fa-shield-halved",
     },
     "navigation": [
-        {"app": "blog", "models": ["post", "category", "tag", "author", "comment"]},
+        {"app": "blog", "models": ["post", "category", "tag", "author", "profilelink", "comment"]},
         {"app": "newsletter", "models": ["subscriber"]},
         {"app": "curation", "models": ["feedsource", "curateditem"]},
         {"app": "campaigns", "models": ["newslettercampaign"]},
