@@ -1,5 +1,6 @@
 # Deploy Django blog to Cloud Run (parallel to Firebase/Hugo on master).
 # Blue-green: new revision gets 0% traffic until /health/ passes, then 100%.
+# Hugo stays on Firebase Hosting until DNS cutover — do not remove firebase workflows.
 # Secrets: FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL (same GCP project SA)
 
 name: Deploy Django to Cloud Run on merge
@@ -69,6 +70,7 @@ jobs:
           image: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           tag: ${{ env.DEPLOY_TAG }}
           no_traffic: true
+          flags: '--min-instances=1'
 
       # Real readiness = app responds (migrate + collectstatic + gunicorn). gcloud Ready filter is unreliable.
       - name: Smoke test candidate revision
@@ -116,13 +118,18 @@ jobs:
             --limit=30 --format='value(textPayload)' 2>/dev/null || true
           exit 1
 
-      # Shift 100% traffic to candidate; previous revision scales to zero (min_instances=0)
+      # Shift 100% traffic to candidate; min-instances=1 keeps one container warm (no ~17s cold start)
       - name: Promote candidate to 100% traffic
         run: |
           gcloud run services update-traffic "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
             --project "${{ env.GCP_PROJECT_ID }}" \
             --to-tags "${{ env.DEPLOY_TAG }}=100"
+
+          gcloud run services update "${{ env.CLOUD_RUN_SERVICE }}" \
+            --region "${{ env.GCP_REGION }}" \
+            --project "${{ env.GCP_PROJECT_ID }}" \
+            --min-instances 1
 
       - name: Verify production endpoints
         run: |
