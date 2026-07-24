@@ -7,7 +7,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
 from blog.sitemaps import PostSitemap, StaticViewSitemap
-from blog.views import robots_txt, search_index
+from blog.views import robots_txt, search_index, health_check
 from blog.feeds import LatestPostsFeed
 from config.admin_docs import ADMIN_HOME_INTRO, APP_SECTIONS
 
@@ -35,6 +35,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
     path('robots.txt', robots_txt, name='robots_txt'),
+    path('health/', health_check, name='health_check'),
     path('index.json', search_index, name='search_index'),
     path('index.xml', LatestPostsFeed(), name='rss_feed'),
     path('llms.txt', TemplateView.as_view(template_name='llms.txt', content_type='text/plain')),

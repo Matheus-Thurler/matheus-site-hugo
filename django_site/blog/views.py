@@ -368,3 +368,8 @@ def robots_txt(request):
         f'Sitemap: {sitemap_url}',
     ]
     return HttpResponse('\n'.join(lines), content_type='text/plain')
+
+
+def health_check(request):
+    """Lightweight liveness probe for Cloud Run deploy smoke tests."""
+    return JsonResponse({'status': 'ok'})

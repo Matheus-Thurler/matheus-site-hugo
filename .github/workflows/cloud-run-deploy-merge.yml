@@ -1,4 +1,5 @@
 # Deploy Django blog to Cloud Run (parallel to Firebase/Hugo on master).
+# Blue-green: new revision gets 0% traffic until /health/ passes, then 100%.
 # Secrets: FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL (same GCP project SA)
 
 name: Deploy Django to Cloud Run on merge
@@ -18,6 +19,7 @@ env:
   AR_REPOSITORY: matheus-blog
   IMAGE_NAME: django
   CLOUD_RUN_SERVICE: matheus-blog
+  DEPLOY_TAG: candidate
 
 jobs:
   build_and_deploy:
@@ -57,14 +59,89 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Deploy to Cloud Run
+      # Step 1: deploy new revision with tag + 0% production traffic (old revision keeps 100%)
+      - name: Deploy candidate revision (no traffic)
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           project_id: ${{ env.GCP_PROJECT_ID }}
           service: ${{ env.CLOUD_RUN_SERVICE }}
           region: ${{ env.GCP_REGION }}
           image: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          # Env/secrets managed by Terraform — CI only rolls the image
+          tag: ${{ env.DEPLOY_TAG }}
+          no_traffic: true
+
+      - name: Wait for candidate revision to be ready
+        run: |
+          set -euo pipefail
+          SERVICE="${{ env.CLOUD_RUN_SERVICE }}"
+          REGION="${{ env.GCP_REGION }}"
+
+          echo "Waiting for Cloud Run Ready condition..."
+          for attempt in $(seq 1 60); do
+            REV="$(gcloud run revisions list \
+              --service="$SERVICE" \
+              --region="$REGION" \
+              --format='value(metadata.name)' \
+              --limit=1 \
+              --sort-by='~metadata.creationTimestamp')"
+
+            READY="$(gcloud run revisions describe "$REV" \
+              --region="$REGION" \
+              --format='value(status.conditions[?type=Ready].status)' 2>/dev/null || true)"
+
+            if [ "$READY" = "True" ]; then
+              echo "Revision $REV is Ready"
+              exit 0
+            fi
+
+            echo "Attempt $attempt/60: $REV not ready yet (status=$READY)"
+            sleep 5
+          done
+
+          echo "Candidate revision did not become Ready in time"
+          exit 1
+
+      - name: Smoke test candidate revision
+        run: |
+          set -euo pipefail
+          SERVICE="${{ env.CLOUD_RUN_SERVICE }}"
+          REGION="${{ env.GCP_REGION }}"
+          TAG="${{ env.DEPLOY_TAG }}"
+
+          CANDIDATE_URL="$(gcloud run services describe "$SERVICE" \
+            --region="$REGION" \
+            --format="json" \
+            | python3 -c "import json,sys; t=json.load(sys.stdin).get('status',{}).get('traffic',[]); print(next((x.get('url','') for x in t if x.get('tag')=='$TAG'), ''))")"
+
+          if [ -z "$CANDIDATE_URL" ]; then
+            BASE_URL="$(gcloud run services describe "$SERVICE" --region="$REGION" --format='value(status.url)')"
+            HOST="${BASE_URL#https://}"
+            CANDIDATE_URL="https://${TAG}---${HOST}"
+          fi
+
+          echo "Smoke testing candidate at $CANDIDATE_URL/health/"
+
+          for attempt in $(seq 1 36); do
+            if curl -fsS --max-time 15 "${CANDIDATE_URL}/health/"; then
+              echo ""
+              echo "Candidate passed smoke test"
+              exit 0
+            fi
+            echo "Attempt $attempt/36 failed, retrying in 5s..."
+            sleep 5
+          done
+
+          echo "Candidate smoke test failed — production traffic unchanged"
+          exit 1
+
+      # Step 2: shift 100% traffic to candidate; old revision scales to zero automatically
+      - name: Promote candidate to 100% traffic
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          service: ${{ env.CLOUD_RUN_SERVICE }}
+          region: ${{ env.GCP_REGION }}
+          tag_traffic: ${{ env.DEPLOY_TAG }}=100
 
       - name: Show service URL
         run: |
