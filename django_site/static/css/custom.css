@@ -216,14 +216,35 @@ article.group > a:active .post-card,
 
 /* Cookie consent — centered banner + button row */
 #cookie-consent {
+  position: fixed;
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  z-index: 100;
+  width: min(calc(100vw - 2rem), 32rem);
+  max-width: 32rem;
+  margin: 0;
+  opacity: 0;
   transform: translateX(-50%) translateY(1rem);
   pointer-events: none;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
 #cookie-consent.cookie-consent--visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
+}
+
+.cookie-consent-body {
+  text-align: center;
+}
+
+.cookie-consent-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .cookie-consent-actions {
@@ -233,6 +254,7 @@ article.group > a:active .post-card,
   align-items: center;
   gap: 0.75rem;
   width: 100%;
+  margin-inline: auto;
 }
 
 .cookie-consent-btn {
@@ -316,11 +338,13 @@ article.group > a:active .post-card,
 
   .cookie-consent-actions {
     flex-direction: column;
+    align-items: center;
   }
 
   .cookie-consent-btn {
     width: 100%;
     max-width: 16rem;
+    margin-inline: auto;
   }
 
   .newsletter-form button[type="submit"] {

@@ -131,19 +131,7 @@
     </script>
 
     <style>
-      /* Critical paint — avoid purple link flash before compiled.css loads */
-      html.dark {
-        background-color: #1a1a1a;
-        color: #eceff4;
-      }
-      html:not(.dark) {
-        background-color: #eceff4;
-        color: #2e3440;
-      }
-      body {
-        background-color: inherit;
-        color: inherit;
-      }
+      /* Avoid purple link flash before compiled.css — do not override theme background */
       a,
       a:link,
       a:visited {
