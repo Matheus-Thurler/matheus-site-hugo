@@ -1,0 +1,11 @@
+{% if google_adsense_client_id %}
+<div class="adsense-slot my-8 hidden flex flex-col items-center justify-center overflow-hidden">
+    <ins class="adsbygoogle"
+         style="display:block; text-align:center;"
+         data-ad-layout="in-article"
+         data-ad-format="fluid"
+         data-ad-client="{{ google_adsense_client_id }}"
+         data-ad-slot="{{ google_adsense_slot }}"></ins>
+    <span class="text-xs text-muted-foreground mt-2">Advertisement</span>
+</div>
+{% endif %}
