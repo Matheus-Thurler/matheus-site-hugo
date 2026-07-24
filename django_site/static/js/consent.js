@@ -27,7 +27,13 @@
   }
 
   function loadGoogleAnalytics() {
-    if (!window.__ANALYTICS_ENABLED__ || !window.__GA_ID__) return;
+    if (
+      !window.__ANALYTICS_ENABLED__ ||
+      !window.__GA_ID__ ||
+      window.__ANALYTICS_SELF_HOSTED__
+    ) {
+      return;
+    }
 
     loadScript("https://www.googletagmanager.com/gtag/js?id=" + window.__GA_ID__)
       .then(function () {
@@ -44,6 +50,7 @@
 
   function loadAdSense() {
     if (!window.__ADSENSE_ID__) return;
+    if (!document.querySelector(".adsense-slot")) return;
 
     var link = document.createElement("link");
     link.rel = "preconnect";

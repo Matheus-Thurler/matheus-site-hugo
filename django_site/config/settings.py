@@ -425,6 +425,8 @@ if not DEBUG:
     # Secure cookies
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+
+    WHITENOISE_MAX_AGE = 60 * 60 * 24 * 30  # 30 days — Lighthouse cache lifetime
 else:
     # Development settings
     SECURE_SSL_REDIRECT = False
@@ -460,7 +462,13 @@ AXES_RESET_ON_SUCCESS = True  # Reset failure count on successful login
 CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': ("'self'",),
-        'script-src': ("'self'", "'unsafe-inline'", 'https://www.googletagmanager.com', 'https://giscus.app'),
+        'script-src': (
+            "'self'",
+            "'unsafe-inline'",
+            'https://www.googletagmanager.com',
+            'https://pagead2.googlesyndication.com',
+            'https://giscus.app',
+        ),
         'style-src': ("'self'", "'unsafe-inline'"),
         'img-src': (
             "'self'",
