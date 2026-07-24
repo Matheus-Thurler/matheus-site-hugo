@@ -118,12 +118,11 @@ jobs:
 
       # Shift 100% traffic to candidate; previous revision scales to zero (min_instances=0)
       - name: Promote candidate to 100% traffic
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          project_id: ${{ env.GCP_PROJECT_ID }}
-          service: ${{ env.CLOUD_RUN_SERVICE }}
-          region: ${{ env.GCP_REGION }}
-          tag_traffic: ${{ env.DEPLOY_TAG }}=100
+        run: |
+          gcloud run services update-traffic "${{ env.CLOUD_RUN_SERVICE }}" \
+            --region "${{ env.GCP_REGION }}" \
+            --project "${{ env.GCP_PROJECT_ID }}" \
+            --to-tags "${{ env.DEPLOY_TAG }}=100"
 
       - name: Verify production endpoints
         run: |
