@@ -55,7 +55,25 @@
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
         window.__ADSENSE_ID__,
       { crossorigin: "anonymous" }
-    ).catch(function () {});
+    )
+      .then(function () {
+        initAdSlots();
+      })
+      .catch(function () {});
+  }
+
+  function initAdSlots() {
+    document.querySelectorAll(".adsense-slot").forEach(function (slot) {
+      slot.classList.remove("hidden");
+      var ins = slot.querySelector("ins.adsbygoogle");
+      if (!ins || ins.dataset.initialized === "true") return;
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        ins.dataset.initialized = "true";
+      } catch (err) {
+        /* adsbygoogle not ready */
+      }
+    });
   }
 
   function loadGiscus() {

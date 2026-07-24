@@ -107,9 +107,9 @@
   {{ content }}
 </article>
 
-<!-- AdSense -->
+<!-- AdSense (loaded after cookie consent via consent.js) -->
 {% if google_adsense_id %}
-<div class="my-8 p-4 bg-card border border-border rounded-2xl text-center overflow-x-auto">
+<div class="adsense-slot my-8 hidden p-4 bg-card border border-border rounded-2xl text-center overflow-x-auto" data-ad-slot="9876543210">
     <p class="text-xs text-muted-foreground mb-2">Advertisement</p>
     <ins class="adsbygoogle block"
          style="display:block"
@@ -117,9 +117,6 @@
          data-ad-slot="9876543210"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-         (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
 </div>
 {% endif %}
 
