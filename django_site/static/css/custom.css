@@ -318,17 +318,50 @@ article.group > a:active .post-card,
   content: none !important;
 }
 
-.prose a {
+.prose a:not(.block):not(.google-anno):not(.google-anno-oc) {
   position: static;
   padding: 0;
   margin: 0;
 }
 
 .prose a.google-anno,
-.prose a.google-anno-oc,
-.prose a.block,
-.prose .aspect-video a {
+.prose a.google-anno-oc {
   text-decoration: none !important;
+}
+
+/* YouTube embeds — aspect-video is not in compiled Tailwind bundle */
+.prose .aspect-video,
+.prose .youtube-embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  margin-block: 1.5rem;
+  overflow: hidden;
+  border-radius: var(--radius-lg, 0.75rem);
+  background: var(--color-muted);
+}
+
+.prose .aspect-video > a,
+.prose .youtube-embed > a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-decoration: none !important;
+}
+
+.prose .aspect-video img,
+.prose .youtube-embed img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.prose .aspect-video .absolute,
+.prose .youtube-embed .absolute {
+  position: absolute;
+  inset: 0;
 }
 
 /* Mobile — touch targets & layout (h-11 / min-h-[44px] missing from compiled Tailwind) */

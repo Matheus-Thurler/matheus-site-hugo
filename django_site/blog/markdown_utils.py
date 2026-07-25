@@ -41,7 +41,7 @@ def _prepare_markdown(text):
         return ''
     return re.sub(
         r'\{\{<\s*youtube\s+([a-zA-Z0-9_-]+)\s*>\}\}',
-        r'<div class="aspect-video my-6 overflow-hidden rounded-lg bg-muted">'
+        r'<div class="youtube-embed aspect-video my-6 overflow-hidden rounded-lg bg-muted">'
         r'<a href="https://www.youtube.com/watch?v=\1" target="_blank" rel="noopener noreferrer" '
         r'class="block w-full h-full relative group">'
         r'<img src="https://i.ytimg.com/vi/\1/hqdefault.jpg" alt="YouTube video" '
