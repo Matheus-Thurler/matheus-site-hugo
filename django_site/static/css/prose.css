@@ -251,59 +251,27 @@
   transform: scale(1);
 }
 
-/* 链接样式 */
+/* 链接样式 — text-decoration only; ::before width:100% draws full-width lines on
+   inline links and AdSense google-anno injections inside post body. */
 .prose a {
   color: var(--tw-prose-links);
   text-decoration: none;
   font-weight: 500;
-  position: relative;
-  transition: all 0.3s ease;
-  padding: 2px 4px;
-  margin: -2px -4px;
-  border-radius: 4px;
-  background: transparent;
+  transition: color 0.2s ease;
 }
 
-.prose a:not(.footnote-ref):not(.footnote-backref)::before {
-  content: "";
-  position: absolute;
-  bottom: 1px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--tw-prose-links);
-  transition: width 0.3s ease;
-  transform-origin: right;
-}
-
+.prose a:not(.footnote-ref):not(.footnote-backref)::before,
 .prose a::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: color-mix(in srgb, var(--color-primary) 15%, transparent);
-  border-radius: 4px;
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.3s ease;
-  z-index: -1;
+  content: none;
+}
+
+.prose a.google-anno,
+.prose a.google-anno-oc {
+  text-decoration: none !important;
 }
 
 .prose a:hover {
   color: var(--color-primary);
-}
-
-
-.prose a:hover::after {
-  opacity: 1;
-  transform: scale(1);
-}
-
-
-.prose a:not(.footnote-ref):not(.footnote-backref):hover::before {
-  width: 0;
 }
 
 

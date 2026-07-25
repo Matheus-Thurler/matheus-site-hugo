@@ -312,6 +312,25 @@ article.group > a:active .post-card,
   padding-top: 1rem;
 }
 
+/* Prose links: override compiled.css pseudo underlines (AdSense google-anno + inline links) */
+.prose a:not(.footnote-ref):not(.footnote-backref)::before,
+.prose a::after {
+  content: none !important;
+}
+
+.prose a {
+  position: static;
+  padding: 0;
+  margin: 0;
+}
+
+.prose a.google-anno,
+.prose a.google-anno-oc,
+.prose a.block,
+.prose .aspect-video a {
+  text-decoration: none !important;
+}
+
 /* Mobile — touch targets & layout (h-11 / min-h-[44px] missing from compiled Tailwind) */
 @media (max-width: 767px) {
   #mobile-menu-toggle,
