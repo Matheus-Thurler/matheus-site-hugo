@@ -43,6 +43,18 @@ def handle_interaction(body: dict) -> dict:
             pk = int(custom_id.replace('reject_campaign_', ''))
             return _handle_reject_campaign(pk, channel_id, message_id)
 
+        if custom_id.startswith('approve_curated_'):
+            pk = int(custom_id.replace('approve_curated_', ''))
+            return _handle_approve_curated(pk, channel_id, message_id)
+
+        if custom_id.startswith('reject_curated_'):
+            pk = int(custom_id.replace('reject_curated_', ''))
+            return _handle_reject_curated(pk, channel_id, message_id)
+
+        if custom_id.startswith('create_draft_curated_'):
+            pk = int(custom_id.replace('create_draft_curated_', ''))
+            return _handle_create_draft_curated(pk, channel_id, message_id)
+
     return {'type': 4, 'data': {'content': 'Interação desconhecida', 'flags': 64}}
 
 
@@ -75,4 +87,45 @@ def _handle_reject_campaign(pk: int, channel_id: str, message_id: str) -> dict:
     return {
         'type': 4,
         'data': {'content': f'❌ Draft #{pk} rejeitado.', 'flags': 64},
+    }
+
+
+def _handle_approve_curated(pk: int, channel_id: str, message_id: str) -> dict:
+    from curation.models import CuratedItem
+    from discord_bot.client import update_message
+
+    CuratedItem.objects.filter(pk=pk).update(status='approved')
+    update_message(channel_id, message_id, components=[])
+    return {'type': 4, 'data': {'content': f'✅ Item #{pk} aprovado.', 'flags': 64}}
+
+
+def _handle_reject_curated(pk: int, channel_id: str, message_id: str) -> dict:
+    from curation.models import CuratedItem
+    from discord_bot.client import update_message
+
+    CuratedItem.objects.filter(pk=pk).update(status='rejected')
+    update_message(channel_id, message_id, components=[])
+    return {'type': 4, 'data': {'content': f'❌ Item #{pk} rejeitado.', 'flags': 64}}
+
+
+def _handle_create_draft_curated(pk: int, channel_id: str, message_id: str) -> dict:
+    from curation.models import CuratedItem
+    from curation.services import create_post_draft
+    from discord_bot.client import update_message
+
+    item = CuratedItem.objects.filter(pk=pk).first()
+    if not item:
+        return {'type': 4, 'data': {'content': 'Item não encontrado.', 'flags': 64}}
+    try:
+        post = create_post_draft(item)
+    except Exception as exc:
+        logger.exception('Create draft from curated %s failed', pk)
+        return {'type': 4, 'data': {'content': f'❌ Erro: {exc}', 'flags': 64}}
+    update_message(channel_id, message_id, components=[])
+    return {
+        'type': 4,
+        'data': {
+            'content': f'📝 Draft criado: **{post.get_title()}** (/{post.slug}/)',
+            'flags': 64,
+        },
     }

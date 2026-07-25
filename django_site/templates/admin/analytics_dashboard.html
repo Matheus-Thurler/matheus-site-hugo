@@ -1,0 +1,27 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Last {{ stats.days }} days — {{ stats.total_views }} views, {{ stats.unique_visitors }} visitors</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem">
+  <section>
+    <h2>Top posts</h2>
+    <ul>{% for row in stats.top_posts %}<li>{{ row.post_slug }} — {{ row.views }}</li>{% empty %}<li>No data</li>{% endfor %}</ul>
+  </section>
+  <section>
+    <h2>Top paths</h2>
+    <ul>{% for row in stats.top_paths %}<li>{{ row.path }} — {{ row.views }}</li>{% empty %}<li>No data</li>{% endfor %}</ul>
+  </section>
+  <section>
+    <h2>Referrers</h2>
+    <ul>{% for row in stats.top_referrers %}<li>{{ row.referrer }} — {{ row.views }}</li>{% empty %}<li>No data</li>{% endfor %}</ul>
+  </section>
+  <section>
+    <h2>Feedback</h2>
+    <ul>
+      <li>Helpful: {{ stats.feedback.True|default:0 }}</li>
+      <li>Not helpful: {{ stats.feedback.False|default:0 }}</li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

@@ -41,10 +41,22 @@ def _prepare_markdown(text):
         return ''
 
     text = re.sub(
+        r'```asciinema\s*\n([a-zA-Z0-9_-]+)\s*\n```',
+        r'<div class="asciinema-embed my-6 not-prose">'
+        r'<script src="https://asciinema.org/a/\1/embed" async></script></div>',
+        text,
+    )
+    text = re.sub(
         r'\{\{<\s*mermaid\s*>\}\}(.*?)\{\{<\s*/\s*mermaid\s*>\}\}',
         lambda match: f'\n```mermaid\n{match.group(1).strip()}\n```\n',
         text,
         flags=re.DOTALL,
+    )
+    text = re.sub(
+        r'\{\{<\s*asciinema\s+([a-zA-Z0-9_-]+)\s*>\}\}',
+        r'<div class="asciinema-embed my-6 not-prose">'
+        r'<script src="https://asciinema.org/a/\1/embed" async></script></div>',
+        text,
     )
     return re.sub(
         r'\{\{<\s*youtube\s+([a-zA-Z0-9_-]+)\s*>\}\}',

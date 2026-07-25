@@ -9,7 +9,7 @@ from ckeditor.widgets import CKEditorWidget
 from config.admin_mixins import DescriptiveAdminMixin
 from .admin_forms import GeneratePostAIForm
 from .ai_posts import create_draft_post, generate_post_payload
-from .models import Author, Category, Tag, Post, Comment, ProfileLink
+from .models import Author, Category, Tag, Post, Comment, ProfileLink, Series, SeriesPost, PostFeedback
 
 
 @admin.register(Author)
@@ -60,11 +60,108 @@ class PostAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             'description': _('Deixe vazio para usar só EN ou marque use_ai_translation no admin shell.'),
         }),
         (_('SEO & Extras'), {
-            'fields': ('keywords', 'cover', 'featured_image', 'show_related', 'use_ai_translation'),
+            'fields': (
+                'keywords', 'cover', 'featured_image', 'show_related', 'use_ai_translation',
+                'content_updated_at', 'show_updated_badge', 'youtube_video_id',
+                'og_title_en', 'og_title_pt', 'og_description_en', 'og_description_pt',
+                'crosspost_linkedin', 'crosspost_mastodon', 'crosspost_telegram',
+            ),
             'classes': ('collapse',),
             'description': _('cover = imagem do card; featured_image = hero do post (opcional).'),
         }),
     )
+    actions = (
+        'translate_to_pt',
+        'translate_to_en',
+        'generate_seo_meta',
+        'generate_crosspost_drafts',
+        'suggest_youtube_links',
+    )
+
+    @admin.action(description='Translate to Portuguese (AI)')
+    def translate_to_pt(self, request, queryset):
+        self._run_translation(request, queryset, 'pt')
+
+    @admin.action(description='Translate to English (AI)')
+    def translate_to_en(self, request, queryset):
+        self._run_translation(request, queryset, 'en')
+
+    def _run_translation(self, request, queryset, target_lang):
+        from blog.platform import translate_post_with_ai
+
+        updated = 0
+        for post in queryset:
+            try:
+                data = translate_post_with_ai(post, target_lang)
+            except Exception as exc:
+                messages.error(request, f'{post.slug}: {exc}')
+                continue
+            if target_lang == 'pt':
+                post.title_pt = data.get('title', '')[:255]
+                post.description_pt = data.get('description', '')
+                post.content_pt = data.get('content', '')
+            else:
+                post.title_en = data.get('title', '')[:255]
+                post.description_en = data.get('description', '')
+                post.content_en = data.get('content', '')
+            post.save()
+            updated += 1
+        messages.success(request, f'{updated} post(s) translated.')
+
+    @admin.action(description='Generate SEO meta (AI)')
+    def generate_seo_meta(self, request, queryset):
+        from blog.platform import generate_seo_meta
+
+        updated = 0
+        for post in queryset:
+            try:
+                data = generate_seo_meta(post)
+            except Exception as exc:
+                messages.error(request, f'{post.slug}: {exc}')
+                continue
+            post.og_title_en = data.get('og_title_en', '')[:255]
+            post.og_title_pt = data.get('og_title_pt', '')[:255]
+            post.og_description_en = data.get('og_description_en', '')
+            post.og_description_pt = data.get('og_description_pt', '')
+            if data.get('keywords'):
+                post.keywords = data['keywords'][:500]
+            post.save()
+            updated += 1
+        messages.success(request, f'SEO meta generated for {updated} post(s).')
+
+    @admin.action(description='Generate cross-post drafts (AI)')
+    def generate_crosspost_drafts(self, request, queryset):
+        from blog.platform import generate_crosspost_drafts
+
+        updated = 0
+        for post in queryset:
+            try:
+                data = generate_crosspost_drafts(post)
+            except Exception as exc:
+                messages.error(request, f'{post.slug}: {exc}')
+                continue
+            post.crosspost_linkedin = data.get('linkedin', '')
+            post.crosspost_mastodon = data.get('mastodon', '')
+            post.crosspost_telegram = data.get('telegram', '')
+            post.save(update_fields=[
+                'crosspost_linkedin', 'crosspost_mastodon', 'crosspost_telegram',
+            ])
+            updated += 1
+        messages.success(request, f'Cross-post drafts generated for {updated} post(s).')
+
+    @admin.action(description='Suggest YouTube video links')
+    def suggest_youtube_links(self, request, queryset):
+        from blog.platform import match_youtube_videos_to_posts
+
+        suggestions = {s['post_slug']: s for s in match_youtube_videos_to_posts()}
+        updated = 0
+        for post in queryset:
+            suggestion = suggestions.get(post.slug)
+            if suggestion and not post.youtube_video_id:
+                post.youtube_video_id = suggestion['video_id']
+                post.save(update_fields=['youtube_video_id'])
+                updated += 1
+        messages.success(request, f'YouTube IDs applied to {updated} post(s).')
 
     def get_urls(self):
         urls = super().get_urls()
@@ -114,12 +211,49 @@ class PostAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
         return render(request, 'admin/blog/generate_post_ai.html', context)
 
 
+class SeriesPostInline(admin.TabularInline):
+    model = SeriesPost
+    extra = 1
+    ordering = ('order',)
+
+
+@admin.register(Series)
+class SeriesAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
+    list_display = ('title_en', 'slug', 'is_published', 'order')
+    prepopulated_fields = {'slug': ('title_en',)}
+    inlines = (SeriesPostInline,)
+
+
+@admin.register(PostFeedback)
+class PostFeedbackAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
+    list_display = ('post', 'helpful', 'created_at')
+    list_filter = ('helpful', 'created_at')
+    readonly_fields = ('post', 'helpful', 'visitor_hash', 'created_at')
+
+    def has_add_permission(self, request):
+        return False
+
+
 @admin.register(Comment)
 class CommentAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     list_display = ('author', 'post', 'status', 'created_at')
     list_filter = ('status', 'created_at')
     search_fields = ('author__username', 'author__email', 'content', 'post__slug')
-    actions = ['approve_comments', 'reject_comments']
+    actions = ['approve_comments', 'reject_comments', 'moderate_with_ai']
+
+    @admin.action(description='Moderate with AI')
+    def moderate_with_ai(self, request, queryset):
+        from blog.platform import moderate_comment_with_ai
+
+        for comment in queryset.filter(status='pending'):
+            try:
+                result = moderate_comment_with_ai(comment)
+            except Exception as exc:
+                messages.error(request, f'Comment #{comment.pk}: {exc}')
+                continue
+            comment.status = 'approved' if result.get('approve') else 'rejected'
+            comment.save(update_fields=['status'])
+        messages.success(request, 'AI moderation completed.')
 
     @admin.action(description='Approve selected comments')
     def approve_comments(self, request, queryset):

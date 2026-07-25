@@ -3,6 +3,7 @@ Django settings for Matheus Thurler Blog.
 """
 
 from pathlib import Path
+import json
 import os
 
 from dotenv import load_dotenv
@@ -470,6 +471,18 @@ DISCORD_NEWSLETTER_CHANNEL_ID = os.environ.get(
 )
 DISCORD_WEBHOOK_URL = os.environ.get('DISCORD_WEBHOOK_URL', '')
 YOUTUBE_CHANNEL_ID = os.environ.get('YOUTUBE_CHANNEL_ID', 'UCHVZvp_RfNpwfATmQ-NaDyw')
+GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME', 'Matheus-Thurler')
+GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')
+START_HERE_POST_SLUGS = [
+    slug.strip()
+    for slug in os.environ.get(
+        'START_HERE_POST_SLUGS',
+        'distrobox-end-of-works-on-my-machine,cloudstack-ansible-video-tutorial,nginx-gateway-api-kubernetes',
+    ).split(',')
+    if slug.strip()
+]
+HOMELAB_STATUS_CHECKS = json.loads(os.environ.get('HOMELAB_STATUS_CHECKS', '[]'))
+CHANGELOG_PATH = BASE_DIR.parent / 'CHANGELOG.md'
 BLOG_RSS_URL = os.environ.get('BLOG_RSS_URL', 'https://matheusthurler.com.br/index.xml')
 INTERNAL_API_TOKEN = (
     os.environ.get('INTERNAL_API_TOKEN')
@@ -614,6 +627,7 @@ CONTENT_SECURITY_POLICY = {
             'https://www.google.com',
             'https://giscus.app',
             'https://cdn.jsdelivr.net',
+            'https://asciinema.org',
         ),
         'style-src': ("'self'", "'unsafe-inline'"),
         'img-src': (
@@ -638,6 +652,7 @@ CONTENT_SECURITY_POLICY = {
             'https://googleads.g.doubleclick.net',
             'https://tpc.googlesyndication.com',
             'https://www.google.com',
+            'https://asciinema.org',
         ),
         'connect-src': (
             "'self'",

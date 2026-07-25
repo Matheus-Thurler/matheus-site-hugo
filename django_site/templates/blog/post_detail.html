@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block extra_head %}
-<meta property="og:title" content="{{ title }}">
-<meta property="og:description" content="{{ description }}">
+<meta property="og:title" content="{{ og_title|default:title }}">
+<meta property="og:description" content="{{ og_description|default:description }}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% if post.cover_url %}
@@ -48,6 +48,13 @@
       <div class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
         <time datetime="{{ post.published_at|date:'Y-m-d' }}">{{ post.published_at|date:"M d, Y" }}</time>
+      </div>
+      {% endif %}
+      {% if show_updated_badge %}
+      <div class="flex items-center gap-2">
+        <span class="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-xs font-medium">
+          {% if lang == 'pt' %}Atualizado {{ post.content_updated_at|date:"d/m/Y" }}{% else %}Updated {{ post.content_updated_at|date:"M d, Y" }}{% endif %}
+        </span>
       </div>
       {% endif %}
 
@@ -148,10 +155,30 @@
 {% if comments_enabled %}
 {% include 'blog/partials/comments.html' %}
 {% endif %}
+
+<section class="bg-card border-border my-10 rounded-xl border p-5" id="post-feedback" data-feedback-url="{% url 'blog:post_feedback' post.slug %}">
+  <p class="text-foreground mb-3 text-sm font-medium">{% if lang == 'pt' %}Este post foi útil?{% else %}Was this helpful?{% endif %}</p>
+  <div class="flex gap-2">
+    <button type="button" data-helpful="1" class="bg-muted/50 hover:bg-primary/10 rounded-lg px-3 py-1.5 text-sm">👍 {% if lang == 'pt' %}Sim{% else %}Yes{% endif %}</button>
+    <button type="button" data-helpful="0" class="bg-muted/50 hover:bg-primary/10 rounded-lg px-3 py-1.5 text-sm">👎 {% if lang == 'pt' %}Não{% else %}No{% endif %}</button>
+  </div>
+  <p class="text-muted-foreground mt-2 text-xs" id="feedback-stats">{{ feedback_helpful }}/{{ feedback_total }} {% if lang == 'pt' %}acharam útil{% else %}found helpful{% endif %}</p>
+</section>
+
+{% if ask_post_enabled %}
+<section class="bg-card border-border my-10 rounded-xl border p-5" id="post-ask" data-ask-url="{% url 'blog:post_ask' post.slug %}">
+  <p class="text-foreground mb-3 text-sm font-medium">{% if lang == 'pt' %}Pergunte sobre este post{% else %}Ask about this post{% endif %}</p>
+  <textarea id="post-ask-input" rows="3" class="border-border w-full rounded-lg border px-3 py-2 text-sm" placeholder="{% if lang == 'pt' %}Sua pergunta...{% else %}Your question...{% endif %}"></textarea>
+  <button type="button" id="post-ask-btn" class="bg-primary text-primary-foreground mt-3 rounded-lg px-4 py-2 text-sm">{% if lang == 'pt' %}Perguntar{% else %}Ask{% endif %}</button>
+  <div id="post-ask-answer" class="text-muted-foreground mt-3 hidden whitespace-pre-wrap text-sm"></div>
+</section>
+{% endif %}
 {% endblock %}
 
 {% block extra_scripts %}
 <script src="{% static 'js/code-blocks.js' %}" defer></script>
+<script src="{% static 'js/post-feedback.js' %}" defer></script>
+{% if ask_post_enabled %}<script src="{% static 'js/post-ask.js' %}" defer></script>{% endif %}
 {% if has_mermaid %}
 <style>
   svg[id^="mermaid-"] {

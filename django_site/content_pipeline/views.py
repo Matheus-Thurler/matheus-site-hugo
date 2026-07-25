@@ -36,3 +36,23 @@ def scheduler_check_content(request):
         return JsonResponse({'error': 'unauthorized'}, status=401)
     job = run_job('check_content')
     return JsonResponse({'ok': job.status == 'success', 'job_id': job.pk, 'log': job.log})
+
+
+@csrf_exempt
+@require_POST
+def scheduler_sync(request):
+    if not _check_token(request):
+        return JsonResponse({'error': 'unauthorized'}, status=401)
+    from integrations.services import sync_all
+    results = sync_all()
+    return JsonResponse({'ok': True, 'results': results})
+
+
+@csrf_exempt
+@require_POST
+def scheduler_pipeline(request):
+    if not _check_token(request):
+        return JsonResponse({'error': 'unauthorized'}, status=401)
+    from .services import run_pipeline
+    job = run_pipeline('full')
+    return JsonResponse({'ok': job.status == 'success', 'job_id': job.pk, 'log': job.log})

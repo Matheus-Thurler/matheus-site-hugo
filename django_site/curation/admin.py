@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from config.admin_mixins import DescriptiveAdminMixin
-from .models import CuratedItem, FeedSource
+from .models import CuratedItem, FeedSource, LinkSubmission
 
 
 @admin.register(FeedSource)
@@ -51,3 +51,26 @@ class CuratedItemAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             request,
             f'{created} draft(s) created. {skipped} skipped.',
         )
+
+
+@admin.register(LinkSubmission)
+class LinkSubmissionAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
+    list_display = ('title', 'url', 'submitter_email', 'status', 'created_at')
+    list_filter = ('status',)
+    search_fields = ('title', 'url', 'submitter_email')
+    actions = ('accept_submissions', 'reject_submissions')
+    readonly_fields = ('created_at', 'curated_item')
+
+    @admin.action(description='Accept and create curated item')
+    def accept_submissions(self, request, queryset):
+        from .services import accept_link_submission
+
+        count = 0
+        for submission in queryset.filter(status='pending'):
+            accept_link_submission(submission)
+            count += 1
+        self.message_user(request, f'{count} submission(s) accepted.')
+
+    @admin.action(description='Reject selected')
+    def reject_submissions(self, request, queryset):
+        queryset.update(status='rejected')

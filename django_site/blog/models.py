@@ -129,6 +129,20 @@ class Post(models.Model):
     featured_image = models.ImageField(upload_to='posts/', blank=True)
     show_related = models.BooleanField(default=True)
     reading_time = models.PositiveIntegerField(default=0, help_text=_('Estimated reading time in minutes'))
+    content_updated_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text=_('When the post content was last meaningfully updated'),
+    )
+    show_updated_badge = models.BooleanField(default=False)
+    youtube_video_id = models.CharField(max_length=20, blank=True)
+    og_title_en = models.CharField(max_length=255, blank=True)
+    og_title_pt = models.CharField(max_length=255, blank=True)
+    og_description_en = models.TextField(blank=True)
+    og_description_pt = models.TextField(blank=True)
+    crosspost_linkedin = models.TextField(blank=True)
+    crosspost_mastodon = models.TextField(blank=True)
+    crosspost_telegram = models.TextField(blank=True)
 
     objects = PostManager()
 
@@ -205,11 +219,36 @@ class Post(models.Model):
         return static(path) if (static_root / path).exists() else ''
 
     def save(self, *args, **kwargs):
-        # Auto-calculate reading time
         content = self.content_en or self.content_pt or ''
         words = len(content.split())
-        self.reading_time = max(1, words // 200)  # ~200 words per minute
+        self.reading_time = max(1, words // 200)
+        if self.pk:
+            old = Post.objects.filter(pk=self.pk).values(
+                'content_en', 'content_pt',
+            ).first()
+            if old and (
+                old['content_en'] != self.content_en
+                or old['content_pt'] != self.content_pt
+            ):
+                from django.utils import timezone
+                self.content_updated_at = timezone.now()
         super().save(*args, **kwargs)
+
+    def get_og_title(self, lang=None):
+        lang = self._resolve_lang(lang)
+        if lang == 'pt' and self.og_title_pt:
+            return self.og_title_pt
+        if self.og_title_en:
+            return self.og_title_en
+        return self.get_title(lang)
+
+    def get_og_description(self, lang=None):
+        lang = self._resolve_lang(lang)
+        if lang == 'pt' and self.og_description_pt:
+            return self.og_description_pt
+        if self.og_description_en:
+            return self.og_description_en
+        return self.get_description(lang)
 
 
 class Comment(models.Model):
@@ -233,6 +272,79 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author} - {self.post.slug}"
+
+
+class Series(models.Model):
+    """Ordered learning path grouping related posts."""
+
+    slug = models.SlugField(max_length=120, unique=True)
+    title_en = models.CharField(max_length=255)
+    title_pt = models.CharField(max_length=255, blank=True)
+    description_en = models.TextField(blank=True)
+    description_pt = models.TextField(blank=True)
+    cover = models.CharField(max_length=500, blank=True)
+    is_published = models.BooleanField(default=True)
+    order = models.PositiveIntegerField(default=0)
+    posts = models.ManyToManyField(
+        Post,
+        through='SeriesPost',
+        related_name='series_list',
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = _('Series')
+        verbose_name_plural = _('Series')
+        ordering = ['order', 'slug']
+
+    def __str__(self):
+        return self.title_en or self.slug
+
+    def get_title(self, lang=None):
+        lang = Post._resolve_lang(lang)
+        if lang == 'pt':
+            return self.title_pt or self.title_en
+        return self.title_en
+
+    def get_description(self, lang=None):
+        lang = Post._resolve_lang(lang)
+        if lang == 'pt':
+            return self.description_pt or self.description_en
+        return self.description_en
+
+    def get_absolute_url(self):
+        return reverse('blog:series_detail', kwargs={'slug': self.slug})
+
+
+class SeriesPost(models.Model):
+    series = models.ForeignKey(Series, on_delete=models.CASCADE, related_name='series_posts')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='series_memberships')
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        unique_together = [('series', 'post')]
+
+    def __str__(self):
+        return f'{self.series.slug} → {self.post.slug}'
+
+
+class PostFeedback(models.Model):
+    """Anonymous helpful / not helpful votes on posts."""
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='feedback')
+    helpful = models.BooleanField()
+    visitor_hash = models.CharField(max_length=64, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = [('post', 'visitor_hash')]
+        verbose_name = _('Post feedback')
+        verbose_name_plural = _('Post feedback')
+
+    def __str__(self):
+        label = 'helpful' if self.helpful else 'not helpful'
+        return f'{self.post.slug} — {label}'
 
 
 class ProfileLink(models.Model):

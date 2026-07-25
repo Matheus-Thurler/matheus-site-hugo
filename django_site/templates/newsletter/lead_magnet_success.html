@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Download | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-xl text-center">
+  <h1 class="text-foreground mb-4 text-3xl font-bold">{% if lang == 'pt' %}Obrigado!{% else %}Thank you!{% endif %}</h1>
+  {% if download_url %}
+  <a href="{{ download_url }}" class="bg-primary text-primary-foreground inline-block rounded-lg px-6 py-3 font-medium">{% if lang == 'pt' %}Baixar recurso{% else %}Download resource{% endif %}</a>
+  {% else %}
+  <p class="text-muted-foreground">{% if lang == 'pt' %}Recurso em breve no admin.{% else %}Resource coming soon in admin.{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}

@@ -6,3 +6,6 @@ class MediaLibraryConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'media_library'
     verbose_name = _('Biblioteca de mídia')
+
+    def ready(self):
+        from . import signals  # noqa: F401

@@ -191,3 +191,24 @@ def export_csv(request):
             sub.is_active,
         ])
     return response
+
+
+def lead_magnet(request, slug):
+    """Lead magnet landing page with newsletter signup gate."""
+    from django.shortcuts import get_object_or_404, render
+
+    from .models import LeadMagnet
+
+    magnet = get_object_or_404(LeadMagnet, slug=slug, is_active=True)
+    lang = _current_language(request)
+    if request.GET.get('download') and request.GET.get('token') == 'subscribed':
+        return render(request, 'newsletter/lead_magnet_success.html', {
+            'magnet': magnet,
+            'lang': lang,
+            'download_url': magnet.get_download_url(),
+        })
+    return render(request, 'newsletter/lead_magnet.html', {
+        'magnet': magnet,
+        'lang': lang,
+        'newsletter_url': '/newsletter/subscribe/',
+    })

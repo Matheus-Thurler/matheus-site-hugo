@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl">
+  <header class="mb-8">
+    <h1 class="text-foreground text-3xl font-bold">{{ title }}</h1>
+    {% if description %}<p class="text-muted-foreground mt-3">{{ description }}</p>{% endif %}
+  </header>
+  <div class="space-y-4">
+    {% for post in posts %}
+    {% include "blog/partials/post_card.html" %}
+    {% empty %}
+    <p class="text-muted-foreground">{% if lang == 'pt' %}Nenhum post configurado ainda.{% else %}No posts configured yet.{% endif %}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

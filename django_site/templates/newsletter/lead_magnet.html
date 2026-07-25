@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ magnet.get_title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-xl">
+  <h1 class="text-foreground mb-4 text-3xl font-bold">{{ magnet.get_title }}</h1>
+  <p class="text-muted-foreground mb-6">{{ magnet.get_description }}</p>
+  <form id="lead-magnet-form" class="bg-card border-border space-y-3 rounded-xl border p-6">
+    <input type="text" name="name" required placeholder="Name" class="w-full rounded-lg border px-3 py-2">
+    <input type="email" name="email" required placeholder="Email" class="w-full rounded-lg border px-3 py-2">
+    <button type="submit" class="bg-primary text-primary-foreground w-full rounded-lg px-4 py-2">Subscribe & download</button>
+  </form>
+</div>
+<script>
+document.getElementById('lead-magnet-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  const payload = { name: form.name.value, email: form.email.value };
+  const resp = await fetch('{{ newsletter_url }}', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (resp.ok) {
+    window.location.href = '?download=1&token=subscribed';
+  } else {
+    alert('Subscription failed');
+  }
+});
+</script>
+{% endblock %}

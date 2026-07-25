@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl">
+  <header class="mb-8"><h1 class="text-foreground text-3xl font-bold">{{ title }}</h1></header>
+  {% for entry in entries %}
+  <section class="mb-8">
+    <h2 class="text-foreground text-xl font-semibold">{{ entry.version }}{% if entry.date %} <span class="text-muted-foreground text-sm">{{ entry.date }}</span>{% endif %}</h2>
+    <ul class="text-muted-foreground mt-3 list-disc space-y-1 pl-5">
+      {% for item in entry.items %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% empty %}
+  <p class="text-muted-foreground">No changelog entries yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

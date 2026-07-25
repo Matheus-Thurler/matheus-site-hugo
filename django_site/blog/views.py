@@ -80,6 +80,18 @@ class PostDetailView(DetailView):
         context['content'] = content_html
         context['has_mermaid'] = 'class="mermaid"' in str(content_html)
         context['table_of_contents'] = table_of_contents
+        context['og_title'] = self.object.get_og_title(lang)
+        context['og_description'] = self.object.get_og_description(lang)
+        context['show_updated_badge'] = (
+            self.object.show_updated_badge and self.object.content_updated_at
+        )
+        context['feedback_helpful'] = self.object.feedback.filter(helpful=True).count()
+        context['feedback_total'] = self.object.feedback.count()
+        context['post_series'] = [
+            sp.series for sp in self.object.series_memberships.select_related('series')
+            if sp.series.is_published
+        ]
+        context['ask_post_enabled'] = bool(getattr(settings, 'GEMINI_API_KEY', ''))
         context['show_reading_progress'] = True
         context['show_toc'] = bool(table_of_contents)
 
@@ -304,17 +316,11 @@ def terms(request):
 
 def search(request):
     """Search posts view."""
+    from blog.platform import search_posts
+
     query = request.GET.get('q', '')
     lang = get_current_language()
-
-    if query:
-        posts = Post.objects.published().filter(
-            title_en__icontains=query
-        ) | Post.objects.published().filter(
-            title_pt__icontains=query
-        )
-    else:
-        posts = Post.objects.none()
+    posts = search_posts(query) if query else Post.objects.none()
 
     context = {
         'lang': lang,
@@ -327,6 +333,9 @@ def search(request):
 
 def search_index(request):
     """JSON search index compatible with Hugo search.js."""
+    from django.urls import reverse
+    from pages.models import Page
+
     lang = get_current_language()
     posts = []
     for post in Post.objects.published():
@@ -334,6 +343,14 @@ def search_index(request):
             'title': post.get_title(lang),
             'text': plain_text(post.get_content(lang), max_length=2000),
             'link': post.get_absolute_url(),
+        })
+
+    pages = []
+    for page in Page.objects.filter(is_published=True):
+        pages.append({
+            'title': page.get_title(lang),
+            'text': plain_text(page.get_content(lang), max_length=1000),
+            'link': reverse('pages:page_detail', kwargs={'slug': page.slug}),
         })
 
     tags = [
@@ -347,7 +364,7 @@ def search_index(request):
 
     return JsonResponse({
         'posts': posts,
-        'pages': [],
+        'pages': pages,
         'tags': tags,
         'categories': categories,
     })

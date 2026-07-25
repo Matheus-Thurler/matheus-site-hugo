@@ -1,0 +1,26 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ title }} | {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl">
+  <header class="mb-8"><h1 class="text-foreground text-3xl font-bold">{{ title }}</h1></header>
+  {% if checks %}
+  <div class="space-y-3">
+    {% for check in checks %}
+    <div class="bg-card border-border flex items-center justify-between rounded-xl border p-4">
+      <div>
+        <p class="text-foreground font-medium">{{ check.name }}</p>
+        <p class="text-muted-foreground text-xs">{{ check.detail }}</p>
+      </div>
+      <span class="rounded-full px-3 py-1 text-xs font-semibold {% if check.status == 'up' %}bg-green-500/20 text-green-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+        {{ check.status|upper }}
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-muted-foreground">{% if lang == 'pt' %}Configure HOMELAB_STATUS_CHECKS no ambiente para exibir checks.{% else %}Configure HOMELAB_STATUS_CHECKS to display checks.{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}

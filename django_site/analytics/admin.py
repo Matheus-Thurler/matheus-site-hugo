@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Count
+from django.urls import path
 
 from config.admin_mixins import DescriptiveAdminMixin
 from .models import PageView
@@ -29,3 +30,18 @@ class PageViewAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return False
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom = [
+            path(
+                'dashboard/',
+                self.admin_site.admin_view(self.dashboard_view),
+                name='analytics_dashboard',
+            ),
+        ]
+        return custom + urls
+
+    def dashboard_view(self, request):
+        from blog.platform_views import analytics_dashboard
+        return analytics_dashboard(request)

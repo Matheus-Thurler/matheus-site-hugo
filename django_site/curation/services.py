@@ -125,10 +125,41 @@ def run_curation(dry_run=False):
                 f'📰 Curation: {len(all_new)} new items',
                 ranked if ranked else all_new,
             )
+            for rank in (ranked or [])[:3]:
+                item = CuratedItem.objects.filter(url=rank.get('url')).first()
+                if item and item.score >= 70:
+                    try:
+                        from discord_bot.client import post_curated_item_for_review
+                        post_curated_item_for_review(item)
+                    except Exception as exc:
+                        logger.warning('Discord curated review skipped: %s', exc)
         except Exception as exc:
             logger.exception('Gemini curation failed: %s', exc)
 
     return created
+
+
+def accept_link_submission(submission):
+    """Convert a reader link submission into a CuratedItem."""
+    from .models import CuratedItem, FeedSource
+
+    source, _ = FeedSource.objects.get_or_create(
+        name='Reader submissions',
+        defaults={'url': 'https://matheusthurler.com.br/suggest-link/', 'max_items': 50},
+    )
+    item, created = CuratedItem.objects.get_or_create(
+        url=submission.url,
+        defaults={
+            'source': source,
+            'title': submission.title,
+            'raw_summary': submission.notes,
+            'status': 'pending',
+        },
+    )
+    submission.status = 'accepted'
+    submission.curated_item = item
+    submission.save(update_fields=['status', 'curated_item'])
+    return item, created
 
 
 def create_post_draft(curated_item):

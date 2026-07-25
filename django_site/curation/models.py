@@ -47,3 +47,33 @@ class CuratedItem(models.Model):
 
     def __str__(self):
         return self.title[:80]
+
+
+class LinkSubmission(models.Model):
+    STATUS_CHOICES = [
+        ('pending', _('Pending')),
+        ('accepted', _('Accepted')),
+        ('rejected', _('Rejected')),
+    ]
+
+    title = models.CharField(max_length=500)
+    url = models.URLField(max_length=1000)
+    submitter_email = models.EmailField(blank=True)
+    notes = models.TextField(blank=True)
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='pending')
+    curated_item = models.ForeignKey(
+        CuratedItem,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='submissions',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Link submission')
+        verbose_name_plural = _('Link submissions')
+
+    def __str__(self):
+        return self.title[:80]

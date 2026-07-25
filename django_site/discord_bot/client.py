@@ -99,6 +99,44 @@ def post_to_newsletter_channel(content, title=''):
     return send_message(settings.DISCORD_NEWSLETTER_CHANNEL_ID, embeds=[embed])
 
 
+def post_curated_item_for_review(item):
+    """Post curated RSS item with Approve/Reject/Create draft buttons."""
+    from django.conf import settings
+
+    channel_id = settings.DISCORD_DRAFTS_CHANNEL_ID
+    embed = {
+        'title': item.title[:256],
+        'url': item.url,
+        'description': (item.ai_summary or item.raw_summary or '')[:2000],
+        'color': 0xB48EAD,
+        'footer': {'text': f'CuratedItem #{item.pk} — score {item.score}'},
+    }
+    components = [{
+        'type': 1,
+        'components': [
+            {
+                'type': 2,
+                'style': 3,
+                'label': 'Aprovar',
+                'custom_id': f'approve_curated_{item.pk}',
+            },
+            {
+                'type': 2,
+                'style': 4,
+                'label': 'Rejeitar',
+                'custom_id': f'reject_curated_{item.pk}',
+            },
+            {
+                'type': 2,
+                'style': 1,
+                'label': 'Criar draft',
+                'custom_id': f'create_draft_curated_{item.pk}',
+            },
+        ],
+    }]
+    return send_message(channel_id, embeds=[embed], components=components)
+
+
 def post_new_content_items(items):
     """Post new blog/video items to newsletter channel."""
     from django.conf import settings

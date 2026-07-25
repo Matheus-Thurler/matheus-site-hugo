@@ -174,3 +174,20 @@ jobs:
           done
           curl -fsS "${FB_URL}/health/" | grep -q '"status"[[:space:]]*:[[:space:]]*"ok"'
           echo "✓ Firebase CDN ${FB_URL}/health/"
+
+      - name: Post-deploy integration sync
+        continue-on-error: true
+        env:
+          INTERNAL_TOKEN: ${{ secrets.NEWSLETTER_INTERNAL_TOKEN }}
+        run: |
+          if [ -z "${INTERNAL_TOKEN}" ]; then
+            echo "NEWSLETTER_INTERNAL_TOKEN not set — skipping sync"
+            exit 0
+          fi
+          PROD_URL="$(gcloud run services describe "${{ env.CLOUD_RUN_SERVICE }}" \
+            --region "${{ env.GCP_REGION }}" \
+            --format 'value(status.url)')"
+          curl -fsS -X POST "${PROD_URL}/internal/scheduler/sync/" \
+            -H "X-Internal-Token: ${INTERNAL_TOKEN}" \
+            -H "Content-Type: application/json"
+          echo "✓ post-deploy sync triggered"
