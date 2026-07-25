@@ -129,3 +129,80 @@ def run_curation(dry_run=False):
             logger.exception('Gemini curation failed: %s', exc)
 
     return created
+
+
+def create_post_draft(curated_item):
+    """Create a blog Post draft from an approved curated RSS item."""
+    from django.utils.text import slugify
+
+    from blog.models import Author, Post, Tag
+
+    if curated_item.post_id:
+        return curated_item.post
+
+    author, _ = Author.objects.get_or_create(
+        slug='matheus-thurler',
+        defaults={
+            'name': settings.AUTHOR_NAME,
+            'title': settings.AUTHOR_TITLE,
+            'description': settings.AUTHOR_DESCRIPTION,
+        },
+    )
+
+    summary = (curated_item.ai_summary or curated_item.raw_summary or '').strip()
+    slug_base = slugify(curated_item.title)[:200] or 'curated-draft'
+    slug = slug_base
+    suffix = 1
+    while Post.objects.filter(slug=slug).exists():
+        slug = f'{slug_base}-{suffix}'
+        suffix += 1
+
+    content = (
+        '## Overview\n\n'
+        f'{summary or "Add your commentary here."}\n\n'
+        '## Source\n\n'
+        f'Read more: [{curated_item.title}]({curated_item.url})\n\n'
+        '## Notes\n\n'
+        '<!-- Add your commentary here -->\n'
+    )
+
+    post = Post.objects.create(
+        author=author,
+        slug=slug,
+        status='draft',
+        title_en=curated_item.title[:255],
+        description_en=summary[:500],
+        content_en=content,
+    )
+
+    for tag_name in [t.strip() for t in curated_item.tags.split(',') if t.strip()][:5]:
+        tag_slug = slugify(tag_name) or 'tag'
+        tag, _ = Tag.objects.get_or_create(
+            slug=tag_slug,
+            defaults={'name': tag_name[:100]},
+        )
+        post.tags.add(tag)
+
+    curated_item.post = post
+    if curated_item.status == 'pending':
+        curated_item.status = 'approved'
+    curated_item.save(update_fields=['post', 'status'])
+    return post
+
+
+def create_drafts_from_approved(limit: int | None = None) -> int:
+    """Create Post drafts for approved curated items without a linked post."""
+    from .models import CuratedItem
+
+    queryset = CuratedItem.objects.filter(
+        status='approved',
+        post__isnull=True,
+    ).order_by('-score', '-created_at')
+    if limit is not None:
+        queryset = queryset[:limit]
+
+    created = 0
+    for item in queryset:
+        create_post_draft(item)
+        created += 1
+    return created

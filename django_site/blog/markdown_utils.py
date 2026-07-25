@@ -36,9 +36,16 @@ def _bleach_attributes():
 
 
 def _prepare_markdown(text):
-    """Convert Hugo YouTube shortcodes before markdown parsing."""
+    """Convert Hugo shortcodes before markdown parsing."""
     if not text:
         return ''
+
+    text = re.sub(
+        r'\{\{<\s*mermaid\s*>\}\}(.*?)\{\{<\s*/\s*mermaid\s*>\}\}',
+        lambda match: f'\n```mermaid\n{match.group(1).strip()}\n```\n',
+        text,
+        flags=re.DOTALL,
+    )
     return re.sub(
         r'\{\{<\s*youtube\s+([a-zA-Z0-9_-]+)\s*>\}\}',
         r'<div class="youtube-embed aspect-video my-6 overflow-hidden rounded-lg bg-muted">'

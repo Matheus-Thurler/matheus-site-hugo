@@ -101,6 +101,15 @@ def _wrap_codeblock(chroma_html: str, lang: str | None, code_id: str) -> str:
 </div>'''
 
 
+def _wrap_mermaid(code: str) -> str:
+    body = html_module.escape(code.rstrip('\n'))
+    return (
+        '<div class="mermaid-diagram my-6 overflow-x-auto not-prose">'
+        f'<pre class="mermaid">{body}</pre>'
+        '</div>'
+    )
+
+
 def enhance_code_blocks(html: str) -> str:
     """Replace markdown code blocks with Chroma-highlighted blocks + copy button."""
     counter = {'n': 0}
@@ -108,6 +117,8 @@ def enhance_code_blocks(html: str) -> str:
     def replace_fenced(match):
         lang = match.group(1)
         raw_code = html_module.unescape(match.group(2))
+        if lang and lang.lower() == 'mermaid':
+            return _wrap_mermaid(raw_code)
         code_id = f'code-{counter["n"]}'
         counter['n'] += 1
         chroma = _highlight_code(raw_code, lang)

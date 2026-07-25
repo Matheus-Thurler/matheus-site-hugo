@@ -613,6 +613,7 @@ CONTENT_SECURITY_POLICY = {
             'https://googleads.g.doubleclick.net',
             'https://www.google.com',
             'https://giscus.app',
+            'https://cdn.jsdelivr.net',
         ),
         'style-src': ("'self'", "'unsafe-inline'"),
         'img-src': (

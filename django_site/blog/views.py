@@ -1,5 +1,4 @@
 """Views for blog app."""
-import json
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView
@@ -79,6 +78,7 @@ class PostDetailView(DetailView):
         context['description'] = self.object.get_description(lang)
         content_html, table_of_contents = render_markdown(self.object.get_content(lang))
         context['content'] = content_html
+        context['has_mermaid'] = 'class="mermaid"' in str(content_html)
         context['table_of_contents'] = table_of_contents
         context['show_reading_progress'] = True
         context['show_toc'] = bool(table_of_contents)
@@ -187,11 +187,9 @@ class ArchivesView(ListView):
 
 
 def _load_youtube_data():
-    path = settings.BASE_DIR / 'data' / 'youtube.json'
-    if not path.exists():
-        return {}
-    with path.open(encoding='utf-8') as handle:
-        return json.load(handle)
+    from integrations.youtube import get_youtube_data
+
+    return get_youtube_data()
 
 
 def home(request):

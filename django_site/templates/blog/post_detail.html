@@ -152,4 +152,13 @@
 
 {% block extra_scripts %}
 <script src="{% static 'js/code-blocks.js' %}" defer></script>
+{% if has_mermaid %}
+<style>
+  svg[id^="mermaid-"] {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+<script type="module" src="{% static 'js/mermaid-init.js' %}"></script>
+{% endif %}
 {% endblock %}
