@@ -11,8 +11,26 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 _VIDEO_ID_RE = re.compile(
-    r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([a-zA-Z0-9_-]{11})',
+    r'(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([a-zA-Z0-9_-]{11})',
 )
+
+
+def is_youtube_short(entry) -> bool:
+    """Return True for YouTube Shorts entries in channel RSS."""
+    link = (getattr(entry, 'link', '') or '').lower()
+    if '/shorts/' in link:
+        return True
+    title = (getattr(entry, 'title', '') or '').lower()
+    return '#short' in title
+
+
+def is_long_form_video(video: dict) -> bool:
+    """Return True when a cached/parsed video dict is not a Short."""
+    watch_url = (video.get('watch_url') or '').lower()
+    if '/shorts/' in watch_url:
+        return False
+    title = (video.get('title') or '').lower()
+    return '#short' not in title
 
 
 def extract_video_id(entry) -> str:
@@ -51,11 +69,14 @@ def _entry_description(entry) -> str:
 
 def parse_youtube_entry(entry) -> dict | None:
     """Convert one RSS entry into the home template video dict."""
+    if is_youtube_short(entry):
+        return None
+
     video_id = extract_video_id(entry)
     if not video_id:
         return None
 
-    watch_url = getattr(entry, 'link', '') or f'https://www.youtube.com/watch?v={video_id}'
+    watch_url = f'https://www.youtube.com/watch?v={video_id}'
     return {
         'id': video_id,
         'title': getattr(entry, 'title', '')[:255],
@@ -79,7 +100,8 @@ def fetch_youtube_rss(channel_id: str | None = None, limit: int = 4) -> dict:
 
     parsed = feedparser.parse(resp.content)
     recent_videos = []
-    for entry in parsed.entries:
+    max_scan = max(limit * 5, 25)
+    for entry in parsed.entries[:max_scan]:
         video = parse_youtube_entry(entry)
         if video:
             recent_videos.append(video)
@@ -110,12 +132,11 @@ def get_youtube_data(limit: int = 4) -> dict:
     if config:
         cached = (config.config_json or {}).get('recent_videos') or []
         if cached:
+            long_form = [v for v in cached if is_long_form_video(v)]
             return {
-                'recent_videos': cached[:limit],
+                'recent_videos': long_form[:limit],
                 'last_updated': (config.config_json or {}).get('last_updated'),
-                'total_videos': (config.config_json or {}).get(
-                    'total_videos', len(cached),
-                ),
+                'total_videos': len(long_form),
                 'source': (config.config_json or {}).get('source', 'integration_cache'),
             }
 

@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 
-from integrations.youtube import extract_video_id, parse_youtube_entry
+from integrations.youtube import extract_video_id, is_youtube_short, parse_youtube_entry
 
 
 class YouTubeParserTests(SimpleTestCase):
@@ -24,3 +24,14 @@ class YouTubeParserTests(SimpleTestCase):
         self.assertEqual(video['watch_url'], entry.link)
         self.assertIn('hqdefault.jpg', video['thumbnail'])
         self.assertIn('/embed/', video['embed_url'])
+
+    def test_shorts_are_excluded_from_parse(self):
+        short = type('Entry', (), {
+            'title': 'Demo short #shorts',
+            'link': 'https://www.youtube.com/shorts/PcheTQsgED0',
+            'id': 'yt:video:PcheTQsgED0',
+            'published_parsed': (2026, 1, 15, 12, 0, 0),
+            'summary': 'Short clip',
+        })()
+        self.assertTrue(is_youtube_short(short))
+        self.assertIsNone(parse_youtube_entry(short))

@@ -46,8 +46,19 @@ def _fetch_my_content():
     channel_id = settings.YOUTUBE_CHANNEL_ID
     if channel_id:
         feed = feedparser.parse(f'https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}')
-        for entry in feed.entries[:3]:
-            items.append(f'- [Vídeo] {entry.title}: {entry.link}')
+        from integrations.youtube import extract_video_id, is_youtube_short
+
+        video_count = 0
+        for entry in feed.entries[:15]:
+            if is_youtube_short(entry):
+                continue
+            video_id = getattr(entry, 'yt_videoid', '') or extract_video_id(entry)
+            if not video_id:
+                continue
+            items.append(f'- [Vídeo] {entry.title}: https://www.youtube.com/watch?v={video_id}')
+            video_count += 1
+            if video_count >= 3:
+                break
 
     blog_url = getattr(settings, 'BLOG_RSS_URL', 'https://matheusthurler.com.br/index.xml')
     feed = feedparser.parse(blog_url)
@@ -118,15 +129,20 @@ def check_new_content(hours=24):
 
     channel_id = settings.YOUTUBE_CHANNEL_ID
     if channel_id:
+        from integrations.youtube import extract_video_id, is_youtube_short
+
         feed = feedparser.parse(f'https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}')
-        for entry in feed.entries[:5]:
+        for entry in feed.entries[:15]:
+            if is_youtube_short(entry):
+                continue
             if hasattr(entry, 'published_parsed') and entry.published_parsed:
                 published = datetime(*entry.published_parsed[:6], tzinfo=dt_tz.utc)
                 if published > cutoff:
+                    video_id = getattr(entry, 'yt_videoid', '') or extract_video_id(entry)
                     new_items.append({
                         'type': 'video',
                         'title': entry.title,
-                        'url': entry.link,
+                        'url': f'https://www.youtube.com/watch?v={video_id}',
                     })
 
     blog_url = getattr(settings, 'BLOG_RSS_URL', 'https://matheusthurler.com.br/index.xml')
