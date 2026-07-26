@@ -44,4 +44,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
     CMD curl -f "http://localhost:${PORT:-8080}/health/" || exit 1
 
 ENTRYPOINT ["/app/docker/entrypoint.sh"]
-CMD ["sh", "-c", "exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 2 --threads 2 --worker-tmp-dir /dev/shm --access-logfile - --error-logfile -"]
+CMD ["sh", "-c", "exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 2 --threads 2 --timeout 120 --worker-tmp-dir /dev/shm --access-logfile - --error-logfile -"]

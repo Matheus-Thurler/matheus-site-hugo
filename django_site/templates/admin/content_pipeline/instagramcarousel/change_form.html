@@ -6,7 +6,7 @@
   <h5 class="mb-2"><i class="fab fa-instagram"></i> Fluxo rápido</h5>
   <ol class="mb-2 pl-3">
     <li>Preencha só o <strong>Tópico</strong> (ex: <em>5 comandos kubectl essenciais</em>).</li>
-    <li>Clique em <strong>Ver preview →</strong> — salva, a IA gera os slides (~15s) e abre o preview.</li>
+    <li>Clique em <strong>Ver preview →</strong> — salva e abre tela de geração (~15–45s).</li>
     <li>Revise e clique em <strong>Exportar PNGs</strong> — salva em <code>media/instagram/&lt;id&gt;/</code>.</li>
   </ol>
   <p class="mb-0 text-muted small">
@@ -14,18 +14,62 @@
   </p>
 </div>
 {{ block.super }}
+
+<div id="instagram-admin-loading" class="instagram-admin-loading-overlay" aria-live="polite" aria-busy="true">
+  <div class="instagram-admin-loading-panel">
+    <div class="instagram-loading-spinner" aria-hidden="true"></div>
+    <h4 class="mt-3 mb-2" id="instagram-admin-loading-title">Processando…</h4>
+    <p class="text-muted small mb-0" id="instagram-admin-loading-text">Aguarde, isso pode levar até 45 segundos.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var overlay = document.getElementById("instagram-admin-loading");
+  if (!overlay) return;
+
+  var titleEl = document.getElementById("instagram-admin-loading-title");
+  var textEl = document.getElementById("instagram-admin-loading-text");
+  var form = document.querySelector("form[method='post']");
+
+  function showLoading(source) {
+    if (source && source.dataset.loadingTitle) {
+      titleEl.textContent = source.dataset.loadingTitle;
+    }
+    if (source && source.dataset.loadingText) {
+      textEl.textContent = source.dataset.loadingText;
+    }
+    overlay.classList.add("is-visible");
+  }
+
+  document.querySelectorAll(".submit-row input[type='submit'][data-loading-title]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      showLoading(button);
+    });
+  });
+
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      var submitter = event.submitter;
+      if (submitter && submitter.dataset.loadingTitle) {
+        showLoading(submitter);
+      }
+    });
+  }
+})();
+</script>
 {% endblock %}
 
 {% block submit_buttons_bottom %}
 <div class="submit-row">
-  <input type="submit" value="Ver preview →" name="_preview" class="default btn btn-info">
+  <input type="submit" value="Ver preview →" name="_preview" class="default btn btn-info" data-loading-title="Gerando preview…" data-loading-text="A IA está criando os slides. Aguarde…">
   {% if original and original.slide_count %}
-  <input type="submit" value="Exportar PNGs" name="_export_pngs" class="btn btn-success">
+  <input type="submit" value="Exportar PNGs" name="_export_pngs" class="btn btn-success" data-loading-title="Exportando PNGs…" data-loading-text="Renderizando slides 1080×1350…">
   {% endif %}
   <input type="submit" value="{% trans 'Save' %}" name="_save">
-  <input type="submit" value="Regenerar com IA" name="_generate_ai" class="btn btn-outline-warning">
+  <input type="submit" value="Regenerar com IA" name="_generate_ai" class="btn btn-outline-warning" data-loading-title="Regenerando com IA…" data-loading-text="Aguarde a resposta do Gemini…">
   {% if original and original.source_post_id %}
-  <input type="submit" value="Regenerar do post" name="_generate_from_post" class="btn btn-outline-secondary">
+  <input type="submit" value="Regenerar do post" name="_generate_from_post" class="btn btn-outline-secondary" data-loading-title="Gerando do post…" data-loading-text="Aguarde a resposta do Gemini…">
   {% endif %}
 </div>
 {% endblock %}

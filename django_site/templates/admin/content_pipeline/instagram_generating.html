@@ -1,0 +1,60 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="instagram-generating-card card">
+  <div class="card-body text-center py-5">
+    <div class="instagram-loading-spinner" aria-hidden="true"></div>
+    <h3 class="mt-4 mb-2">Gerando slides com IA…</h3>
+    <p class="text-muted mb-1">{{ carousel.title|default:carousel.topic }}</p>
+    <p class="text-muted small mb-0">Isso leva cerca de 15–45 segundos. Não feche esta aba.</p>
+    <p id="ig-generate-error" class="text-danger mt-3 d-none"></p>
+    <a id="ig-generate-back" href="{% url 'admin:content_pipeline_instagramcarousel_change' carousel.pk %}" class="btn btn-outline-secondary btn-sm mt-3 d-none">
+      Voltar ao carrossel
+    </a>
+  </div>
+</div>
+
+<script>
+(function () {
+  var generateUrl = "{{ generate_url|escapejs }}";
+  var previewUrl = "{{ preview_url|escapejs }}";
+  var csrf = "{{ csrf_token|escapejs }}";
+  var errorEl = document.getElementById("ig-generate-error");
+  var backEl = document.getElementById("ig-generate-back");
+
+  function showError(message) {
+    document.querySelector(".instagram-loading-spinner").style.display = "none";
+    errorEl.textContent = message;
+    errorEl.classList.remove("d-none");
+    backEl.classList.remove("d-none");
+  }
+
+  fetch(generateUrl, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "X-CSRFToken": csrf,
+      "X-Requested-With": "XMLHttpRequest",
+      "Accept": "application/json"
+    }
+  })
+    .then(function (response) {
+      return response.json().then(function (data) {
+        if (!response.ok || !data.ok) {
+          throw new Error(data.error || "Erro ao gerar slides.");
+        }
+        window.location.replace(data.redirect || previewUrl);
+      });
+    })
+    .catch(function (err) {
+      showError(err.message || "Erro inesperado ao gerar slides.");
+    });
+})();
+</script>
+{% endblock %}

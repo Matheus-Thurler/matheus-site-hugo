@@ -318,7 +318,10 @@ def _parse_ai_json(text: str) -> dict:
     if text.startswith('```'):
         text = text.split('\n', 1)[-1].rsplit('```', 1)[0].strip()
     text = fix_json_newlines(extract_json(text))
-    return json.loads(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise ValueError('Resposta da IA não é JSON válido — tente Regenerar com IA.') from exc
 
 
 def generate_carousel_with_ai(topic: str, post_type: str = 'cheatsheet', slide_count: int = 7) -> dict:

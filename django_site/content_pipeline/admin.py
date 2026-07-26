@@ -2,11 +2,14 @@ from csp.decorators import csp_update
 from django.conf import settings
 from django.contrib import admin, messages
 from django.db import connection
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
+
+import logging
 
 from config.admin_mixins import DescriptiveAdminMixin
 from .instagram import (
@@ -18,6 +21,8 @@ from .instagram import (
 )
 from .instagram_export import InstagramExportError, export_carousel_pngs
 from .models import InstagramCarousel, PipelineJob
+
+logger = logging.getLogger(__name__)
 
 
 @admin.register(PipelineJob)
@@ -163,17 +168,19 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     def _redirect_preview(self, request, obj):
         if self._block_if_duplicate(request, obj):
             return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
-        if not self._ensure_slides(request, obj):
-            return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
-        messages.success(request, f'Preview pronto — {obj.slide_count} slides.')
-        return redirect('admin:content_pipeline_instagramcarousel_preview', obj.pk)
+        if obj.slide_count:
+            messages.success(request, f'Preview pronto — {obj.slide_count} slides.')
+            return redirect('admin:content_pipeline_instagramcarousel_preview', obj.pk)
+        return redirect(
+            f'{reverse("admin:content_pipeline_instagramcarousel_preview", args=[obj.pk])}?autogenerate=1'
+        )
 
     def _apply_ai_data(self, carousel, data):
-        carousel.title = data.get('title', carousel.title)[:255]
-        carousel.slides = data.get('slides', [])
-        carousel.caption = data.get('caption', '')
-        carousel.hashtags = data.get('hashtags', [])
-        carousel.cover_svg = data.get('cover_svg', '')
+        carousel.title = (data.get('title') or carousel.title or '')[:255]
+        carousel.slides = data.get('slides') or []
+        carousel.caption = data.get('caption') or ''
+        carousel.hashtags = data.get('hashtags') or []
+        carousel.cover_svg = data.get('cover_svg') or ''
         carousel.save()
 
     def save_model(self, request, obj, form, change):
@@ -187,42 +194,50 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     def _run_generate_ai(self, request, carousel, *, quiet=False):
         topic = (carousel.topic or carousel.title or '').strip()
         if not topic:
-            messages.error(request, 'Preencha o campo Tópico antes de gerar.')
-            return False
+            msg = 'Preencha o campo Tópico antes de gerar.'
+            if not quiet:
+                messages.error(request, msg)
+            return False, msg
         if not quiet and self._block_if_duplicate(request, carousel):
-            return False
+            return False, 'Assunto duplicado.'
         connection.close()
         try:
             data = generate_carousel_with_ai(topic, carousel.post_type)
         except Exception as exc:
-            messages.error(request, f'Erro na IA: {exc}')
-            return False
+            msg = f'Erro na IA: {exc}'
+            if not quiet:
+                messages.error(request, msg)
+            return False, msg
         self._apply_ai_data(carousel, data)
         if not quiet:
             messages.success(request, f'{carousel.slide_count} slides gerados.')
-        return True
+        return True, None
 
     def _run_generate_from_post(self, request, carousel, *, quiet=False):
         if not carousel.source_post:
-            messages.error(request, 'Selecione um Post do blog ou use o campo Tópico.')
-            return False
+            msg = 'Selecione um Post do blog ou use o campo Tópico.'
+            if not quiet:
+                messages.error(request, msg)
+            return False, msg
         if not quiet and self._block_if_duplicate(request, carousel):
-            return False
+            return False, 'Assunto duplicado.'
         connection.close()
         try:
             data = carousel_from_post(carousel.source_post, carousel.post_type)
         except Exception as exc:
-            messages.error(request, f'Erro na IA: {exc}')
-            return False
+            msg = f'Erro na IA: {exc}'
+            if not quiet:
+                messages.error(request, msg)
+            return False, msg
         self._apply_ai_data(carousel, data)
         if not quiet:
             messages.success(request, f'{carousel.slide_count} slides gerados a partir do post.')
-        return True
+        return True, None
 
     def _ensure_slides(self, request, carousel):
         """Gera slides automaticamente se ainda não existirem."""
         if carousel.slide_count:
-            return True
+            return True, None
         if carousel.source_post_id:
             return self._run_generate_from_post(request, carousel, quiet=True)
         return self._run_generate_ai(request, carousel, quiet=True)
@@ -231,7 +246,8 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     def generate_with_ai(self, request, queryset):
         updated = 0
         for carousel in queryset:
-            if self._run_generate_ai(request, carousel):
+            ok, _error = self._run_generate_ai(request, carousel)
+            if ok:
                 updated += 1
         if updated:
             messages.info(request, 'Abra cada carrossel e clique em "Ver preview →".')
@@ -240,7 +256,8 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     def generate_from_post(self, request, queryset):
         updated = 0
         for carousel in queryset:
-            if self._run_generate_from_post(request, carousel):
+            ok, _error = self._run_generate_from_post(request, carousel)
+            if ok:
                 updated += 1
         if updated:
             messages.info(request, 'Abra cada carrossel e clique em "Ver preview →".')
@@ -252,6 +269,11 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
                 '<int:pk>/preview/',
                 self.admin_site.admin_view(self.preview_view),
                 name='content_pipeline_instagramcarousel_preview',
+            ),
+            path(
+                '<int:pk>/generate/',
+                self.admin_site.admin_view(self.generate_view),
+                name='content_pipeline_instagramcarousel_generate',
             ),
             path(
                 '<int:pk>/slide/<int:slide_num>/',
@@ -266,9 +288,22 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
     def preview_view(self, request, pk):
         carousel = get_object_or_404(InstagramCarousel, pk=pk)
         if request.GET.get('autogenerate') and not carousel.slide_count:
-            if not self._ensure_slides(request, carousel):
-                return redirect('admin:content_pipeline_instagramcarousel_change', pk)
-            carousel.refresh_from_db()
+            return render(
+                request,
+                'admin/content_pipeline/instagram_generating.html',
+                {
+                    **self.admin_site.each_context(request),
+                    'carousel': carousel,
+                    'generate_url': reverse(
+                        'admin:content_pipeline_instagramcarousel_generate',
+                        args=[pk],
+                    ),
+                    'preview_url': reverse(
+                        'admin:content_pipeline_instagramcarousel_preview',
+                        args=[pk],
+                    ),
+                },
+            )
 
         if not carousel.slide_count:
             messages.warning(request, 'Preencha o Tópico e clique em Ver preview.')
@@ -277,6 +312,13 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
         slide_num = int(request.GET.get('slide', 1))
         slide_num = max(1, min(slide_num, carousel.slide_count))
 
+        try:
+            slide_ctx = slide_context(carousel, slide_num - 1)
+        except Exception:
+            logger.exception('Instagram preview failed for carousel %s slide %s', pk, slide_num)
+            messages.error(request, 'Erro ao renderizar o preview. Tente regenerar os slides.')
+            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
+
         context = {
             **self.admin_site.each_context(request),
             'carousel': carousel,
@@ -284,9 +326,43 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             'caption': caption_text(carousel),
             'title': f'Preview — {carousel.title}',
             'has_exports': bool(carousel.export_paths),
-            **slide_context(carousel, slide_num - 1),
+            **slide_ctx,
         }
         return render(request, 'admin/content_pipeline/instagram_preview.html', context)
+
+    def generate_view(self, request, pk):
+        if request.method != 'POST':
+            return JsonResponse({'ok': False, 'error': 'Método não permitido.'}, status=405)
+
+        carousel = get_object_or_404(InstagramCarousel, pk=pk)
+        preview_url = reverse('admin:content_pipeline_instagramcarousel_preview', args=[pk])
+
+        if self._block_if_duplicate(request, carousel):
+            return JsonResponse(
+                {'ok': False, 'error': 'Assunto duplicado — já existe carrossel para este tópico.'},
+                status=409,
+            )
+
+        if carousel.slide_count:
+            return JsonResponse({'ok': True, 'redirect': preview_url})
+
+        try:
+            connection.close()
+            ok, error = self._ensure_slides(request, carousel)
+            if not ok:
+                return JsonResponse(
+                    {'ok': False, 'error': error or 'Não foi possível gerar os slides.'},
+                    status=400,
+                )
+            carousel.refresh_from_db()
+        except Exception as exc:
+            logger.exception('Instagram generate failed for carousel %s', pk)
+            return JsonResponse(
+                {'ok': False, 'error': f'Erro na IA: {exc}'},
+                status=500,
+            )
+
+        return JsonResponse({'ok': True, 'redirect': preview_url})
 
     def slide_view(self, request, pk, slide_num):
         carousel = get_object_or_404(InstagramCarousel, pk=pk)
