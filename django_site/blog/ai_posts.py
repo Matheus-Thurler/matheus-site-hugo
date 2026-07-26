@@ -89,7 +89,7 @@ def generate_post_payload(
 
     from google import genai
 
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     client = genai.Client(api_key=api_key)
     prompt = build_prompt(brief, language, include_code)
 

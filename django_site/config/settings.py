@@ -13,7 +13,7 @@ from config.gcp_secrets import get_secret
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR / '.env', override=True)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get(
@@ -135,8 +135,21 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': Path(os.environ.get('DATABASE_PATH', BASE_DIR / 'db.sqlite3')),
+            'OPTIONS': {
+                'timeout': 30,
+            },
         }
     }
+
+    from django.db.backends.signals import connection_created
+
+    def _sqlite_wal(sender, connection, **kwargs):
+        if connection.vendor == 'sqlite':
+            with connection.cursor() as cursor:
+                cursor.execute('PRAGMA journal_mode=WAL;')
+                cursor.execute('PRAGMA busy_timeout=30000;')
+
+    connection_created.connect(_sqlite_wal)
 
 
 # Password validation
@@ -201,7 +214,7 @@ SITE_ID = 1
 # Authentication backends (django-axes + allauth)
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'config.auth_backends.EmailOrUsernameBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -457,7 +470,17 @@ POSTS_PER_PAGE = 6
 
 # Gemini — AI post drafts (admin); falls back to GCP secret gemini-api-key
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY') or get_secret('gemini-api-key')
-GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-2.5-flash')
+GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-3.5-flash')
+# Modelo barato/alto volume (curadoria em lote, etc.)
+GEMINI_MODEL_LITE = os.environ.get('GEMINI_MODEL_LITE', 'gemini-3.1-flash-lite')
+GEMINI_MODEL_FALLBACKS = [
+    m.strip()
+    for m in os.environ.get(
+        'GEMINI_MODEL_FALLBACKS',
+        'gemini-3.6-flash,gemini-3.1-flash-lite,gemini-flash-latest',
+    ).split(',')
+    if m.strip()
+]
 
 # Curation / Discord (content-automation migration)
 # Bot token: GCP secret discord-bot-token (same as Cloud Functions)
@@ -495,14 +518,62 @@ JAZZMIN_SETTINGS = {
     "site_title": "Matheus Thurler",
     "site_header": "Plataforma MT",
     "site_brand": "MT Platform",
-    "welcome_sign": "Guia de cada módulo abaixo — passe o mouse nos menus ou leia os cards antes de editar.",
+    "welcome_sign": "Painel da plataforma — use o menu lateral ou os atalhos abaixo.",
     "show_sidebar": True,
+    "navigation_expanded": False,
+    "search_model": ["blog.post"],
+    "hide_apps": ["axes", "sites", "socialaccount", "discord_bot"],
+    "hide_models": [
+        "auth.group",
+        "blog.postfeedback",
+    ],
+    "order_with_respect_to": [
+        "blog",
+        "pages",
+        "media_library",
+        "newsletter",
+        "campaigns",
+        "curation",
+        "content_pipeline",
+        "integrations",
+        "analytics",
+        "contact",
+        "redirects",
+        "auth",
+        "blog.post",
+        "Gerar post com IA",
+        "blog.series",
+        "blog.category",
+        "blog.tag",
+        "blog.author",
+        "blog.profilelink",
+        "blog.comment",
+        "pages.page",
+        "media_library.mediaasset",
+        "newsletter.subscriber",
+        "newsletter.leadmagnet",
+        "curation.feedsource",
+        "curation.curateditem",
+        "curation.linksubmission",
+        "campaigns.newslettercampaign",
+        "content_pipeline.instagramcarousel",
+        "content_pipeline.pipelinejob",
+        "integrations.integrationconfig",
+        "Dashboard analytics",
+        "analytics.pageview",
+        "contact.contactmessage",
+        "redirects.redirect",
+        "auth.user",
+    ],
     "icons": {
         "blog": "fas fa-newspaper",
+        "blog.post": "fas fa-file-alt",
+        "blog.series": "fas fa-layer-group",
         "newsletter": "fas fa-envelope",
         "curation": "fas fa-rss",
         "campaigns": "fas fa-paper-plane",
         "content_pipeline": "fas fa-gears",
+        "content_pipeline.instagramcarousel": "fab fa-instagram",
         "pages": "fas fa-file-alt",
         "media_library": "fas fa-images",
         "contact": "fas fa-inbox",
@@ -510,22 +581,7 @@ JAZZMIN_SETTINGS = {
         "redirects": "fas fa-route",
         "integrations": "fas fa-plug",
         "auth": "fas fa-users-cog",
-        "socialaccount": "fas fa-share-alt",
-        "axes": "fas fa-shield-halved",
     },
-    "navigation": [
-        {"app": "blog", "models": ["post", "category", "tag", "author", "profilelink", "comment"]},
-        {"app": "newsletter", "models": ["subscriber"]},
-        {"app": "curation", "models": ["feedsource", "curateditem"]},
-        {"app": "campaigns", "models": ["newslettercampaign"]},
-        {"app": "content_pipeline", "models": ["pipelinejob"]},
-        {"app": "pages", "models": ["page"]},
-        {"app": "media_library", "models": ["mediaasset"]},
-        {"app": "contact", "models": ["contactmessage"]},
-        {"app": "analytics", "models": ["pageview"]},
-        {"app": "redirects", "models": ["redirect"]},
-        {"app": "integrations", "models": ["integrationconfig"]},
-    ],
     "custom_links": {
         "blog": [{
             "name": "Gerar post com IA",
@@ -533,16 +589,29 @@ JAZZMIN_SETTINGS = {
             "icon": "fas fa-wand-magic-sparkles",
             "permissions": ["blog.add_post"],
         }],
+        "analytics": [{
+            "name": "Dashboard analytics",
+            "url": "/admin/analytics/pageview/dashboard/",
+            "icon": "fas fa-chart-pie",
+        }],
         "content_pipeline": [{
-            "name": "Rodar pipeline",
-            "url": "/admin/content_pipeline/pipelinejob/",
-            "icon": "fas fa-play",
+            "name": "Carrosséis Instagram",
+            "url": "/admin/content_pipeline/instagramcarousel/",
+            "icon": "fab fa-instagram",
         }],
     },
     "topnav_links": [
         {"name": "Ver Site", "url": "/", "icon": "fa-globe"},
         {"name": "GitHub", "url": "https://github.com/Matheus-Thurler", "icon": "fa-github"},
     ],
+    "custom_css": "css/admin.css",
+    "custom_js": "js/admin-sidebar.js",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "sidebar_fixed": True,
+    "navbar_fixed": True,
+    "sidebar_nav_compact_style": True,
 }
 
 # =============================================================================

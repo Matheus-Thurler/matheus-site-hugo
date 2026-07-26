@@ -1,0 +1,31 @@
+{% extends "admin/descriptive_change_form.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="callout callout-info mb-3">
+  <h5 class="mb-2"><i class="fab fa-instagram"></i> Fluxo rápido</h5>
+  <ol class="mb-2 pl-3">
+    <li>Preencha só o <strong>Tópico</strong> (ex: <em>5 comandos kubectl essenciais</em>).</li>
+    <li>Clique em <strong>Ver preview →</strong> — salva, a IA gera os slides (~15s) e abre o preview.</li>
+    <li>Revise e clique em <strong>Exportar PNGs</strong> — salva em <code>media/instagram/&lt;id&gt;/</code>.</li>
+  </ol>
+  <p class="mb-0 text-muted small">
+    Título é opcional (usa o tópico). Assuntos duplicados são bloqueados na geração.
+  </p>
+</div>
+{{ block.super }}
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+<div class="submit-row">
+  <input type="submit" value="Ver preview →" name="_preview" class="default btn btn-info">
+  {% if original and original.slide_count %}
+  <input type="submit" value="Exportar PNGs" name="_export_pngs" class="btn btn-success">
+  {% endif %}
+  <input type="submit" value="{% trans 'Save' %}" name="_save">
+  <input type="submit" value="Regenerar com IA" name="_generate_ai" class="btn btn-outline-warning">
+  {% if original and original.source_post_id %}
+  <input type="submit" value="Regenerar do post" name="_generate_from_post" class="btn btn-outline-secondary">
+  {% endif %}
+</div>
+{% endblock %}

@@ -4,21 +4,29 @@
 {% block content %}
 <div class="callout callout-info mb-4">
   <h5 class="mb-2"><i class="fas fa-circle-info mr-1"></i> {% trans "Guia rápido" %}</h5>
-  <p class="mb-0">{{ admin_home_intro }}</p>
+  <p class="mb-2">{{ admin_home_intro }}</p>
+  <div class="admin-quick-links">
+    <a href="{% url 'admin:blog_post_changelist' %}"><i class="fas fa-file-alt text-primary"></i> Posts</a>
+    <a href="{% url 'admin:blog_post_generate_ai' %}"><i class="fas fa-wand-magic-sparkles text-warning"></i> Gerar com IA</a>
+    <a href="{% url 'admin:curation_curateditem_changelist' %}"><i class="fas fa-rss text-info"></i> Curadoria</a>
+    <a href="{% url 'admin:campaigns_newslettercampaign_changelist' %}"><i class="fas fa-paper-plane text-success"></i> Campanhas</a>
+    <a href="{% url 'admin:content_pipeline_instagramcarousel_changelist' %}"><i class="fab fa-instagram text-danger"></i> Instagram</a>
+    <a href="/admin/analytics/pageview/dashboard/"><i class="fas fa-chart-pie text-secondary"></i> Analytics</a>
+  </div>
 </div>
 
-<div class="row">
+<div class="row admin-home-cards">
   {% for section in admin_app_sections %}
   <div class="col-12 col-lg-6 mb-3">
     <div class="card card-outline card-primary h-100">
-      <div class="card-header">
-        <h3 class="card-title">
+      <div class="card-header py-2">
+        <h3 class="card-title mb-0">
           <i class="{{ section.icon }} mr-1"></i> {{ section.title }}
         </h3>
       </div>
-      <div class="card-body">
-        <p class="text-muted">{{ section.summary }}</p>
-        <ul class="mb-0 pl-3">
+      <div class="card-body py-2">
+        <p class="text-muted mb-2">{{ section.summary }}</p>
+        <ul class="mb-0 pl-3 small">
           {% for name, detail in section.models %}
           <li class="mb-1"><strong>{{ name }}:</strong> {{ detail }}</li>
           {% endfor %}
@@ -28,6 +36,4 @@
   </div>
   {% endfor %}
 </div>
-
-{{ block.super }}
 {% endblock %}

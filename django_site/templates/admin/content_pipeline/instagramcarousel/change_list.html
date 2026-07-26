@@ -1,0 +1,18 @@
+{% extends "admin/descriptive_change_list.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="callout callout-success mb-3">
+  <h5 class="mb-2"><i class="fab fa-instagram"></i> Carrosséis para Instagram</h5>
+  <p class="mb-2">
+    <strong>Fluxo rápido:</strong> novo carrossel → preencha o <strong>Tópico</strong> →
+    <strong>Ver preview →</strong> (gera slides com IA e abre na hora).
+  </p>
+  <p class="mb-0">
+    <a href="{% url 'admin:content_pipeline_instagramcarousel_add' %}" class="btn btn-sm btn-primary">
+      + Novo carrossel
+    </a>
+  </p>
+</div>
+{{ block.super }}
+{% endblock %}

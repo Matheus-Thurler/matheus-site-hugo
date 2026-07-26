@@ -205,7 +205,7 @@ class PostAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
                 'Gera rascunho EN ou PT via Gemini. Revise tom, links e código antes de publicar.'
             ),
             'gemini_configured': gemini_configured,
-            'gemini_model': getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash'),
+            'gemini_model': getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash'),
             'opts': self.model._meta,
         }
         return render(request, 'admin/blog/generate_post_ai.html', context)

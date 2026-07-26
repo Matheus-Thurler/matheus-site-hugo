@@ -10,8 +10,10 @@ from blog.sitemaps import PostSitemap, StaticViewSitemap
 from blog.views import robots_txt, search_index, health_check, ads_txt
 from blog.feeds import LatestPostsFeed
 from config.admin_docs import ADMIN_HOME_INTRO, APP_SECTIONS
+from config.admin_auth import AdminEmailLoginForm
 
 _admin_index = admin.site.index
+admin.site.login_form = AdminEmailLoginForm
 
 
 def _admin_index_with_docs(request, extra_context=None):

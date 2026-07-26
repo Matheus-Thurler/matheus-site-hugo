@@ -1,0 +1,85 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/instagram-slide.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title mb-0">
+      <i class="fab fa-instagram mr-1"></i> {{ carousel.title }}
+      <span class="badge bg-secondary ml-2">{{ carousel.get_post_type_display }}</span>
+      <span class="badge bg-info ml-1">{{ carousel.slide_count }} slides</span>
+    </h3>
+  </div>
+  <div class="card-body">
+    <div class="instagram-preview-toolbar">
+      <a href="{% url 'admin:content_pipeline_instagramcarousel_change' carousel.pk %}" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-edit"></i> Editar
+      </a>
+      {% if slide_num > 1 %}
+      <a href="?slide={{ slide_num|add:'-1' }}" class="btn btn-primary btn-sm">← Anterior</a>
+      {% endif %}
+      <span class="text-muted">Slide {{ slide_num }} / {{ carousel.slide_count }}</span>
+      {% if slide_num < carousel.slide_count %}
+      <a href="?slide={{ slide_num|add:'1' }}" class="btn btn-primary btn-sm">Próximo →</a>
+      {% endif %}
+      <a href="{% url 'admin:content_pipeline_instagramcarousel_slide' carousel.pk slide_num %}" class="btn btn-outline-secondary btn-sm ms-auto" target="_blank">
+        Abrir slide
+      </a>
+      <form method="post" action="{% url 'admin:content_pipeline_instagramcarousel_change' carousel.pk %}" class="d-inline ms-2">
+        {% csrf_token %}
+        <button type="submit" name="_export_pngs" value="1" class="btn btn-success btn-sm">
+          <i class="fas fa-download"></i> Exportar PNGs
+        </button>
+      </form>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="instagram-preview-stage" id="preview-stage">
+          {% include "social/instagram/slide_canvas.html" %}
+        </div>
+        <p class="text-muted text-center small mt-2">Proporção Instagram 4:5 (1080×1350 px)</p>
+      </div>
+      <div class="col-md-6">
+        <h5>Caption</h5>
+        <div class="instagram-caption-box border rounded p-3 mb-3">{{ caption }}</div>
+        {% if has_exports %}
+        <h5>PNGs exportados</h5>
+        <ul class="list-unstyled small mb-3">
+          {% for path in carousel.export_paths %}
+          <li><a href="/media/{{ path }}" target="_blank">{{ path }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <p class="text-muted small">
+          Use <strong>Exportar PNGs</strong> para salvar os slides em <code>media/instagram/{{ carousel.pk }}/</code> (1080×1350).
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var stage = document.getElementById("preview-stage");
+  var canvas = stage && stage.querySelector(".instagram-slide-canvas");
+  if (!stage || !canvas) return;
+
+  function resizePreview() {
+    var scale = stage.clientWidth / 1080;
+    canvas.style.transform = "scale(" + scale + ")";
+  }
+
+  resizePreview();
+  window.addEventListener("resize", resizePreview);
+  if (typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(resizePreview).observe(stage);
+  }
+})();
+</script>
+{% endblock %}

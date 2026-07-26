@@ -247,7 +247,7 @@ def ask_post_question(post, question: str, lang='en') -> str:
         raise ValueError('GEMINI_API_KEY is not configured')
     content = post.get_content(lang)[:12000]
     client = genai.Client(api_key=api_key)
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     prompt = (
         'Answer ONLY based on the blog post below. '
         'If the answer is not in the post, say you do not know.\n\n'
@@ -273,7 +273,7 @@ def translate_post_with_ai(post, target_lang: str) -> dict:
         'content': post.get_content(source_lang),
     }
     client = genai.Client(api_key=api_key)
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     prompt = (
         f'Translate this blog post from {source_lang} to {target_lang}. '
         'Keep Markdown formatting. Return ONLY JSON: '
@@ -295,7 +295,7 @@ def generate_seo_meta(post, lang='both') -> dict:
     if not api_key:
         raise ValueError('GEMINI_API_KEY is not configured')
     client = genai.Client(api_key=api_key)
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     brief = {
         'title_en': post.title_en,
         'title_pt': post.title_pt,
@@ -323,7 +323,7 @@ def generate_crosspost_drafts(post, lang='en') -> dict:
     if not api_key:
         raise ValueError('GEMINI_API_KEY is not configured')
     client = genai.Client(api_key=api_key)
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     prompt = (
         'Write social media drafts for a DevOps blog post. Return ONLY JSON:\n'
         '{"linkedin":"","mastodon":"","telegram":""}\n'
@@ -346,7 +346,7 @@ def moderate_comment_with_ai(comment) -> dict:
     if not api_key:
         return {'approve': True, 'reason': 'AI not configured'}
     client = genai.Client(api_key=api_key)
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     prompt = (
         'Moderate this blog comment. Return ONLY JSON: '
         '{"approve": true/false, "reason": "short reason"}\n'

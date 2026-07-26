@@ -40,7 +40,7 @@ def summarize_with_gemini(items: list[dict]) -> list[dict]:
     if not items:
         return []
     client = _gemini_client()
-    model = getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash')
+    model = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash')
     brief = json.dumps(items[:20], default=str)
     prompt = (
         'You curate a DevOps/Cloud/Kubernetes newsletter. '

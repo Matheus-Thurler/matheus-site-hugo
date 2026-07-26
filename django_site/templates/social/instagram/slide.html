@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>{{ title }} — slide {{ slide_num }}</title>
+<link rel="stylesheet" href="{% static 'css/instagram-slide.css' %}">
+</head>
+<body style="margin:0;padding:0;background:#0a1628;">
+{% include "social/instagram/slide_canvas.html" %}
+</body>
+</html>

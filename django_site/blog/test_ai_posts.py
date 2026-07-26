@@ -21,7 +21,7 @@ SAMPLE_PAYLOAD = {
 }
 
 
-@override_settings(GEMINI_API_KEY='test-key', GEMINI_MODEL='gemini-2.5-flash')
+@override_settings(GEMINI_API_KEY='test-key', GEMINI_MODEL='gemini-3.5-flash')
 class GeneratePostPayloadTests(TestCase):
     @patch('google.genai.Client')
     def test_generate_post_payload_parses_json(self, mock_client_cls):

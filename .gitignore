@@ -1,6 +1,31 @@
-/public/
-/resources/_gen/
+# Python / Django
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.env
+.env.*
+!.env.example
 
-hugo.exe
-hugo.linux
-hugo.darwin
+# Django
+db.sqlite3
+staticfiles/
+*.log
+django_site/media/instagram/
+django_site/lighthouse-reports/
+
+# Secrets
+client_secret*.json
+*.pem
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

@@ -2,124 +2,52 @@
 
 from django.utils.translation import gettext_lazy as _
 
-# Visão geral na página inicial do /admin/
 ADMIN_HOME_INTRO = _(
-    'Painel da plataforma do blog. Cada seção abaixo explica o que faz e quando usar.'
+    'Atalhos acima para o dia a dia. Menu lateral agrupa por app — clique para expandir.'
 )
 
 APP_SECTIONS = [
     {
-        'title': _('Blog'),
+        'title': _('Conteúdo'),
         'icon': 'fas fa-newspaper',
-        'summary': _(
-            'Conteúdo público do site: posts, categorias, tags, autor e moderação de comentários nativos.'
-        ),
+        'summary': _('Posts, séries, páginas estáticas e biblioteca de mídia.'),
         'models': [
-            (_('Posts'), _('Artigos EN/PT publicados em /posts/. Use status "published" e data de publicação.')),
-            (_('Gerar post com IA'), _('Rascunho via Gemini a partir de um brief — revisar antes de publicar.')),
-            (_('Categorias / Tags'), _('Organização e URLs de arquivo (/categories/, /tags/).')),
-            (_('Autor'), _('Perfil exibido na home e página About (bio, links sociais, avatar).')),
-            (_('Links /links/'), _('Cards e ícones sociais da página link-in-bio — edite URLs sem deploy.')),
-            (_('Comentários'), _('Comentários Django no post (alternativa ao Giscus). Aprove ou rejeite aqui.')),
+            (_('Posts / Séries'), _('Artigos EN/PT, capas, SEO e cross-post.')),
+            (_('Páginas / Mídia'), _('About, Privacy, Terms e uploads reutilizáveis.')),
+            (_('Gerar com IA'), _('Rascunho a partir de brief — revisar antes de publicar.')),
         ],
     },
     {
-        'title': _('Newsletter'),
-        'icon': 'fas fa-envelope',
-        'summary': _(
-            'Inscrições do formulário da home. Substitui a Cloud Function subscribe do content-automation.'
-        ),
-        'models': [
-            (_('Assinantes'), _('E-mails ativos/inativos, idioma e export CSV. Desative quem pediu unsubscribe.')),
-        ],
-    },
-    {
-        'title': _('Curadoria'),
-        'icon': 'fas fa-rss',
-        'summary': _(
-            'Lê feeds RSS configurados, resume com IA e guarda links candidatos a post ou newsletter.'
-        ),
-        'models': [
-            (_('Fontes RSS'), _('URLs de blogs/feeds a monitorar. max_items limita itens por execução.')),
-            (_('Itens curados'), _('Links capturados com score e resumo IA — aprove, rejeite ou publique.')),
-        ],
-    },
-    {
-        'title': _('Campanhas'),
+        'title': _('Distribuição'),
         'icon': 'fas fa-paper-plane',
-        'summary': _(
-            'Newsletter semanal em massa. Pode enviar direto ou pedir revisão no Discord antes.'
-        ),
+        'summary': _('Newsletter, curadoria RSS, campanhas e carrosséis Instagram.'),
         'models': [
-            (_('Campanhas'), _(
-                'Rascunho PT/EN → ação "Post to Discord for review" ou "Send campaign now". '
-                'Status pending_review aguarda botões Aprovar/Rejeitar no Discord.'
-            )),
+            (_('Newsletter'), _('Assinantes, lead magnets e campanhas semanais.')),
+            (_('Curadoria'), _('Feeds RSS → itens com score IA → draft ou newsletter.')),
+            (_('Instagram'), _('Carrosséis 1080×1350 com preview — adaptado do instagen (Go).')),
         ],
     },
     {
-        'title': _('Pipeline'),
+        'title': _('Automação'),
         'icon': 'fas fa-gears',
-        'summary': _(
-            'Log de jobs automáticos (Cloud Scheduler): curadoria, newsletter, sync e rascunhos IA.'
-        ),
+        'summary': _('Jobs do Cloud Scheduler e integrações externas.'),
         'models': [
-            (_('Jobs'), _('Somente leitura — veja se o cron rodou, erros e duração. Disparado via HTTP interno.')),
+            (_('Pipeline jobs'), _('Log de curadoria, sync YouTube/GitHub, rascunhos IA.')),
+            (_('Integrações'), _('Estado de sync — secrets no GCP Secret Manager.')),
         ],
     },
     {
-        'title': _('Páginas'),
-        'icon': 'fas fa-file-alt',
-        'summary': _('Páginas estáticas CMS: About, Privacy, Terms, Links — conteúdo EN/PT editável.'),
-        'models': [
-            (_('Páginas'), _('slug define a URL (/about/, /privacy/). show_in_footer aparece no rodapé.')),
-        ],
-    },
-    {
-        'title': _('Mídia'),
-        'icon': 'fas fa-images',
-        'summary': _('Biblioteca central de imagens e arquivos reutilizáveis (capas, diagramas, galeria).'),
-        'models': [
-            (_('Biblioteca'), _('Upload com alt, caption e tags. Referencie nos posts ou páginas.')),
-        ],
-    },
-    {
-        'title': _('Contato'),
-        'icon': 'fas fa-inbox',
-        'summary': _('Mensagens enviadas pelo formulário de contato (se habilitado no site).'),
-        'models': [
-            (_('Mensagens'), _('Somente leitura — marque como lida após responder por e-mail.')),
-        ],
-    },
-    {
-        'title': _('Analytics'),
+        'title': _('Site & métricas'),
         'icon': 'fas fa-chart-line',
-        'summary': _(
-            'Pageviews próprios (sem cookies Google). Registrados por analytics-track.js após consent opcional.'
-        ),
+        'summary': _('Autor, links /links/, redirects, contato e pageviews.'),
         'models': [
-            (_('Visualizações'), _('Path, referrer e hash anônimo do visitante. Top páginas no topo da lista.')),
-        ],
-    },
-    {
-        'title': _('Redirects'),
-        'icon': 'fas fa-route',
-        'summary': _('Redirecionamentos 301/302 — URLs antigas do Hugo ou links que mudaram.'),
-        'models': [
-            (_('Redirects'), _('old_path → new_path. Middleware aplica antes da view Django.')),
-        ],
-    },
-    {
-        'title': _('Integrações'),
-        'icon': 'fas fa-plug',
-        'summary': _('Estado de sync com YouTube, GitHub e Discord (config JSON + último resultado).'),
-        'models': [
-            (_('Integrações'), _('Ative/desative e veja last_sync_at. Secrets ficam no GCP Secret Manager.')),
+            (_('Autor / Links'), _('Bio, avatar e link-in-bio editável.')),
+            (_('Analytics'), _('Dashboard + pageviews first-party.')),
+            (_('Redirects / Contato'), _('301 do Hugo e caixa de mensagens.')),
         ],
     },
 ]
 
-# Descrição no topo de cada changelist / change form (chave: app_label.model_name)
 MODEL_DESCRIPTIONS = {
     'blog.post': _(
         'Artigos do blog em inglês e português. Publicados aparecem em /posts/ e na home. '
@@ -130,17 +58,18 @@ MODEL_DESCRIPTIONS = {
     'blog.author': _('Perfil do autor na home e /about/. Campos goals: uma meta por linha.'),
     'blog.profilelink': _(
         'Links da página /links/ (estilo link-in-bio). '
-        'section=card → lista principal; section=social → ícones inferiores. '
-        'Altere url ou internal_route aqui; ordem pelo campo order.'
+        'section=card → lista principal; section=social → ícones inferiores.'
     ),
     'blog.comment': _(
         'Comentários nativos Django (não confundir com Giscus/GitHub). '
         'Modere antes de aparecer no site se moderation estiver ativa.'
     ),
+    'blog.series': _('Agrupa posts em trilhas (/series/<slug>/). Ordene via inline na série.'),
     'newsletter.subscriber': _(
         'Lista de e-mails do formulário "DevOps & Cloud Newsletter". '
         'Token de unsubscribe é derivado do e-mail (compatível com automação antiga).'
     ),
+    'newsletter.leadmagnet': _('Lead magnets para captura de e-mail com página de sucesso.'),
     'curation.feedsource': _(
         'Feeds RSS/Atom monitorados pelo job de curadoria (semanal ou manual). '
         'Desative is_active para pausar uma fonte sem apagar histórico.'
@@ -149,6 +78,7 @@ MODEL_DESCRIPTIONS = {
         'Links capturados dos feeds com resumo IA e score de relevância. '
         'Fluxo: pending → approved/rejected → published (vira post opcional).'
     ),
+    'curation.linksubmission': _('Sugestões de links enviadas pelo formulário /suggest-link/.'),
     'campaigns.newslettercampaign': _(
         'Edição de campanha de e-mail em massa. body_markdown = rascunho semanal da curadoria. '
         'Discord: posta em #drafts-review; botões Aprovar enviam, Rejeitar cancelam.'
@@ -156,6 +86,10 @@ MODEL_DESCRIPTIONS = {
     'content_pipeline.pipelinejob': _(
         'Histórico de execuções automáticas. Tipos: full, curation, newsletter, sync, ai_draft. '
         'Consulte log para debug quando o Scheduler falhar.'
+    ),
+    'content_pipeline.instagramcarousel': _(
+        'Carrossel Instagram 1080×1350 (4:5). Gere slides com IA, preview no admin, exporte PNGs '
+        'para media/instagram/&lt;id&gt;/. Assuntos duplicados são bloqueados na geração.'
     ),
     'pages.page': _(
         'Páginas estáticas editáveis. slug=about → /about/. is_published oculta sem apagar. '

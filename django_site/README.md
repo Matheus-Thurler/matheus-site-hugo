@@ -89,7 +89,7 @@ No admin: **Blog → Posts → Generate with AI** (ou sidebar *Gerar post com IA
 ```bash
 # .env
 GEMINI_API_KEY=sua-chave-aqui
-GEMINI_MODEL=gemini-2.5-flash   # opcional
+GEMINI_MODEL=gemini-3.5-flash   # GA jul/2026 — substitui gemini-2.5-flash (indisponível p/ contas novas)
 ```
 
 Usa a mesma API do `content-automation` (Google AI Studio / Secret Manager).

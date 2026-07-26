@@ -90,7 +90,7 @@ def generate_weekly_draft_text() -> str:
         community_content=_fetch_community_content(),
     )
     response = client.models.generate_content(
-        model=getattr(settings, 'GEMINI_MODEL', 'gemini-2.5-flash'),
+        model=getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash'),
         contents=prompt,
     )
     return (response.text or '').strip()

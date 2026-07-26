@@ -10,9 +10,8 @@ class RedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        try:
-            target = Redirect.objects.get(old_path=request.path)
-        except Redirect.DoesNotExist:
+        target = Redirect.objects.filter(old_path=request.path).first()
+        if not target:
             return self.get_response(request)
         if target.is_permanent:
             return HttpResponsePermanentRedirect(target.new_path)

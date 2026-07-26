@@ -1,0 +1,49 @@
+{% load static %}
+<div class="instagram-slide-canvas" style="background: linear-gradient({{ bg_gradient }});">
+  <div class="ig-header">
+    <span class="ig-badge">{{ badge_label }}</span>
+    <span class="ig-page-num">{{ slide_num }}/{{ total_slides }}</span>
+  </div>
+
+  {% if is_first %}
+  <div class="ig-cover">
+    {% if cover_logos %}
+      <div class="ig-cover-icon ig-cover-logos">
+        {% for logo in cover_logos %}
+          {% if not forloop.first %}<span class="ig-vs">vs</span>{% endif %}
+          <img
+            class="ig-tech-logo"
+            src="{% static logo.file %}"
+            alt="{{ logo.name }}"
+          >
+        {% endfor %}
+      </div>
+    {% elif cover_svg %}
+      <div class="ig-cover-icon">{{ cover_svg|safe }}</div>
+    {% elif slide.icon %}
+      <div class="ig-icon">{{ slide.icon }}</div>
+    {% endif %}
+    <h1 class="ig-cover-title">{{ title }}</h1>
+    <p class="ig-cover-sub">Deslize para ver →</p>
+  </div>
+  {% elif is_last %}
+  <div class="ig-cta">
+    {% if slide.icon %}<div class="ig-icon">{{ slide.icon }}</div>{% endif %}
+    <div class="ig-cta-title">{{ slide.heading }}</div>
+    <p class="ig-cta-sub">{{ slide.body }}</p>
+  </div>
+  {% else %}
+  <div class="ig-slide-content">
+    {% if slide.icon %}<div class="ig-icon">{{ slide.icon }}</div>{% endif %}
+    <h2 class="ig-heading">{{ slide.heading }}</h2>
+    {% if slide.body %}<p class="ig-text">{{ slide.body }}</p>{% endif %}
+    {% if code %}<pre class="ig-code">{{ code }}</pre>{% endif %}
+  </div>
+  {% endif %}
+
+  <div class="ig-footer">
+    <img class="ig-avatar" src="{% static 'images/avatar.png' %}" alt="Matheus Thurler">
+    <span class="ig-handle">@maththurler.devops</span>
+    {% if not is_last %}<span class="ig-swipe">Próximo</span>{% endif %}
+  </div>
+</div>

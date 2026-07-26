@@ -1,0 +1,7 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kustomize">
+  <rect x="22" y="18" width="56" height="40" rx="8" fill="#A3D5FF"/>
+  <rect x="32" y="32" width="56" height="40" rx="8" fill="#90C3EF"/>
+  <rect x="42" y="46" width="56" height="40" rx="8" fill="#6BB0FF"/>
+  <circle cx="34" cy="82" r="20" fill="#FC7753"/>
+  <path d="M26 82h16M34 74v16" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+</svg>
