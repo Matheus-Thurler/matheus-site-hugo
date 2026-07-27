@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import zipfile
 from pathlib import Path
 
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.files import File
 from django.template.loader import render_to_string
 from django.utils import timezone
 
@@ -46,8 +48,93 @@ def export_dir_for(carousel) -> Path:
     return Path(settings.MEDIA_ROOT) / 'instagram' / str(carousel.pk)
 
 
+def media_abspath(relative_path: str) -> Path:
+    return Path(settings.MEDIA_ROOT) / relative_path
+
+
+def carousel_title(carousel) -> str:
+    return (carousel.title or carousel.topic or f'Carrossel #{carousel.pk}').strip()
+
+
+def _slide_tag(carousel, slide_name: str) -> str:
+    slide_num = slide_name.removeprefix('slide-').removesuffix('.png')
+    return f'carousel:{carousel.pk},slide:{slide_num}'
+
+
+def build_carousel_zip(carousel, relative_paths: list[str]) -> str:
+    """Monta ZIP com todos os PNGs. Retorna path relativo em media/."""
+    out_dir = export_dir_for(carousel)
+    zip_filename = f'carousel-{carousel.pk}.zip'
+    zip_path = out_dir / zip_filename
+    rel_zip = str(Path('instagram') / str(carousel.pk) / zip_filename)
+
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for rel in relative_paths:
+            abs_path = media_abspath(rel)
+            zf.write(abs_path, arcname=abs_path.name)
+
+    return rel_zip
+
+
+def register_exports_in_media_library(carousel, relative_paths: list[str]) -> int:
+    """Copia PNGs para library/ e registra/atualiza MediaAsset. Retorna quantidade."""
+    from media_library.models import MediaAsset
+
+    title_base = carousel_title(carousel)
+    created_or_updated = 0
+
+    for rel in relative_paths:
+        slide_name = rel.rsplit('/', 1)[-1]
+        tag_key = _slide_tag(carousel, slide_name)
+        asset_title = f'{title_base} — {slide_name}'
+        src = media_abspath(rel)
+
+        asset = MediaAsset.objects.filter(tags__contains=tag_key).first()
+        if asset is None:
+            asset = MediaAsset(
+                title=asset_title,
+                tags=f'instagram,{tag_key}',
+                caption=title_base,
+            )
+
+        with src.open('rb') as handle:
+            asset.file.save(slide_name, File(handle), save=False)
+        asset.title = asset_title
+        asset.caption = title_base
+        asset.tags = f'instagram,{tag_key}'
+        asset.save()
+        created_or_updated += 1
+
+    return created_or_updated
+
+
+def register_zip_in_media_library(carousel, zip_rel_path: str) -> None:
+    """Registra o ZIP do carrossel na Media Library."""
+    from media_library.models import MediaAsset
+
+    title_base = carousel_title(carousel)
+    zip_name = zip_rel_path.rsplit('/', 1)[-1]
+    tag_key = f'carousel:{carousel.pk},zip'
+
+    asset = MediaAsset.objects.filter(tags__contains=tag_key).first()
+    if asset is None:
+        asset = MediaAsset(
+            title=f'{title_base} — ZIP',
+            tags=f'instagram,{tag_key}',
+            caption=f'ZIP com {carousel.slide_count} slides',
+        )
+
+    src = media_abspath(zip_rel_path)
+    with src.open('rb') as handle:
+        asset.file.save(zip_name, File(handle), save=False)
+    asset.title = f'{title_base} — ZIP'
+    asset.caption = f'ZIP com {carousel.slide_count} slides'
+    asset.tags = f'instagram,{tag_key}'
+    asset.save()
+
+
 def export_carousel_pngs(carousel, *, force: bool = False) -> list[str]:
-    """Renderiza cada slide e salva PNG em media/instagram/<id>/. Retorna paths relativos."""
+    """Renderiza cada slide, salva PNG, monta ZIP e registra na Media Library."""
     if not carousel.slide_count:
         raise InstagramExportError('Carrossel sem slides — gere o preview antes.')
 
@@ -83,13 +170,14 @@ def export_carousel_pngs(carousel, *, force: bool = False) -> list[str]:
         finally:
             browser.close()
 
+    zip_rel_path = build_carousel_zip(carousel, relative_paths)
+    register_exports_in_media_library(carousel, relative_paths)
+    register_zip_in_media_library(carousel, zip_rel_path)
+
     carousel.export_paths = relative_paths
+    carousel.export_zip_path = zip_rel_path
     carousel.exported_at = timezone.now()
     if carousel.status == 'draft':
         carousel.status = 'ready'
-    carousel.save(update_fields=['export_paths', 'exported_at', 'status'])
+    carousel.save(update_fields=['export_paths', 'export_zip_path', 'exported_at', 'status'])
     return relative_paths
-
-
-def media_abspath(relative_path: str) -> Path:
-    return Path(settings.MEDIA_ROOT) / relative_path

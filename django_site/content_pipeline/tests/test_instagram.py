@@ -2,7 +2,14 @@ import pytest
 from django.utils import timezone
 
 from content_pipeline.instagram import find_duplicate_carousel, normalize_topic_key, reorder_slides
+from content_pipeline.instagram_export import (
+    build_carousel_zip,
+    export_dir_for,
+    register_exports_in_media_library,
+    register_zip_in_media_library,
+)
 from content_pipeline.models import InstagramCarousel
+from media_library.models import MediaAsset
 
 
 def test_reorder_slides_puts_cta_last():
@@ -63,3 +70,69 @@ def test_export_paths_persisted():
     carousel.refresh_from_db()
     assert carousel.is_exported
     assert carousel.export_paths[0].endswith('.png')
+
+
+@pytest.mark.django_db
+def test_build_carousel_zip(tmp_path, settings):
+    settings.MEDIA_ROOT = tmp_path
+    carousel = InstagramCarousel.objects.create(
+        title='Zip test',
+        topic='zip test',
+        slides=[{'heading': 'Cover', 'body': ''}, {'heading': 'CTA', 'body': 'segue'}],
+    )
+    out_dir = export_dir_for(carousel)
+    out_dir.mkdir(parents=True)
+    rel_paths = []
+    for name in ('slide-01.png', 'slide-02.png'):
+        path = out_dir / name
+        path.write_bytes(b'fake-png')
+        rel_paths.append(str(path.relative_to(tmp_path)))
+
+    zip_rel = build_carousel_zip(carousel, rel_paths)
+    zip_path = tmp_path / zip_rel
+
+    assert zip_path.is_file()
+    assert zip_rel.endswith(f'carousel-{carousel.pk}.zip')
+
+
+@pytest.mark.django_db
+def test_register_exports_in_media_library(tmp_path, settings):
+    settings.MEDIA_ROOT = tmp_path
+    carousel = InstagramCarousel.objects.create(
+        title='Media lib test',
+        topic='media lib test',
+        slides=[{'heading': 'Cover', 'body': ''}],
+    )
+    out_dir = export_dir_for(carousel)
+    out_dir.mkdir(parents=True)
+    slide_path = out_dir / 'slide-01.png'
+    slide_path.write_bytes(b'fake-png')
+    rel_path = str(slide_path.relative_to(tmp_path))
+
+    count = register_exports_in_media_library(carousel, [rel_path])
+    assert count == 1
+    asset = MediaAsset.objects.get(tags__contains=f'carousel:{carousel.pk}')
+    assert asset.title.endswith('slide-01.png')
+    assert 'instagram' in asset.tags
+    assert asset.file.name.startswith('library/')
+
+
+@pytest.mark.django_db
+def test_register_zip_in_media_library(tmp_path, settings):
+    settings.MEDIA_ROOT = tmp_path
+    carousel = InstagramCarousel.objects.create(
+        title='Zip library',
+        topic='zip library',
+        slides=[{'heading': 'Cover', 'body': ''}, {'heading': 'CTA', 'body': ''}],
+    )
+    out_dir = export_dir_for(carousel)
+    out_dir.mkdir(parents=True)
+    zip_rel = f'instagram/{carousel.pk}/carousel-{carousel.pk}.zip'
+    zip_path = tmp_path / zip_rel
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    zip_path.write_bytes(b'fake-zip')
+
+    register_zip_in_media_library(carousel, zip_rel)
+    asset = MediaAsset.objects.get(tags__contains=f'carousel:{carousel.pk},zip')
+    assert asset.title.endswith('ZIP')
+    assert asset.file.name.startswith('library/')

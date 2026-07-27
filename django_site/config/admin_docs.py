@@ -89,7 +89,8 @@ MODEL_DESCRIPTIONS = {
     ),
     'content_pipeline.instagramcarousel': _(
         'Carrossel Instagram 1080×1350 (4:5). Gere slides com IA, preview no admin, exporte PNGs '
-        'para media/instagram/&lt;id&gt;/. Assuntos duplicados são bloqueados na geração.'
+        'para media/instagram/&lt;id&gt;/ com ZIP para download e cópia na Media Library. '
+        'Assuntos duplicados são bloqueados na geração.'
     ),
     'pages.page': _(
         'Páginas estáticas editáveis. slug=about → /about/. is_published oculta sem apagar. '

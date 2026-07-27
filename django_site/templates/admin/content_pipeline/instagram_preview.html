@@ -55,9 +55,19 @@
           <li><a href="/media/{{ path }}" target="_blank">{{ path }}</a></li>
           {% endfor %}
         </ul>
+        {% if zip_download_url %}
+        <p class="mb-2">
+          <a href="{{ zip_download_url }}" class="btn btn-success btn-sm">
+            <i class="fas fa-file-archive"></i> Baixar ZIP
+          </a>
+          <a href="{{ media_library_url }}" class="btn btn-outline-secondary btn-sm ms-1">
+            Media Library
+          </a>
+        </p>
+        {% endif %}
         {% endif %}
         <p class="text-muted small">
-          Use <strong>Exportar PNGs</strong> para salvar os slides em <code>media/instagram/{{ carousel.pk }}/</code> (1080×1350).
+          Use <strong>Exportar PNGs</strong> para salvar slides, gerar ZIP e registrar na Media Library.
         </p>
       </div>
     </div>
