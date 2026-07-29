@@ -7,6 +7,7 @@ from content_pipeline.instagram_export import (
     export_dir_for,
     register_exports_in_media_library,
     register_zip_in_media_library,
+    zip_download_filename,
 )
 from content_pipeline.models import InstagramCarousel
 from media_library.models import MediaAsset
@@ -70,6 +71,45 @@ def test_export_paths_persisted():
     carousel.refresh_from_db()
     assert carousel.is_exported
     assert carousel.export_paths[0].endswith('.png')
+
+
+@pytest.mark.django_db
+def test_zip_download_filename():
+    carousel = InstagramCarousel(title='Kubectl Tips!', pk=7)
+    assert zip_download_filename(carousel) == 'kubectl-tips.zip'
+
+
+@pytest.mark.django_db
+def test_export_zip_view_downloads_file(client, django_user_model, tmp_path, settings, monkeypatch):
+    settings.MEDIA_ROOT = tmp_path
+    user = django_user_model.objects.create_superuser('admin', 'a@b.com', 'pass')
+    client.force_login(user)
+
+    carousel = InstagramCarousel.objects.create(
+        title='Download test',
+        topic='download test',
+        slides=[{'heading': 'Cover', 'body': ''}, {'heading': 'CTA', 'body': ''}],
+    )
+    out_dir = export_dir_for(carousel)
+    out_dir.mkdir(parents=True)
+    rel_paths = []
+    for name in ('slide-01.png', 'slide-02.png'):
+        path = out_dir / name
+        path.write_bytes(b'png')
+        rel_paths.append(str(path.relative_to(tmp_path)))
+    zip_rel = build_carousel_zip(carousel, rel_paths)
+    carousel.export_paths = rel_paths
+    carousel.export_zip_path = zip_rel
+    carousel.save()
+
+    url = f'/admin/content_pipeline/instagramcarousel/{carousel.pk}/export-zip/'
+    response = client.post(url)
+
+    assert response.status_code == 200
+    assert response['Content-Disposition'].startswith('attachment')
+    assert 'download-test.zip' in response['Content-Disposition']
+    body = b''.join(response.streaming_content)
+    assert body[:2] == b'PK'
 
 
 @pytest.mark.django_db

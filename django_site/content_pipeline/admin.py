@@ -23,6 +23,7 @@ from .instagram_export import (
     InstagramExportError,
     export_carousel_pngs,
     media_abspath,
+    zip_download_filename,
 )
 from .models import InstagramCarousel, PipelineJob
 
@@ -67,7 +68,7 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             'fields': ('export_files_display', 'exported_at', 'export_paths', 'export_zip_path'),
             'classes': ('collapse',),
             'description': _(
-                'PNG 1080×1350 em media/instagram/&lt;id&gt;/, ZIP para download e cópia na Media Library.'
+                'Clique em Baixar ZIP para gerar os PNGs, baixar o arquivo e registrar na Media Library.'
             ),
         }),
         (_('Preview'), {
@@ -107,32 +108,73 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
 
     @admin.display(description=_('PNGs exportados'))
     def export_files_display(self, obj):
-        if not obj or not obj.export_paths:
-            return mark_safe('<span class="quiet">Nenhum PNG exportado ainda.</span>')
+        if not obj or not obj.pk:
+            return mark_safe('<span class="quiet">Use Baixar ZIP no rodapé.</span>')
+        if not obj.export_paths:
+            return mark_safe('<span class="quiet">Nenhum export ainda — use <strong>Baixar ZIP</strong>.</span>')
         links = []
         for rel in obj.export_paths:
             url = f'{settings.MEDIA_URL.rstrip("/")}/{rel}'
             name = rel.rsplit('/', 1)[-1]
             links.append(f'<a href="{url}" target="_blank">{name}</a>')
         exported = obj.exported_at.strftime('%d/%m/%Y %H:%M') if obj.exported_at else '—'
-        parts = [f'<div class="mb-1">{" · ".join(links)}</div>']
-        if obj.export_zip_path:
-            zip_url = reverse('admin:content_pipeline_instagramcarousel_download_zip', args=[obj.pk])
-            parts.append(
-                f'<div class="mb-1"><a class="button" href="{zip_url}">'
-                f'<i class="fas fa-file-archive"></i> Baixar ZIP</a></div>'
-            )
         library_url = (
             f'{reverse("admin:media_library_mediaasset_changelist")}'
             f'?q=carousel%3A{obj.pk}'
         )
-        parts.append(
+        return mark_safe(
+            f'<div class="mb-1">{" · ".join(links)}</div>'
             f'<div class="mb-1"><a href="{library_url}">Ver na Media Library</a></div>'
+            f'<small class="quiet">Último export em {exported}</small>'
         )
-        parts.append(f'<small class="quiet">Exportado em {exported}</small>')
-        return mark_safe(''.join(parts))
 
-    def _duplicate_warning(self, request, obj):
+    def _zip_file_response(self, carousel):
+        zip_path = media_abspath(carousel.export_zip_path)
+        return FileResponse(
+            zip_path.open('rb'),
+            as_attachment=True,
+            filename=zip_download_filename(carousel),
+            content_type='application/zip',
+        )
+
+    def export_zip_view(self, request, pk):
+        """Gera PNGs/ZIP se necessário e devolve download imediato."""
+        if request.method != 'POST':
+            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
+
+        carousel = get_object_or_404(InstagramCarousel, pk=pk)
+        force = request.POST.get('force') == '1'
+        zip_path = media_abspath(carousel.export_zip_path) if carousel.export_zip_path else None
+
+        needs_export = (
+            force
+            or not carousel.export_paths
+            or not carousel.export_zip_path
+            or zip_path is None
+            or not zip_path.is_file()
+        )
+
+        if needs_export:
+            try:
+                export_carousel_pngs(carousel, force=force)
+                carousel.refresh_from_db()
+            except InstagramExportError as exc:
+                messages.error(request, str(exc))
+                referer = request.META.get('HTTP_REFERER')
+                if referer:
+                    return redirect(referer)
+                return redirect('admin:content_pipeline_instagramcarousel_change', pk)
+
+        if not carousel.export_zip_path:
+            messages.error(request, 'Não foi possível gerar o ZIP.')
+            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
+
+        zip_path = media_abspath(carousel.export_zip_path)
+        if not zip_path.is_file():
+            messages.error(request, 'Arquivo ZIP não encontrado — tente Regenerar ZIP.')
+            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
+
+        return self._zip_file_response(carousel)
         dup = find_duplicate_carousel(
             topic=obj.topic or '',
             title=obj.title or '',
@@ -171,37 +213,7 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             return True
         return False
 
-    def _run_export_pngs(self, request, carousel):
-        try:
-            paths = export_carousel_pngs(carousel)
-        except InstagramExportError as exc:
-            messages.error(request, str(exc))
-            return False
-        messages.success(
-            request,
-            f'{len(paths)} PNG(s) exportados, ZIP pronto e registrados na Media Library.',
-        )
-        return True
-
-    def download_zip_view(self, request, pk):
-        carousel = get_object_or_404(InstagramCarousel, pk=pk)
-        if not carousel.export_zip_path:
-            messages.error(request, 'ZIP ainda não foi gerado — exporte os PNGs primeiro.')
-            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
-
-        zip_path = media_abspath(carousel.export_zip_path)
-        if not zip_path.is_file():
-            messages.error(request, 'Arquivo ZIP não encontrado no disco — exporte novamente.')
-            return redirect('admin:content_pipeline_instagramcarousel_change', pk)
-
-        return FileResponse(
-            zip_path.open('rb'),
-            as_attachment=True,
-            filename=zip_path.name,
-            content_type='application/zip',
-        )
-
-    def get_fieldsets(self, request, obj=None):
+    def _duplicate_warning(self, request, obj):
         fieldsets = super().get_fieldsets(request, obj)
         if obj is None:
             return [fs for fs in fieldsets if fs[0] not in (_('Preview'), _('Meta'))]
@@ -318,9 +330,9 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
                 name='content_pipeline_instagramcarousel_generate',
             ),
             path(
-                '<int:pk>/download-zip/',
-                self.admin_site.admin_view(self.download_zip_view),
-                name='content_pipeline_instagramcarousel_download_zip',
+                '<int:pk>/export-zip/',
+                self.admin_site.admin_view(self.export_zip_view),
+                name='content_pipeline_instagramcarousel_export_zip',
             ),
             path(
                 '<int:pk>/slide/<int:slide_num>/',
@@ -373,11 +385,6 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             'caption': caption_text(carousel),
             'title': f'Preview — {carousel.title}',
             'has_exports': bool(carousel.export_paths),
-            'zip_download_url': (
-                reverse('admin:content_pipeline_instagramcarousel_download_zip', args=[pk])
-                if carousel.export_zip_path
-                else ''
-            ),
             'media_library_url': (
                 f'{reverse("admin:media_library_mediaasset_changelist")}?q=carousel%3A{pk}'
             ),
@@ -433,9 +440,6 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
         if '_generate_from_post' in request.POST:
             self._run_generate_from_post(request, obj)
             return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
-        if '_export_pngs' in request.POST:
-            self._run_export_pngs(request, obj)
-            return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
         if '_preview' in request.POST:
             return self._redirect_preview(request, obj)
         return super().response_change(request, obj)
@@ -446,9 +450,6 @@ class InstagramCarouselAdmin(DescriptiveAdminMixin, admin.ModelAdmin):
             return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
         if '_generate_from_post' in request.POST:
             self._run_generate_from_post(request, obj)
-            return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
-        if '_export_pngs' in request.POST:
-            self._run_export_pngs(request, obj)
             return redirect('admin:content_pipeline_instagramcarousel_change', obj.pk)
         if '_preview' in request.POST:
             return self._redirect_preview(request, obj)

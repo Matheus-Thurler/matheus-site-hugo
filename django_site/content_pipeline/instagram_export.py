@@ -56,6 +56,13 @@ def carousel_title(carousel) -> str:
     return (carousel.title or carousel.topic or f'Carrossel #{carousel.pk}').strip()
 
 
+def zip_download_filename(carousel) -> str:
+    from django.utils.text import slugify
+
+    base = slugify(carousel_title(carousel))
+    return f'{base or f"carrossel-{carousel.pk}"}.zip'
+
+
 def _slide_tag(carousel, slide_name: str) -> str:
     slide_num = slide_name.removeprefix('slide-').removesuffix('.png')
     return f'carousel:{carousel.pk},slide:{slide_num}'

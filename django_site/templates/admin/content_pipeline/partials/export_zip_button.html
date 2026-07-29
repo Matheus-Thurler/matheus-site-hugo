@@ -1,0 +1,14 @@
+{% load i18n %}
+<form method="post" action="{% url 'admin:content_pipeline_instagramcarousel_export_zip' carousel.pk %}" class="d-inline{% if extra_class %} {{ extra_class }}{% endif %}">
+  {% csrf_token %}
+  {% if force %}<input type="hidden" name="force" value="1">{% endif %}
+  <button
+    type="submit"
+    class="btn {% if force %}btn-outline-success{% else %}btn-success{% endif %}{% if small %} btn-sm{% endif %}"
+    data-loading-title="{% if force %}Regenerando ZIP…{% else %}Gerando ZIP…{% endif %}"
+    data-loading-text="Renderizando slides 1080×1350 e preparando download…"
+  >
+    <i class="fas fa-file-archive"></i>
+    {% if force %}Regenerar ZIP{% else %}Baixar ZIP{% endif %}
+  </button>
+</form>

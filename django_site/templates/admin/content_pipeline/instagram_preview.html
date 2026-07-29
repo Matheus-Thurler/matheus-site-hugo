@@ -30,12 +30,9 @@
       <a href="{% url 'admin:content_pipeline_instagramcarousel_slide' carousel.pk slide_num %}" class="btn btn-outline-secondary btn-sm ms-auto" target="_blank">
         Abrir slide
       </a>
-      <form method="post" action="{% url 'admin:content_pipeline_instagramcarousel_change' carousel.pk %}" class="d-inline ms-2">
-        {% csrf_token %}
-        <button type="submit" name="_export_pngs" value="1" class="btn btn-success btn-sm">
-          <i class="fas fa-download"></i> Exportar PNGs
-        </button>
-      </form>
+      <span class="ms-2">
+        {% include "admin/content_pipeline/partials/export_zip_button.html" with carousel=carousel small=True %}
+      </span>
     </div>
 
     <div class="row">
@@ -49,28 +46,34 @@
         <h5>Caption</h5>
         <div class="instagram-caption-box border rounded p-3 mb-3">{{ caption }}</div>
         {% if has_exports %}
-        <h5>PNGs exportados</h5>
+        <h5>Último export</h5>
         <ul class="list-unstyled small mb-3">
           {% for path in carousel.export_paths %}
           <li><a href="/media/{{ path }}" target="_blank">{{ path }}</a></li>
           {% endfor %}
         </ul>
-        {% if zip_download_url %}
         <p class="mb-2">
-          <a href="{{ zip_download_url }}" class="btn btn-success btn-sm">
-            <i class="fas fa-file-archive"></i> Baixar ZIP
-          </a>
-          <a href="{{ media_library_url }}" class="btn btn-outline-secondary btn-sm ms-1">
+          <a href="{{ media_library_url }}" class="btn btn-outline-secondary btn-sm">
             Media Library
           </a>
+          {% if carousel.export_zip_path %}
+          {% include "admin/content_pipeline/partials/export_zip_button.html" with carousel=carousel small=True force=True %}
+          {% endif %}
         </p>
         {% endif %}
-        {% endif %}
         <p class="text-muted small">
-          Use <strong>Exportar PNGs</strong> para salvar slides, gerar ZIP e registrar na Media Library.
+          <strong>Baixar ZIP</strong> gera os PNGs (se ainda não existirem) e inicia o download na hora.
         </p>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="instagram-admin-loading" class="instagram-admin-loading-overlay" aria-live="polite" aria-busy="true">
+  <div class="instagram-admin-loading-panel">
+    <div class="instagram-loading-spinner" aria-hidden="true"></div>
+    <h4 class="mt-3 mb-2" id="instagram-admin-loading-title">Processando…</h4>
+    <p class="text-muted small mb-0" id="instagram-admin-loading-text">Aguarde, isso pode levar até 45 segundos.</p>
   </div>
 </div>
 
@@ -78,18 +81,29 @@
 (function () {
   var stage = document.getElementById("preview-stage");
   var canvas = stage && stage.querySelector(".instagram-slide-canvas");
-  if (!stage || !canvas) return;
-
-  function resizePreview() {
-    var scale = stage.clientWidth / 1080;
-    canvas.style.transform = "scale(" + scale + ")";
+  if (stage && canvas) {
+    function resizePreview() {
+      var scale = stage.clientWidth / 1080;
+      canvas.style.transform = "scale(" + scale + ")";
+    }
+    resizePreview();
+    window.addEventListener("resize", resizePreview);
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(resizePreview).observe(stage);
+    }
   }
 
-  resizePreview();
-  window.addEventListener("resize", resizePreview);
-  if (typeof ResizeObserver !== "undefined") {
-    new ResizeObserver(resizePreview).observe(stage);
-  }
+  var overlay = document.getElementById("instagram-admin-loading");
+  if (!overlay) return;
+  var titleEl = document.getElementById("instagram-admin-loading-title");
+  var textEl = document.getElementById("instagram-admin-loading-text");
+  document.querySelectorAll("[data-loading-title]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      if (el.dataset.loadingTitle) titleEl.textContent = el.dataset.loadingTitle;
+      if (el.dataset.loadingText) textEl.textContent = el.dataset.loadingText;
+      overlay.classList.add("is-visible");
+    });
+  });
 })();
 </script>
 {% endblock %}

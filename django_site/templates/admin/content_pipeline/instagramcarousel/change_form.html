@@ -7,7 +7,7 @@
   <ol class="mb-2 pl-3">
     <li>Preencha só o <strong>Tópico</strong> (ex: <em>5 comandos kubectl essenciais</em>).</li>
     <li>Clique em <strong>Ver preview →</strong> — salva e abre tela de geração (~15–45s).</li>
-    <li>Revise e clique em <strong>Exportar PNGs</strong> — gera PNGs, ZIP e registra na Media Library.</li>
+    <li>Clique em <strong>Baixar ZIP</strong> — gera os slides e baixa o arquivo na hora.</li>
   </ol>
   <p class="mb-0 text-muted small">
     Título é opcional (usa o tópico). Assuntos duplicados são bloqueados na geração.
@@ -30,7 +30,6 @@
 
   var titleEl = document.getElementById("instagram-admin-loading-title");
   var textEl = document.getElementById("instagram-admin-loading-text");
-  var form = document.querySelector("form[method='post']");
 
   function showLoading(source) {
     if (source && source.dataset.loadingTitle) {
@@ -42,20 +41,11 @@
     overlay.classList.add("is-visible");
   }
 
-  document.querySelectorAll(".submit-row input[type='submit'][data-loading-title]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      showLoading(button);
+  document.querySelectorAll("[data-loading-title]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      showLoading(el);
     });
   });
-
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      var submitter = event.submitter;
-      if (submitter && submitter.dataset.loadingTitle) {
-        showLoading(submitter);
-      }
-    });
-  }
 })();
 </script>
 {% endblock %}
@@ -64,7 +54,10 @@
 <div class="submit-row">
   <input type="submit" value="Ver preview →" name="_preview" class="default btn btn-info" data-loading-title="Gerando preview…" data-loading-text="A IA está criando os slides. Aguarde…">
   {% if original and original.slide_count %}
-  <input type="submit" value="Exportar PNGs" name="_export_pngs" class="btn btn-success" data-loading-title="Exportando PNGs…" data-loading-text="Renderizando slides 1080×1350…">
+  {% include "admin/content_pipeline/partials/export_zip_button.html" with carousel=original %}
+  {% if original.export_zip_path %}
+  {% include "admin/content_pipeline/partials/export_zip_button.html" with carousel=original force=True %}
+  {% endif %}
   {% endif %}
   <input type="submit" value="{% trans 'Save' %}" name="_save">
   <input type="submit" value="Regenerar com IA" name="_generate_ai" class="btn btn-outline-warning" data-loading-title="Regenerando com IA…" data-loading-text="Aguarde a resposta do Gemini…">
