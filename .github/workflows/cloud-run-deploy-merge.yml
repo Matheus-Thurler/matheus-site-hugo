@@ -74,7 +74,7 @@ jobs:
           image: ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.AR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           tag: ${{ env.DEPLOY_TAG }}
           no_traffic: true
-          flags: '--min-instances=1'
+          flags: '--min-instances=1 --memory=2Gi --cpu=2'
 
       # Real readiness = app responds (migrate + collectstatic + gunicorn). gcloud Ready filter is unreliable.
       - name: Smoke test candidate revision
@@ -133,7 +133,9 @@ jobs:
           gcloud run services update "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
             --project "${{ env.GCP_PROJECT_ID }}" \
-            --min-instances 1
+            --min-instances 1 \
+            --memory 2Gi \
+            --cpu 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
