@@ -150,7 +150,9 @@ jobs:
           PROD_URL="$(gcloud run services describe "${{ env.CLOUD_RUN_SERVICE }}" \
             --region "${{ env.GCP_REGION }}" \
             --format 'value(status.url)')"
-          uv run python manage.py prerender_pages --base-url "${PROD_URL}"
+          uv run python manage.py prerender_pages \
+            --base-url "${PROD_URL}" \
+            --host matheusthurler.com.br
 
       - name: Deploy Firebase Hosting (CDN → Cloud Run)
         run: bash scripts/firebase-deploy.sh

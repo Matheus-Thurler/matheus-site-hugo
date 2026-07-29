@@ -61,21 +61,28 @@ class PrerenderCommandTest(TestCase):
             published_at=timezone.now(),
         )
 
-    def test_prerender_writes_index_html(self):
+    def test_prerender_writes_index_html_with_canonical_urls(self):
         from io import StringIO
-
-        from django.core.management import call_command
+        import shutil
 
         from django.conf import settings
-        import shutil
+        from django.core.management import call_command
 
         output = settings.PRERENDER_OUTPUT_DIR / '_test_prerender'
         if output.exists():
             shutil.rmtree(output)
 
         out = StringIO()
-        call_command('prerender_pages', output=str(output), stdout=out)
+        call_command(
+            'prerender_pages',
+            output=str(output),
+            host=settings.SITE_CANONICAL_HOST,
+            stdout=out,
+        )
         target = output / 'posts' / 'prerender-me' / 'index.html'
         self.assertTrue(target.exists())
-        self.assertIn(b'Prerender', target.read_bytes())
+        html = target.read_text()
+        self.assertIn('Prerender', html)
+        self.assertIn(settings.SITE_CANONICAL_URL, html)
+        self.assertNotIn('localhost', html)
         shutil.rmtree(output)

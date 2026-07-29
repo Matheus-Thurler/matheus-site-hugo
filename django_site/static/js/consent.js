@@ -26,6 +26,23 @@
     });
   }
 
+  function ensurePartytown() {
+    if (!window.__PARTYTOWN_LIB__) {
+      return Promise.resolve(false);
+    }
+    if (window.__partytownReady) {
+      return Promise.resolve(true);
+    }
+    window.partytown = {
+      forward: ["dataLayer.push", "gtag"],
+      lib: window.__PARTYTOWN_LIB__,
+    };
+    return loadScript(window.__PARTYTOWN_LIB__ + "partytown.js").then(function () {
+      window.__partytownReady = true;
+      return true;
+    });
+  }
+
   function loadGoogleAnalytics() {
     if (
       !window.__ANALYTICS_ENABLED__ ||
@@ -35,20 +52,28 @@
       return;
     }
 
-    var configScript = document.createElement("script");
-    configScript.type = "text/partytown";
-    configScript.textContent =
-      'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}' +
-      'gtag("js",new Date());gtag("config","' +
-      window.__GA_ID__ +
-      '",{anonymize_ip:true});';
-    document.head.appendChild(configScript);
+    ensurePartytown()
+      .then(function (ready) {
+        var scriptType = ready ? "text/partytown" : "text/javascript";
 
-    var loader = document.createElement("script");
-    loader.type = "text/partytown";
-    loader.src =
-      "https://www.googletagmanager.com/gtag/js?id=" + window.__GA_ID__;
-    document.head.appendChild(loader);
+        var configScript = document.createElement("script");
+        configScript.type = scriptType;
+        configScript.textContent =
+          'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}' +
+          'gtag("js",new Date());gtag("config","' +
+          window.__GA_ID__ +
+          '",{anonymize_ip:true});';
+        document.head.appendChild(configScript);
+
+        var loader = document.createElement("script");
+        loader.type = scriptType;
+        loader.src =
+          "https://www.googletagmanager.com/gtag/js?id=" + window.__GA_ID__;
+        document.head.appendChild(loader);
+      })
+      .catch(function () {
+        /* Partytown unavailable — skip GA rather than block main thread */
+      });
   }
 
   function adsenseClientId() {

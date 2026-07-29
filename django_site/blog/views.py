@@ -200,6 +200,8 @@ class ArchivesView(ListView):
         # Group by year
         posts_by_year = {}
         for post in context['posts']:
+            if not post.published_at:
+                continue
             year = post.published_at.year
             if year not in posts_by_year:
                 posts_by_year[year] = []

@@ -29,6 +29,17 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(','
 _csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
 
+# Canonical public URL (SEO, prerender, absolute links)
+SITE_CANONICAL_HOST = os.environ.get('SITE_CANONICAL_HOST', 'matheusthurler.com.br')
+SITE_CANONICAL_URL = os.environ.get(
+    'SITE_CANONICAL_URL',
+    f'https://{SITE_CANONICAL_HOST}',
+).rstrip('/')
+
+for _site_host in (SITE_CANONICAL_HOST, f'www.{SITE_CANONICAL_HOST}'):
+    if _site_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_site_host)
+
 
 # Application definition
 
@@ -75,10 +86,10 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'redirects.middleware.RedirectMiddleware',
     'django.middleware.locale.LocaleMiddleware',  # i18n
-    'blog.performance.PublicCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'blog.performance.PublicCacheMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -397,9 +408,10 @@ RECENT_POSTS_COUNT = 5
 RELATED_POSTS_COUNT = 3
 
 # =============================================================================
-# PAGE CACHE (Redis optional; LocMem default)
+# PAGE CACHE (file in prod — shared across gunicorn workers; Redis optional)
 # =============================================================================
-CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'locmem').lower()
+_default_cache_backend = 'file' if not DEBUG else 'locmem'
+CACHE_BACKEND = os.environ.get('CACHE_BACKEND', _default_cache_backend).lower()
 CACHE_PAGE_TIMEOUT = int(os.environ.get('CACHE_PAGE_TIMEOUT', '900'))
 PUBLIC_CACHE_MAX_AGE = int(os.environ.get('PUBLIC_CACHE_MAX_AGE', '300'))
 PUBLIC_CACHE_S_MAXAGE = int(os.environ.get('PUBLIC_CACHE_S_MAXAGE', '3600'))

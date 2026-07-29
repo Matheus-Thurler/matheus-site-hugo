@@ -99,21 +99,15 @@
     <link rel="dns-prefetch" href="https://img.youtube.com">
     <link rel="dns-prefetch" href="https://i.ytimg.com">
 
-    <!-- Partytown — GA runs off main thread after cookie consent -->
-    <script>
-      window.partytown = {
-        forward: ['dataLayer.push', 'gtag'],
-        lib: '{% get_static_prefix %}partytown/'
-      };
-    </script>
-    <script src="{% static 'partytown/partytown.js' %}" defer></script>
-
     <!-- Third-party config (loaded by consent.js after acceptance) -->
     <script>
       window.__ANALYTICS_ENABLED__ = {{ analytics_enabled|yesno:"true,false" }};
       window.__ANALYTICS_SELF_HOSTED__ = {{ analytics_self_hosted|yesno:"true,false" }};
       window.__GA_ID__ = "{{ google_analytics_id|escapejs }}";
       window.__ADSENSE_ID__ = "{{ google_adsense_id|escapejs }}";
+      {% if analytics_enabled and google_analytics_id and not analytics_self_hosted %}
+      window.__PARTYTOWN_LIB__ = "{% get_static_prefix %}partytown/";
+      {% endif %}
     </script>
 
     <script>
