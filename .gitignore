@@ -29,3 +29,7 @@ client_secret*.json
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Prerendered HTML (generated on deploy)
+hosting/public/**
+!hosting/public/.gitkeep

@@ -135,6 +135,23 @@ jobs:
             --project "${{ env.GCP_PROJECT_ID }}" \
             --min-instances 1
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Prerender public pages for Firebase CDN
+        working-directory: django_site
+        run: |
+          uv sync --frozen
+          PROD_URL="$(gcloud run services describe "${{ env.CLOUD_RUN_SERVICE }}" \
+            --region "${{ env.GCP_REGION }}" \
+            --format 'value(status.url)')"
+          uv run python manage.py prerender_pages --base-url "${PROD_URL}"
+
       - name: Deploy Firebase Hosting (CDN → Cloud Run)
         run: bash scripts/firebase-deploy.sh
 

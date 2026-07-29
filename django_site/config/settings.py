@@ -75,6 +75,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'redirects.middleware.RedirectMiddleware',
     'django.middleware.locale.LocaleMiddleware',  # i18n
+    'blog.performance.PublicCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -395,6 +396,37 @@ FOOTER_MENU_PT = [
 RECENT_POSTS_COUNT = 5
 RELATED_POSTS_COUNT = 3
 
+# =============================================================================
+# PAGE CACHE (Redis optional; LocMem default)
+# =============================================================================
+CACHE_BACKEND = os.environ.get('CACHE_BACKEND', 'locmem').lower()
+CACHE_PAGE_TIMEOUT = int(os.environ.get('CACHE_PAGE_TIMEOUT', '900'))
+PUBLIC_CACHE_MAX_AGE = int(os.environ.get('PUBLIC_CACHE_MAX_AGE', '300'))
+PUBLIC_CACHE_S_MAXAGE = int(os.environ.get('PUBLIC_CACHE_S_MAXAGE', '3600'))
+PRERENDER_OUTPUT_DIR = BASE_DIR.parent / 'hosting' / 'public'
+
+if CACHE_BACKEND == 'redis':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+        }
+    }
+elif CACHE_BACKEND == 'file':
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': BASE_DIR / 'data' / 'django_cache',
+        }
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'matheus-blog-public',
+        }
+    }
+
 # Newsletter — Django app replaces content-automation Cloud Function subscribe
 NEWSLETTER_SUBSCRIBE_URL = os.environ.get(
     'NEWSLETTER_SUBSCRIBE_URL',
@@ -690,6 +722,7 @@ CONTENT_SECURITY_POLICY = {
         'script-src': (
             "'self'",
             "'unsafe-inline'",
+            'blob:',
             'https://www.googletagmanager.com',
             'https://pagead2.googlesyndication.com',
             'https://googleads.g.doubleclick.net',
@@ -737,6 +770,7 @@ CONTENT_SECURITY_POLICY = {
             'https://ep1.adtrafficquality.google',
         ),
         'font-src': ("'self'", 'https://fonts.gstatic.com'),
+        'worker-src': ("'self'", 'blob:'),
         'media-src': ("'self'", 'https://img.youtube.com', 'https://i.ytimg.com'),
         'object-src': ("'none'",),
         'base-uri': ("'self'",),

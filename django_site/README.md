@@ -50,9 +50,23 @@ uv run pytest
 
 ## Performance / LGPD
 
-- GA, AdSense e Giscus carregam **somente após consent** (`static/js/consent.js`)
+- **Cache de página** (`cache_page` + LocMem/Redis) em rotas públicas
+- **Pré-render** no deploy → `hosting/public/` servido direto pelo Firebase CDN
+- **Cache-Control** no Django + headers no `firebase.json` para HTML
+- GA via **Partytown** (off main thread); AdSense/Giscus lazy-load após scroll/consent
+- `preload` de CSS/JS críticos no `base.html`
 - Cookie banner é **overlay fixo** — não empurra layout (CLS)
 - `robots.txt` dinâmico com Sitemap absoluto
+
+### Comandos
+
+```bash
+# Pré-render local (grava HTML estático para Firebase CDN)
+uv run python manage.py prerender_pages
+
+# Pré-render a partir do servidor em produção (CI)
+uv run python manage.py prerender_pages --base-url https://matheusthurler.com.br
+```
 
 ## Conteúdo
 

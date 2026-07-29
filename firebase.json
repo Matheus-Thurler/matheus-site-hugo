@@ -26,6 +26,87 @@
             "value": "private, no-cache, no-store, must-revalidate"
           }
         ]
+      },
+      {
+        "source": "/posts/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "/pt/posts/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=120, s-maxage=600, stale-while-revalidate=3600"
+          }
+        ]
+      },
+      {
+        "source": "/pt/",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=120, s-maxage=600, stale-while-revalidate=3600"
+          }
+        ]
+      },
+      {
+        "source": "/categories/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "/tags/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "/about/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
+          }
+        ]
+      },
+      {
+        "source": "/privacy/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
+          }
+        ]
+      },
+      {
+        "source": "/terms/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800"
+          }
+        ]
       }
     ],
     "rewrites": [

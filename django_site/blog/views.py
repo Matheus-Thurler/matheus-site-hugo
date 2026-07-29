@@ -3,6 +3,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, TemplateView
 from django.utils.translation import get_language
+from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.urls import reverse
@@ -14,6 +15,9 @@ from django_ratelimit.decorators import ratelimit
 from .models import Post, Category, Tag, Author, Comment
 from .forms import CommentForm
 from .markdown_utils import render_markdown, plain_text
+from .performance import method_public_cache_page, public_cache_page
+
+_cache_timeout = lambda: getattr(settings, 'CACHE_PAGE_TIMEOUT', 900)
 
 
 def get_current_language():
@@ -22,6 +26,7 @@ def get_current_language():
     return lang if lang in ['en', 'pt'] else 'en'
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class CategoriesView(TemplateView):
     """List all categories."""
     template_name = 'blog/categories.html'
@@ -33,6 +38,7 @@ class CategoriesView(TemplateView):
         return context
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class TagsView(TemplateView):
     """List all tags."""
     template_name = 'blog/tags.html'
@@ -44,6 +50,7 @@ class TagsView(TemplateView):
         return context
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class PostListView(ListView):
     """List view for published posts."""
     model = Post
@@ -60,6 +67,7 @@ class PostListView(ListView):
         return context
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class PostDetailView(DetailView):
     """Detail view for a single post."""
     model = Post
@@ -137,6 +145,7 @@ def add_comment(request, slug):
     return redirect('blog:post_detail', slug=slug)
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class CategoryListView(ListView):
     """List posts by category."""
     model = Post
@@ -155,6 +164,7 @@ class CategoryListView(ListView):
         return context
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class TagListView(ListView):
     """List posts by tag."""
     model = Post
@@ -173,6 +183,7 @@ class TagListView(ListView):
         return context
 
 
+@method_decorator(method_public_cache_page(_cache_timeout()), name='dispatch')
 class ArchivesView(ListView):
     """Archive view - grouped by year/month."""
     model = Post
@@ -204,6 +215,7 @@ def _load_youtube_data():
     return get_youtube_data()
 
 
+@public_cache_page(_cache_timeout())
 def home(request):
     """Home page view."""
     lang = get_current_language()
@@ -235,6 +247,7 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 
+@public_cache_page(_cache_timeout())
 def about(request):
     """About page view."""
     lang = get_current_language()
@@ -281,6 +294,7 @@ def _get_social_links():
     return get_social_links()
 
 
+@public_cache_page(_cache_timeout())
 def links(request):
     """Links page view (link-in-bio layout matching Hugo)."""
     lang = get_current_language()
@@ -302,12 +316,14 @@ def links(request):
     return render(request, 'blog/links.html', context)
 
 
+@public_cache_page(_cache_timeout())
 def privacy(request):
     """Privacy policy page view."""
     lang = get_current_language()
     return render(request, 'blog/privacy.html', {'lang': lang})
 
 
+@public_cache_page(_cache_timeout())
 def terms(request):
     """Terms of service page view."""
     lang = get_current_language()

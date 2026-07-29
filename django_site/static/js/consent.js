@@ -1,6 +1,6 @@
 /**
- * Cookie consent + lazy-load tracking scripts (GA, AdSense).
- * Giscus loads on comment pages without marketing consent (functional widget).
+ * Cookie consent + lazy third-party scripts (GA via Partytown, AdSense, Giscus).
+ * Marketing scripts load only after consent; Giscus loads when comments scroll into view.
  */
 (function () {
   "use strict";
@@ -35,17 +35,20 @@
       return;
     }
 
-    loadScript("https://www.googletagmanager.com/gtag/js?id=" + window.__GA_ID__)
-      .then(function () {
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          window.dataLayer.push(arguments);
-        }
-        window.gtag = gtag;
-        gtag("js", new Date());
-        gtag("config", window.__GA_ID__, { anonymize_ip: true });
-      })
-      .catch(function () {});
+    var configScript = document.createElement("script");
+    configScript.type = "text/partytown";
+    configScript.textContent =
+      'window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}' +
+      'gtag("js",new Date());gtag("config","' +
+      window.__GA_ID__ +
+      '",{anonymize_ip:true});';
+    document.head.appendChild(configScript);
+
+    var loader = document.createElement("script");
+    loader.type = "text/partytown";
+    loader.src =
+      "https://www.googletagmanager.com/gtag/js?id=" + window.__GA_ID__;
+    document.head.appendChild(loader);
   }
 
   function adsenseClientId() {
@@ -60,12 +63,6 @@
     if (!document.querySelector(".adsense-slot")) return;
 
     var clientId = adsenseClientId();
-
-    var link = document.createElement("link");
-    link.rel = "preconnect";
-    link.href = "https://pagead2.googlesyndication.com";
-    link.crossOrigin = "anonymous";
-    document.head.appendChild(link);
 
     loadScript(
       "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
@@ -127,15 +124,63 @@
     root.dataset.loaded = "true";
   }
 
-  function loadThirdParties() {
-    loadGoogleAnalytics();
-    loadAdSense();
+  function initAdSenseLazy() {
+    var slots = document.querySelectorAll(".adsense-slot");
+    if (!slots.length) return;
+
+    function maybeLoad() {
+      if (localStorage.getItem(CONSENT_KEY) !== "accepted") return;
+      loadAdSense();
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      scheduleIdle(maybeLoad);
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            observer.disconnect();
+            scheduleIdle(maybeLoad);
+          }
+        });
+      },
+      { rootMargin: "240px 0px" }
+    );
+
+    slots.forEach(function (slot) {
+      observer.observe(slot);
+    });
   }
 
-  function initGiscusIfPresent() {
-    if (document.getElementById("giscus-root")) {
+  function initGiscusLazy() {
+    var root = document.getElementById("giscus-root");
+    if (!root) return;
+
+    if (!("IntersectionObserver" in window)) {
       loadGiscus();
+      return;
     }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            loadGiscus();
+            observer.disconnect();
+          }
+        });
+      },
+      { rootMargin: "200px 0px" }
+    );
+    observer.observe(root);
+  }
+
+  function loadThirdParties() {
+    scheduleIdle(loadGoogleAnalytics);
+    initAdSenseLazy();
   }
 
   function hideBanner(banner) {
@@ -180,7 +225,7 @@
   }
 
   function init() {
-    initGiscusIfPresent();
+    initGiscusLazy();
     if (localStorage.getItem(CONSENT_KEY) === "accepted") {
       loadThirdParties();
     }

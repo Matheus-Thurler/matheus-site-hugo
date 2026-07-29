@@ -95,10 +95,18 @@
     <link rel="manifest" href="{% static 'manifest.json' %}">
     <link rel="alternate" type="application/rss+xml" title="{{ site_name }}" href="/index.xml">
 
-    <!-- DNS prefetch (third-party scripts load after consent) -->
+    <!-- DNS prefetch (third-party scripts load after consent / scroll) -->
     <link rel="dns-prefetch" href="https://img.youtube.com">
     <link rel="dns-prefetch" href="https://i.ytimg.com">
-    <link rel="dns-prefetch" href="https://giscus.app">
+
+    <!-- Partytown — GA runs off main thread after cookie consent -->
+    <script>
+      window.partytown = {
+        forward: ['dataLayer.push', 'gtag'],
+        lib: '{% get_static_prefix %}partytown/'
+      };
+    </script>
+    <script src="{% static 'partytown/partytown.js' %}" defer></script>
 
     <!-- Third-party config (loaded by consent.js after acceptance) -->
     <script>
@@ -140,6 +148,8 @@
       }
     </style>
 
+    <link rel="preload" href="{% static 'css/compiled.css' %}" as="style">
+    <link rel="preload" href="{% static 'js/main.js' %}" as="script">
     <link rel="stylesheet" href="{% static 'css/compiled.css' %}">
     {% block syntax_highlight_css %}{% endblock %}
     <link rel="stylesheet" href="{% static 'css/custom.css' %}">
