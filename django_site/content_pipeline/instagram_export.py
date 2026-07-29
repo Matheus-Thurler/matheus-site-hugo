@@ -142,7 +142,8 @@ def export_carousel_pngs(carousel, *, force: bool = False) -> list[str]:
         from playwright.sync_api import sync_playwright
     except ImportError as exc:
         raise InstagramExportError(
-            'Playwright não instalado. Rode: uv sync --group dev && uv run playwright install chromium'
+            'Playwright não instalado no servidor. '
+            'Rebuild da imagem Docker com playwright no pyproject.toml.'
         ) from exc
 
     out_dir = export_dir_for(carousel)
@@ -151,7 +152,17 @@ def export_carousel_pngs(carousel, *, force: bool = False) -> list[str]:
     relative_paths: list[str] = []
 
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=True)
+        try:
+            browser = playwright.chromium.launch(
+                headless=True,
+                args=['--no-sandbox', '--disable-dev-shm-usage'],
+            )
+        except Exception as exc:
+            raise InstagramExportError(
+                'Chromium do Playwright não encontrado. '
+                'Local: uv run playwright install chromium. '
+                'Docker: rebuild da imagem após atualizar o Dockerfile.'
+            ) from exc
         page = browser.new_page(viewport={'width': SLIDE_WIDTH, 'height': SLIDE_HEIGHT})
         try:
             for index in range(carousel.slide_count):

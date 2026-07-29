@@ -27,12 +27,16 @@ RUN apt-get update \
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PATH="/app/.venv/bin:$PATH"
+    PATH="/app/.venv/bin:$PATH" \
+    PLAYWRIGHT_BROWSERS_PATH="/app/.playwright-browsers"
 
 COPY --from=builder --chown=app:app /app /app
 
-RUN mkdir -p /app/data /app/media /app/staticfiles \
-    && chown -R app:app /app/data /app/media /app/staticfiles \
+RUN apt-get update \
+    && mkdir -p /app/data /app/media /app/staticfiles /app/.playwright-browsers \
+    && playwright install --with-deps chromium \
+    && rm -rf /var/lib/apt/lists/* \
+    && chown -R app:app /app/data /app/media /app/staticfiles /app/.playwright-browsers \
     && chmod +x /app/docker/entrypoint.sh
 
 # entrypoint drops to user `app` after fixing volume permissions
