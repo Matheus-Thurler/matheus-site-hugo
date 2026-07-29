@@ -86,3 +86,16 @@ class PrerenderCommandTest(TestCase):
         self.assertIn(settings.SITE_CANONICAL_URL, html)
         self.assertNotIn('localhost', html)
         shutil.rmtree(output)
+
+    def test_parse_sitemap_locs(self):
+        from blog.management.commands.prerender_pages import Command
+
+        cmd = Command()
+        xml = """<?xml version="1.0"?>
+        <urlset>
+          <url><loc>https://matheusthurler.com.br/posts/foo/</loc></url>
+          <url><loc>https://matheusthurler.com.br/categories/devops</loc></url>
+        </urlset>"""
+        paths = cmd._parse_sitemap_locs(xml)
+        self.assertIn('/posts/foo/', paths)
+        self.assertIn('/categories/devops/', paths)

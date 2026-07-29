@@ -17,6 +17,17 @@ from blog.models import Category, Post, Tag
 # Pages with forms or dynamic query strings — not useful as static snapshots.
 _SKIP_PATHS = frozenset({'/search/', '/pt/search/'})
 
+_TRANSLATABLE_PREFIXES = (
+    '/posts/',
+    '/categories/',
+    '/tags/',
+    '/archives/',
+    '/about/',
+    '/links/',
+    '/privacy/',
+    '/terms/',
+)
+
 
 class Command(BaseCommand):
     help = 'Prerender public pages to hosting/public for Firebase CDN static serving.'
@@ -54,8 +65,12 @@ class Command(BaseCommand):
         output_dir.mkdir(parents=True, exist_ok=True)
 
         canonical_host = options['host'] or settings.SITE_CANONICAL_HOST
-        paths = self._collect_paths()
         base_url = (options.get('base_url') or '').rstrip('/')
+
+        if base_url:
+            paths = self._collect_paths_from_remote(base_url, canonical_host)
+        else:
+            paths = self._collect_paths_from_db()
 
         if options['clean']:
             self._clean_output_dir(output_dir)
@@ -71,8 +86,8 @@ class Command(BaseCommand):
             f'Prerendered {written} pages → {output_dir} (host={canonical_host})',
         ))
 
-    def _collect_paths(self) -> list[str]:
-        paths = [
+    def _static_paths(self) -> list[str]:
+        return [
             '/',
             '/posts/',
             '/categories/',
@@ -93,6 +108,9 @@ class Command(BaseCommand):
             '/pt/terms/',
         ]
 
+    def _collect_paths_from_db(self) -> list[str]:
+        paths = list(self._static_paths())
+
         for post in Post.objects.published().values_list('slug', flat=True):
             paths.append(f'/posts/{post}/')
             paths.append(f'/pt/posts/{post}/')
@@ -105,7 +123,67 @@ class Command(BaseCommand):
             paths.append(f'/tags/{slug}/')
             paths.append(f'/pt/tags/{slug}/')
 
-        return [p for p in paths if p not in _SKIP_PATHS]
+        return self._dedupe_paths(paths)
+
+    def _collect_paths_from_remote(self, base_url: str, canonical_host: str) -> list[str]:
+        """Discover paths from live sitemap — no local DB required (CI deploy)."""
+        session = self._remote_session(canonical_host)
+        paths = set(self._static_paths())
+
+        sitemap_url = urljoin(base_url + '/', 'sitemap.xml')
+        try:
+            response = session.get(sitemap_url, timeout=30)
+            response.raise_for_status()
+            paths.update(self._parse_sitemap_locs(response.text))
+        except requests.RequestException as exc:
+            self.stdout.write(self.style.WARNING(f'Sitemap fetch failed: {exc}'))
+
+        pt_mirror = set()
+        for path in paths:
+            if path.startswith('/pt/') or path in _SKIP_PATHS:
+                continue
+            if self._is_translatable(path):
+                pt_mirror.add('/pt/' if path == '/' else f'/pt{path}')
+        paths.update(pt_mirror)
+
+        return self._dedupe_paths(paths)
+
+    def _remote_session(self, canonical_host: str) -> requests.Session:
+        session = requests.Session()
+        session.headers.update({
+            'User-Agent': 'matheus-blog-prerender/1.0',
+            'Host': canonical_host,
+            'X-Forwarded-Proto': 'https',
+            'X-Forwarded-Host': canonical_host,
+        })
+        return session
+
+    def _parse_sitemap_locs(self, xml_text: str) -> set[str]:
+        paths: set[str] = set()
+        for match in re.finditer(r'<loc>\s*(.*?)\s*</loc>', xml_text, re.IGNORECASE):
+            parsed = urlparse(match.group(1).strip())
+            path = parsed.path or '/'
+            if not path.endswith('/'):
+                path = f'{path}/'
+            if path.startswith(('/admin/', '/accounts/', '/newsletter/api/')):
+                continue
+            paths.add(path)
+        return paths
+
+    def _is_translatable(self, path: str) -> bool:
+        if path == '/':
+            return True
+        return any(path.startswith(prefix) for prefix in _TRANSLATABLE_PREFIXES)
+
+    def _dedupe_paths(self, paths: list[str] | set[str]) -> list[str]:
+        seen: set[str] = set()
+        ordered: list[str] = []
+        for path in paths:
+            if path in _SKIP_PATHS or path in seen:
+                continue
+            seen.add(path)
+            ordered.append(path)
+        return ordered
 
     def _client_kwargs(self, host: str) -> dict[str, str]:
         return {
@@ -134,13 +212,7 @@ class Command(BaseCommand):
         output_dir: Path,
         canonical_host: str,
     ) -> int:
-        session = requests.Session()
-        session.headers.update({
-            'User-Agent': 'matheus-blog-prerender/1.0',
-            'Host': canonical_host,
-            'X-Forwarded-Proto': 'https',
-            'X-Forwarded-Host': canonical_host,
-        })
+        session = self._remote_session(canonical_host)
         fetched_host = urlparse(base_url).netloc
         written = 0
         for path in paths:
@@ -171,7 +243,6 @@ class Command(BaseCommand):
                 continue
             text = text.replace(f'https://{host}', canonical)
             text = text.replace(f'http://{host}', canonical)
-        # Cloud Run regional URLs (*.run.app)
         text = re.sub(
             r'https://[a-z0-9-]+(?:\.[a-z0-9-]+)*\.run\.app',
             canonical,
