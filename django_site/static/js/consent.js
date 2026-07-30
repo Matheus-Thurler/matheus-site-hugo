@@ -1,6 +1,6 @@
 /**
- * Cookie consent + lazy third-party scripts (GA via Partytown, AdSense, Giscus).
- * Marketing scripts load only after consent; Giscus loads when comments scroll into view.
+ * Cookie consent + lazy third-party scripts (GA via Partytown, Giscus).
+ * AdSense loads from adsense_head.html (same as Hugo — not gated by consent).
  */
 (function () {
   "use strict";
@@ -76,44 +76,6 @@
       });
   }
 
-  function adsenseClientId() {
-    var id = window.__ADSENSE_ID__ || "";
-    if (id.indexOf("ca-pub-") === 0) return id;
-    if (id.indexOf("pub-") === 0) return "ca-" + id;
-    return id;
-  }
-
-  function loadAdSense() {
-    if (!window.__ADSENSE_ID__) return;
-    if (!document.querySelector(".adsense-slot")) return;
-
-    var clientId = adsenseClientId();
-
-    loadScript(
-      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" +
-        clientId,
-      { crossorigin: "anonymous" }
-    )
-      .then(function () {
-        initAdSlots();
-      })
-      .catch(function () {});
-  }
-
-  function initAdSlots() {
-    document.querySelectorAll(".adsense-slot").forEach(function (slot) {
-      slot.classList.remove("hidden");
-      var ins = slot.querySelector("ins.adsbygoogle");
-      if (!ins || ins.dataset.initialized === "true") return;
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        ins.dataset.initialized = "true";
-      } catch (err) {
-        /* adsbygoogle not ready */
-      }
-    });
-  }
-
   function loadGiscus() {
     var root = document.getElementById("giscus-root");
     if (!root || root.dataset.loaded === "true") return;
@@ -149,37 +111,6 @@
     root.dataset.loaded = "true";
   }
 
-  function initAdSenseLazy() {
-    var slots = document.querySelectorAll(".adsense-slot");
-    if (!slots.length) return;
-
-    function maybeLoad() {
-      if (localStorage.getItem(CONSENT_KEY) !== "accepted") return;
-      loadAdSense();
-    }
-
-    if (!("IntersectionObserver" in window)) {
-      scheduleIdle(maybeLoad);
-      return;
-    }
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            observer.disconnect();
-            scheduleIdle(maybeLoad);
-          }
-        });
-      },
-      { rootMargin: "240px 0px" }
-    );
-
-    slots.forEach(function (slot) {
-      observer.observe(slot);
-    });
-  }
-
   function initGiscusLazy() {
     var root = document.getElementById("giscus-root");
     if (!root) return;
@@ -205,7 +136,6 @@
 
   function loadThirdParties() {
     scheduleIdle(loadGoogleAnalytics);
-    initAdSenseLazy();
   }
 
   function hideBanner(banner) {
