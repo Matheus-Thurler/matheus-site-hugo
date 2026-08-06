@@ -217,26 +217,31 @@ def _load_youtube_data():
     return get_youtube_data()
 
 
-@public_cache_page(_cache_timeout())
-def home(request):
-    """Home page view."""
-    lang = get_current_language()
-    recent_posts = Post.objects.published()[:settings.RECENT_POSTS_COUNT]
-
-    # Get or create default author
-    author, _ = Author.objects.get_or_create(
+def _default_author():
+    """Author profile synced from settings (source of truth for public copy)."""
+    author, _ = Author.objects.update_or_create(
         slug='matheus-thurler',
         defaults={
             'name': settings.AUTHOR_NAME,
             'title': settings.AUTHOR_TITLE,
             'description': settings.AUTHOR_DESCRIPTION,
-            'avatar': 'images/avatar.webp',
+            'content_teaching': settings.AUTHOR_CONTENT_TEACHING,
+            'goals': settings.AUTHOR_GOALS,
             'github': settings.AUTHOR_GITHUB,
             'youtube': settings.AUTHOR_YOUTUBE,
             'linkedin': settings.AUTHOR_LINKEDIN,
             'email': settings.AUTHOR_EMAIL,
-        }
+        },
     )
+    return author
+
+
+@public_cache_page(_cache_timeout())
+def home(request):
+    """Home page view."""
+    lang = get_current_language()
+    recent_posts = Post.objects.published()[:settings.RECENT_POSTS_COUNT]
+    author = _default_author()
 
     context = {
         'lang': lang,
@@ -253,22 +258,7 @@ def home(request):
 def about(request):
     """About page view."""
     lang = get_current_language()
-
-    # Get or create default author
-    author, _ = Author.objects.get_or_create(
-        slug='matheus-thurler',
-        defaults={
-            'name': settings.AUTHOR_NAME,
-            'title': settings.AUTHOR_TITLE,
-            'description': settings.AUTHOR_DESCRIPTION,
-            'content_teaching': settings.AUTHOR_CONTENT_TEACHING,
-            'goals': settings.AUTHOR_GOALS,
-            'github': settings.AUTHOR_GITHUB,
-            'youtube': settings.AUTHOR_YOUTUBE,
-            'linkedin': settings.AUTHOR_LINKEDIN,
-            'email': settings.AUTHOR_EMAIL,
-        }
-    )
+    author = _default_author()
 
     # Convert goals text to list
     goals_list = []

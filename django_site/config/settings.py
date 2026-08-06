@@ -254,22 +254,63 @@ SITE_KEYWORDS = ['DevOps', 'Google Cloud', 'GCP', 'Kubernetes', 'Terraform', 'Pl
 
 # Author info
 AUTHOR_NAME = 'Matheus Thurler'
-AUTHOR_TITLE = 'DevOps & Platform Engineer | Google Cloud | SRE | AI'
-AUTHOR_DESCRIPTION = 'DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and Site Reliability Engineering. Creating content about DevOps, Cloud, and automation.'
+AUTHOR_TITLE = 'DevOps & Platform Engineer | Creator of VirtFoundry'
+AUTHOR_DESCRIPTION = (
+    'DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and SRE. '
+    'Creator of VirtFoundry — an open-source Kubernetes-native IaaS control plane on KubeVirt.'
+)
 AUTHOR_CONTENT_TEACHING = 'I create tutorials and educational content about DevOps, Cloud Native technologies, and Platform Engineering. My goal is to help others learn complex topics through practical, real-world examples.'
-AUTHOR_GOALS = 'Google Cloud Innovator program\nContributing to open source projects\nBuilding a community around Platform Engineering\nLearning and sharing about AI/LLM integration in DevOps workflows'
+AUTHOR_GOALS = (
+    'Growing VirtFoundry as open-source KubeVirt IaaS\n'
+    'Google Cloud Innovator program\n'
+    'Contributing to open source projects\n'
+    'Building a community around Platform Engineering\n'
+    'Learning and sharing about AI/LLM integration in DevOps workflows'
+)
 AUTHOR_GITHUB = 'https://github.com/Matheus-Thurler'
 AUTHOR_YOUTUBE = 'https://youtube.com/@matheusthurler'
 AUTHOR_LINKEDIN = 'https://linkedin.com/in/matheusthurler'
 AUTHOR_EMAIL = 'matheus@matheusthurler.com.br'
 AUTHOR_AVATAR = 'images/avatar.png'
 AUTHOR_LINKS_SUBTITLE = 'DevOps Engineer & Content Creator'
+VIRTFOUNDRY_URL = 'https://github.com/virtfoundry'
 
 AUTHOR_SOCIAL = [
     {'name': 'GitHub', 'url': AUTHOR_GITHUB, 'icon': 'github'},
     {'name': 'YouTube', 'url': AUTHOR_YOUTUBE, 'icon': 'youtube'},
     {'name': 'LinkedIn', 'url': AUTHOR_LINKEDIN, 'icon': 'linkedin'},
     {'name': 'Email', 'url': f'mailto:{AUTHOR_EMAIL}', 'icon': 'email'},
+]
+
+# Highlighted on /projects/ (org lives under github.com/virtfoundry)
+FEATURED_PROJECTS = [
+    {
+        'name': 'VirtFoundry',
+        'description': (
+            'Open-source Kubernetes-native IaaS control plane on KubeVirt — '
+            'multi-tenant VMs, networking, and a CloudStack-inspired API.'
+        ),
+        'url': 'https://github.com/virtfoundry',
+        'language': 'Go',
+        'role': 'Creator',
+        'stars': None,
+    },
+    {
+        'name': 'virtfoundry/core',
+        'description': 'API, worker, and UI for the VirtFoundry control plane.',
+        'url': 'https://github.com/virtfoundry/core',
+        'language': 'Go',
+        'role': 'Creator',
+        'stars': None,
+    },
+    {
+        'name': 'virtfoundry/helm-charts',
+        'description': 'Helm charts and docs to install VirtFoundry on Kubernetes.',
+        'url': 'https://github.com/virtfoundry/helm-charts',
+        'language': 'YAML',
+        'role': 'Creator',
+        'stars': None,
+    },
 ]
 
 LINKS_PAGE_PT = [

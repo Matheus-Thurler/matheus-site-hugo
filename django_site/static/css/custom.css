@@ -11,6 +11,23 @@
   border: 0;
 }
 
+/* Home hero: beat base.html a { text-decoration: inherit } */
+a.virtfoundry-link,
+a.virtfoundry-link:link,
+a.virtfoundry-link:visited {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--color-primary) 70%, transparent);
+}
+
+a.virtfoundry-link:hover,
+a.virtfoundry-link:focus-visible {
+  text-decoration-color: var(--color-primary);
+}
+
 .skip-link:focus-visible {
   position: fixed;
   top: 0.75rem;

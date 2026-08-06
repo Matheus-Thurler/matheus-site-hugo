@@ -13,7 +13,6 @@ from blog.platform import (
     analytics_dashboard_stats,
     ask_post_question,
     check_homelab_status,
-    get_projects_data,
     get_start_here_posts,
     parse_changelog,
 )
@@ -53,15 +52,18 @@ def start_here(request):
 
 def projects(request):
     lang = get_current_language()
-    repos = get_projects_data()
+    from blog.platform import get_projects_page_data
+
+    data = get_projects_page_data()
     return render(request, 'blog/projects.html', {
         'lang': lang,
-        'repos': repos,
+        'featured': data['featured'],
+        'repos': data['repos'],
         'title': 'Projetos' if lang == 'pt' else 'Projects',
         'description': (
-            'Repositórios open source'
+            'VirtFoundry e repositórios open source'
             if lang == 'pt'
-            else 'Open source repositories'
+            else 'VirtFoundry and open source repositories'
         ),
     })
 

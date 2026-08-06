@@ -164,6 +164,25 @@ def get_projects_data() -> list[dict]:
     return fetch_github_projects()
 
 
+def get_featured_projects() -> list[dict]:
+    """Highlighted projects (e.g. VirtFoundry) shown above the GitHub list."""
+    return list(getattr(settings, 'FEATURED_PROJECTS', []) or [])
+
+
+def get_projects_page_data() -> dict:
+    featured = get_featured_projects()
+    featured_urls = {p.get('url') for p in featured if p.get('url')}
+    featured_names = {p.get('name', '').lower() for p in featured}
+    repos = []
+    for repo in get_projects_data():
+        url = repo.get('url', '')
+        name = (repo.get('name') or '').lower()
+        if url in featured_urls or name in featured_names or name.startswith('virtfoundry'):
+            continue
+        repos.append(repo)
+    return {'featured': featured, 'repos': repos}
+
+
 def sync_github_projects(config, dry_run=False):
     projects = fetch_github_projects()
     if not dry_run and config:

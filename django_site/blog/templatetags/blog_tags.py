@@ -2,11 +2,27 @@
 import re
 
 from django import template
+from django.conf import settings
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
 from blog.markdown_utils import render_markdown
 
 register = template.Library()
+
+
+@register.filter(is_safe=True)
+def linkify_virtfoundry(text):
+    """Wrap plain-text VirtFoundry mentions with a link to the project repo."""
+    if not text:
+        return ''
+    url = getattr(settings, 'VIRTFOUNDRY_URL', 'https://github.com/virtfoundry')
+    escaped = escape(str(text))
+    link = (
+        f'<a href="{escape(url)}" target="_blank" rel="noopener noreferrer" '
+        f'class="virtfoundry-link">VirtFoundry</a>'
+    )
+    return mark_safe(escaped.replace('VirtFoundry', link))
 
 
 @register.filter
