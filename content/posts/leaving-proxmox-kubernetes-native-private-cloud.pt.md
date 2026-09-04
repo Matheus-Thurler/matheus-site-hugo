@@ -2,7 +2,7 @@
 title: "Criei o VirtFoundry: operator Kubernetes rumo ao CNCF Sandbox"
 date: 2026-09-04
 description: "Eu criei o VirtFoundry — operator + CRDs + UI para nuvem privada no KubeVirt. Arquitetura, o que já funciona, comparação honesta e o caminho até o CNCF Sandbox."
-cover: /images/covers/virtfoundry-ui-vms.png
+cover: /images/covers/virtfoundry-logo.png
 readingTime: "12"
 katex: false
 mermaid: false
@@ -17,6 +17,8 @@ categories: ['kubernetes', 'homelab']
 O hypervisor é o [KubeVirt](https://kubevirt.io/). A fonte da verdade não é MySQL: é o próprio Kubernetes. O destino do projeto é **candidatar ao [CNCF Sandbox](https://github.com/cncf/sandbox)**.
 
 Ainda **não** é um projeto da CNCF. Estamos construindo operator, charts, provider Terraform e comunidade para submeter quando o repositório completar a maturidade mínima — não antes.
+
+![Lista de VMs no VirtFoundry](/images/covers/virtfoundry-ui-vms.png)
 
 ## O problema que eu queria resolver
 

@@ -2,7 +2,7 @@
 title: "I created VirtFoundry: a Kubernetes operator on a path to CNCF Sandbox"
 date: 2026-09-04
 description: "I created VirtFoundry — operator + CRDs + UI for private cloud on KubeVirt. Architecture, what works today, an honest comparison, and the road to CNCF Sandbox."
-cover: /images/covers/virtfoundry-ui-vms.png
+cover: /images/covers/virtfoundry-logo.png
 readingTime: "12"
 katex: false
 mermaid: false
@@ -17,6 +17,8 @@ categories: ['kubernetes', 'homelab']
 The hypervisor is [KubeVirt](https://kubevirt.io/). Source of truth is not MySQL: it is Kubernetes. The destination is a **[CNCF Sandbox](https://github.com/cncf/sandbox)** application.
 
 It is **not** a CNCF project yet. We are building the operator, charts, Terraform provider, and community so we can apply when the repo meets the maturity bar — not before.
+
+![VirtFoundry VM list](/images/covers/virtfoundry-ui-vms.png)
 
 ## The problem I wanted to solve
 
