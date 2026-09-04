@@ -8,13 +8,14 @@ Sou Matheus Thurler, DevOps & Platform Engineer na CI&T, baseado no Brasil. Meu 
 
 Trabalho com tecnologia desde 2012, construindo e operando infraestrutura de produção em escala. Hoje meu foco é ajudar times a entregar software mais rápido e com mais confiabilidade através de platform engineering, automação e práticas cloud-native.
 
-Também mantenho um homelab com Apache CloudStack e Kubernetes — meu laboratório pessoal para testar ideias antes de irem para produção.
+Sou o criador do [VirtFoundry](https://github.com/virtfoundry) — um control plane IaaS open-source, Kubernetes-native, em cima do KubeVirt. Também mantenho um homelab com Apache CloudStack e Kubernetes — meu laboratório pessoal para testar ideias antes de irem para produção.
 
 ## Com o que trabalho
 
+- **Open source:** [VirtFoundry](https://github.com/virtfoundry) (criador) — IaaS Kubernetes-native no KubeVirt
 - **Cloud:** Google Cloud Platform (GKE, Cloud Run, Cloud Build, Vertex AI)
 - **Infrastructure as Code:** Terraform, Ansible, NixOS
-- **Containers & Orquestração:** Kubernetes, Docker, Helm, ArgoCD
+- **Containers & Orquestração:** Kubernetes, Docker, Helm, ArgoCD, KubeVirt
 - **CI/CD:** GitHub Actions, Cloud Build, GitOps workflows
 - **Observabilidade:** Prometheus, Grafana, OpenTelemetry, Cloud Monitoring
 - **Linguagens:** Go, Python, Shell
@@ -29,6 +30,7 @@ Crio conteúdo em português sobre DevOps, Cloud e automação — conectando ex
 
 ## Objetivos Atuais
 
+- Crescer o VirtFoundry como IaaS open-source no KubeVirt
 - Programa Google Cloud Innovator
 - Google Developer Experts (Cloud)
 - Google GEAR — IA Generativa para DevOps

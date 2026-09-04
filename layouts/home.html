@@ -5,64 +5,62 @@
     {{ $author := .Params.author | default site.Params.author }}
     
     {{ if $author }}
+      {{ $vfUrl := site.Params.virtfoundryUrl | default "https://github.com/virtfoundry" }}
+      {{ $vfLink := printf `<a href="%s" target="_blank" rel="noopener noreferrer" class="virtfoundry-link text-primary font-semibold underline decoration-2 underline-offset-4 decoration-primary/70 hover:decoration-primary">VirtFoundry</a>` $vfUrl }}
       <section class="author-section mb-12">
-        <div class="bg-card border-border rounded-xl border p-8 shadow-sm">
-          <div
-            class="flex flex-col items-center gap-6 text-center md:flex-row md:items-start md:text-left">
-            <!-- 头像 -->
-            <div class="flex-shrink-0">
+        <div class="bg-card border-border rounded-xl border p-8 shadow-sm md:p-10">
+          <div class="mx-auto flex max-w-2xl flex-col items-center text-center">
+            <div class="mb-5">
               {{ if $author.avatar }}
                 <img
                   src="{{ $author.avatar }}"
                   alt="{{ $author.name | default site.Title }}"
-                  class="border-primary/20 h-24 w-24 rounded-full border-4 object-cover shadow-lg" />
+                  width="112"
+                  height="112"
+                  decoding="async"
+                  fetchpriority="high"
+                  class="hero-avatar border-primary/20 mx-auto h-28 w-28 rounded-full border-4 object-cover shadow-lg" />
               {{ else }}
-                <!-- 默认头像：使用作者姓名首字母 -->
                 <div
-                  class="bg-primary text-primary-foreground flex h-24 w-24 items-center justify-center rounded-full text-2xl font-bold shadow-lg">
+                  class="hero-avatar bg-primary text-primary-foreground mx-auto flex h-28 w-28 items-center justify-center rounded-full text-3xl font-bold shadow-lg">
                   {{ substr ($author.name | default site.Title) 0 1 | upper }}
                 </div>
               {{ end }}
             </div>
 
-            <!-- 作者信息 -->
-            <div class="min-w-0 flex-1">
-              <h1 class="text-foreground mb-2 text-3xl font-bold">
-                {{ $author.name | default site.Title }}
-              </h1>
+            <h1 class="text-foreground mb-2 text-3xl font-bold md:text-4xl">
+              {{ $author.name | default site.Title }}
+            </h1>
 
-              {{ if $author.title }}
-                <p class="text-muted-foreground mb-3 text-lg">
-                  {{ $author.title }}
-                </p>
-              {{ end }}
+            {{ with $author.title }}
+              <p class="text-muted-foreground mb-4 text-lg">
+                {{ replace . "VirtFoundry" $vfLink | safeHTML }}
+              </p>
+            {{ end }}
 
-              {{ if $author.description }}
-                <p class="text-foreground mb-4 leading-relaxed">
-                  {{ $author.description }}
-                </p>
-              {{ end }}
+            {{ with $author.description }}
+              <p class="text-foreground mb-6 max-w-xl text-base leading-relaxed">
+                {{ replace . "VirtFoundry" $vfLink | safeHTML }}
+              </p>
+            {{ end }}
 
-              <!-- 社交链接 -->
-              {{ if $author.social }}
-                <div
-                  class="flex flex-wrap justify-center gap-3 md:justify-start">
-                  {{ range $author.social }}
-                    <a
-                      href="{{ .url }}"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="bg-muted text-muted-foreground hover:text-primary hover:bg-primary/10 focus:ring-primary/20 inline-flex items-center gap-2 rounded-lg px-3 py-2 transition-all duration-300 ease-out hover:-translate-y-0.5 hover:scale-105 focus:ring-2 focus:outline-none"
-                      title="{{ .name }}">
-                      {{ if .icon }}
-                        {{ partial "features/icon.html" (dict "name" .icon "size" "sm" "ariaLabel" .name) }}
-                      {{ end }}
-                      <span class="text-sm font-medium">{{ .name }}</span>
-                    </a>
-                  {{ end }}
-                </div>
-              {{ end }}
-            </div>
+            {{ with $author.social }}
+              <div class="flex flex-wrap justify-center gap-3">
+                {{ range . }}
+                  <a
+                    href="{{ .url }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="bg-muted text-muted-foreground hover:text-primary hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-colors"
+                    title="{{ .name }}">
+                    {{ if .icon }}
+                      {{ partial "features/icon.html" (dict "name" .icon "size" "sm" "ariaLabel" .name) }}
+                    {{ end }}
+                    <span>{{ .name }}</span>
+                  </a>
+                {{ end }}
+              </div>
+            {{ end }}
           </div>
         </div>
       </section>

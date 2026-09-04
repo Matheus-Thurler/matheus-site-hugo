@@ -8,13 +8,14 @@ I'm Matheus Thurler, a DevOps & Platform Engineer at CI&T based in Brazil. I spe
 
 I've been working in tech since 2012, building and operating production infrastructure at scale. Today my focus is on helping teams ship faster and more reliably through platform engineering, automation, and cloud-native practices.
 
-I also run a homelab with Apache CloudStack and Kubernetes — my personal playground for testing ideas before they hit production.
+I'm the creator of [VirtFoundry](https://github.com/virtfoundry) — an open-source Kubernetes-native IaaS control plane on KubeVirt. I also run a homelab with Apache CloudStack and Kubernetes — my personal playground for testing ideas before they hit production.
 
 ## What I Work With
 
+- **Open source:** [VirtFoundry](https://github.com/virtfoundry) (creator) — Kubernetes-native IaaS on KubeVirt
 - **Cloud:** Google Cloud Platform (GKE, Cloud Run, Cloud Build, Vertex AI)
 - **Infrastructure as Code:** Terraform, Ansible, NixOS
-- **Containers & Orchestration:** Kubernetes, Docker, Helm, ArgoCD
+- **Containers & Orchestration:** Kubernetes, Docker, Helm, ArgoCD, KubeVirt
 - **CI/CD:** GitHub Actions, Cloud Build, GitOps workflows
 - **Observability:** Prometheus, Grafana, OpenTelemetry, Cloud Monitoring
 - **Languages:** Go, Python, Shell
@@ -29,6 +30,7 @@ I create content in Portuguese about DevOps, Cloud, and automation — bridging 
 
 ## Current Goals
 
+- Growing VirtFoundry as open-source KubeVirt IaaS
 - Google Cloud Innovator program
 - Google Developer Experts (Cloud)
 - Google GEAR — Generative AI for DevOps

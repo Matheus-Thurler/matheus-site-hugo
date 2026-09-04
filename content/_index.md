@@ -3,8 +3,8 @@ title: "Home"
 
 author:
     name: "Matheus Thurler"
-    title: "DevOps & Platform Engineer | Google Cloud | SRE | AI"
-    description: "DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and Site Reliability Engineering. Creating content about DevOps, Cloud, and automation."
+    title: "DevOps & Platform Engineer | Creator of VirtFoundry"
+    description: "DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and SRE. Creator of VirtFoundry — an open-source Kubernetes-native IaaS control plane on KubeVirt."
     avatar: "/images/avatar.png"
     social:
       - name: "GitHub"

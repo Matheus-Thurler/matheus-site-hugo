@@ -1,0 +1,25 @@
+/* Hero + VirtFoundry link (loaded via assets/css/custom/*) */
+.hero-avatar {
+  width: 7rem;
+  height: 7rem;
+}
+
+.author-section h1 {
+  line-height: 1.2;
+}
+
+a.virtfoundry-link,
+a.virtfoundry-link:link,
+a.virtfoundry-link:visited {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: color-mix(in srgb, var(--color-primary) 70%, transparent);
+}
+
+a.virtfoundry-link:hover,
+a.virtfoundry-link:focus-visible {
+  text-decoration-color: var(--color-primary);
+}
