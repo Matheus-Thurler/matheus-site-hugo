@@ -1,4 +1,10 @@
 {{ with site.Params.googleAdsenseId }}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-{{ . }}"
-    crossorigin="anonymous"></script>
+{{- $client := . -}}
+{{- if not (hasPrefix $client "ca-") -}}
+  {{- $client = printf "ca-%s" $client -}}
+{{- end -}}
+<meta name="google-adsense-account" content="{{ $client }}">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}"
+    crossorigin="anonymous"
+    data-overlays="bottom"></script>
 {{ end }}

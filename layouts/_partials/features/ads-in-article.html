@@ -1,15 +1,15 @@
-{{ if .Site.Params.googleAdsenseId }}
-{{ $client := .Site.Params.googleAdsenseId }}
+{{ $client := site.Params.googleAdsenseId }}
+{{ $slot := site.Params.googleAdsenseInArticleSlot }}
+{{ if and $client $slot (ne $slot "auto") }}
 {{ if not (hasPrefix $client "ca-") }}
   {{ $client = printf "ca-%s" $client }}
 {{ end }}
 <div class="my-8 flex flex-col items-center justify-center overflow-hidden not-prose">
     <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article"
         data-ad-format="fluid" data-ad-client="{{ $client }}"
-        data-ad-slot='{{ .slot | default "auto" }}'></ins>
+        data-ad-slot="{{ $slot }}"></ins>
     <script>
         (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
-    <span class="text-xs text-muted-foreground mt-1">Advertisement</span>
 </div>
 {{ end }}

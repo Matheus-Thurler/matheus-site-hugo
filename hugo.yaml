@@ -308,7 +308,9 @@ params:
       id: "G-G73F8VFQNC"
 
   # Google AdSense
-  googleAdsenseId: "pub-3348120452456400" # Coloque seu ID aqui (ex: pub-1234567890)
+  googleAdsenseId: "pub-3348120452456400"
+  # Slot numérico de unidade in-article (AdSense → Anúncios → Por unidade). Sem isso, só Auto ads in-page.
+  # googleAdsenseInArticleSlot: ""
 
 
   katex:

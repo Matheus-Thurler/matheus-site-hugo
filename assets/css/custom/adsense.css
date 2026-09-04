@@ -1,0 +1,11 @@
+/* In-page Auto ads: não injetar em chrome da página (nav, meta, footer). */
+.post-meta,
+.breadcrumb,
+#cookie-consent,
+#dock {
+  google-auto-ads: ignore;
+}
+
+header {
+  google-auto-ads: ignore;
+}

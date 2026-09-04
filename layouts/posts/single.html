@@ -41,7 +41,7 @@
 <article class="prose prose-neutral dark:prose-invert mb-12 max-w-none">
   {{ .Content }}
 
-  {{ partial "features/ads-in-article.html" (dict "Site" .Site "slot" "auto") }}
+  {{ partial "features/ads-in-article.html" . }}
 </article>
 
 {{ partial "content/post-license.html" . }}
