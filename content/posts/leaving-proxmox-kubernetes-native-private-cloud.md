@@ -2,7 +2,7 @@
 title: "I created VirtFoundry: a Kubernetes operator on a path to CNCF Sandbox"
 date: 2026-09-04
 description: "I created VirtFoundry — operator + CRDs + UI for private cloud on KubeVirt. Architecture, what works today, an honest comparison, and the road to CNCF Sandbox."
-cover: /images/covers/virtfoundry-logo.png
+cover: /images/covers/virtfoundry-logo-card.png
 readingTime: "12"
 katex: false
 mermaid: false
