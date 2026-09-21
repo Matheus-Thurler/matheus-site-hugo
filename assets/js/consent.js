@@ -4,8 +4,24 @@
   const key = "cookie-consent-accepted";
   const cfg = window.__siteConsent || {};
 
+  window.dataLayer = window.dataLayer || [];
+  window.gtag =
+    window.gtag ||
+    function gtag() {
+      window.dataLayer.push(arguments);
+    };
+  window.gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    wait_for_update: 500,
+  });
+
   const loadScript = (src, attrs = {}) => {
-    if ([...document.scripts].some((s) => s.src === src)) return;
+    if ([...document.scripts].some((s) => s.src === src || s.getAttribute("src") === src)) {
+      return;
+    }
     const script = document.createElement("script");
     script.src = src;
     script.async = true;
@@ -16,11 +32,13 @@
   };
 
   const enableTracking = () => {
-    if (cfg.gaId && !window.gtag) {
-      window.dataLayer = window.dataLayer || [];
-      window.gtag = function gtag() {
-        window.dataLayer.push(arguments);
-      };
+    window.gtag("consent", "update", {
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      analytics_storage: "granted",
+    });
+    if (cfg.gaId) {
       loadScript(`https://www.googletagmanager.com/gtag/js?id=${cfg.gaId}`);
       window.gtag("js", new Date());
       window.gtag("config", cfg.gaId, { anonymize_ip: true });

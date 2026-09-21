@@ -20,20 +20,28 @@
     return;
   }
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d", { alpha: true });
+  if (!ctx) return;
+
   const nodes = [];
   const count = 18;
+  let frame = 0;
 
   const resize = () => {
-    canvas.width = canvas.clientWidth * devicePixelRatio;
-    canvas.height = canvas.clientHeight * devicePixelRatio;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    if (!w || !h) return false;
+    canvas.width = w * devicePixelRatio;
+    canvas.height = h * devicePixelRatio;
     ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    return true;
   };
 
   const seed = () => {
     nodes.length = 0;
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
+    if (!w || !h) return;
     for (let i = 0; i < count; i += 1) {
       nodes.push({
         x: Math.random() * w,
@@ -45,8 +53,10 @@
   };
 
   const step = () => {
+    frame = requestAnimationFrame(step);
     const w = canvas.clientWidth;
     const h = canvas.clientHeight;
+    if (!w || !h) return;
     ctx.clearRect(0, 0, w, h);
     ctx.lineWidth = 1;
     nodes.forEach((n) => {
@@ -75,14 +85,23 @@
       ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
       ctx.fill();
     });
-    requestAnimationFrame(step);
   };
 
-  resize();
+  if (!resize()) return;
   seed();
   step();
-  window.addEventListener("resize", () => {
-    resize();
-    seed();
+  window.addEventListener(
+    "resize",
+    () => {
+      if (resize()) seed();
+    },
+    { passive: true }
+  );
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      cancelAnimationFrame(frame);
+    } else {
+      step();
+    }
   });
 })();

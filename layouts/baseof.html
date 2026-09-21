@@ -6,11 +6,7 @@
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="{{ site.Params.themeColor | default `#0c1116` }}" />
     {{ partial "seo.html" . }}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
-      rel="stylesheet" />
+    <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
     {{ $syntax := resources.Get "css/syntax.css" }}
     {{ $main := resources.Get "css/main.css" }}
     {{ with slice $syntax $main | resources.Concat "css/site.css" | minify | fingerprint }}

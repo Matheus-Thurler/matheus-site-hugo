@@ -34,7 +34,7 @@
               <span class="kind-tag">{{ i18n "kind_video" }}</span>
               <span class="run"><span class="pulse"></span> Running</span>
             </div>
-            <img src="{{ .thumbnail }}" alt="" width="480" height="270" />
+            <img src="{{ .thumbnail }}" alt="{{ .title }}" width="480" height="270" loading="lazy" decoding="async" />
             <div class="meta">
               <h3>{{ .title }}</h3>
               <p>{{ i18n "watch" }} · {{ .id }}</p>
