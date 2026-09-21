@@ -23,29 +23,31 @@
       {{ partial "boot.html" . }}
     {{ end }}
     <canvas id="mesh" aria-hidden="true"></canvas>
-    {{ partial "cluster-bar.html" . }}
-    <header class="site-header wrap">
-      <a class="wordmark" href="{{ site.Home.RelPermalink }}">
-        <span class="prompt">control-plane/</span>{{ site.Title | anchorize }}
-      </a>
-      <nav class="nav" aria-label="{{ i18n "nav_main" }}">
-        {{ with site.GetPage "/posts" }}
-          <a href="{{ .RelPermalink }}" {{ if eq $.Section "posts" }}class="is-active"{{ end }}>
-            {{ i18n "nav.posts" }}
-          </a>
-        {{ end }}
-        {{ with site.GetPage "/about" }}
-          <a href="{{ .RelPermalink }}" {{ if eq $.RelPermalink .RelPermalink }}class="is-active"{{ end }}>
-            {{ i18n "nav.about" }}
-          </a>
-        {{ end }}
-        <div class="lang" aria-label="{{ i18n "nav_language" }}">
-          {{ range .AllTranslations }}
-            <a href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode }}" {{ if eq .Lang $.Lang }}class="is-active" aria-current="true"{{ end }}>{{ .Lang }}</a>
+    <div class="site-chrome">
+      {{ partial "cluster-bar.html" . }}
+      <header class="site-header wrap">
+        <a class="wordmark" href="{{ site.Home.RelPermalink }}">
+          <span class="prompt">control-plane/</span>{{ site.Title | anchorize }}
+        </a>
+        <nav class="nav" aria-label="{{ i18n "nav_main" }}">
+          {{ with site.GetPage "/posts" }}
+            <a href="{{ .RelPermalink }}" {{ if eq $.Section "posts" }}class="is-active"{{ end }}>
+              {{ i18n "nav.posts" }}
+            </a>
           {{ end }}
-        </div>
-      </nav>
-    </header>
+          {{ with site.GetPage "/about" }}
+            <a href="{{ .RelPermalink }}" {{ if eq $.RelPermalink .RelPermalink }}class="is-active"{{ end }}>
+              {{ i18n "nav.about" }}
+            </a>
+          {{ end }}
+          <div class="lang" aria-label="{{ i18n "nav_language" }}">
+            {{ range .AllTranslations }}
+              <a href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode }}" {{ if eq .Lang $.Lang }}class="is-active" aria-current="true"{{ end }}>{{ .Lang }}</a>
+            {{ end }}
+          </div>
+        </nav>
+      </header>
+    </div>
     <main id="main">
       {{ block "main" . }}{{ end }}
     </main>
