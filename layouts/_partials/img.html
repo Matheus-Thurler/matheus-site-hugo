@@ -1,4 +1,4 @@
-{{- $img := partial "processed-image.html" . -}}
+{{- $img := partial "processed-image.html" . | transform.Unmarshal -}}
 <img
   src="{{ $img.src }}"
   alt="{{ .alt }}"

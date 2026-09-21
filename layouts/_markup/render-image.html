@@ -4,7 +4,7 @@
 {{- $width := 0 -}}
 {{- $height := 0 -}}
 {{- if not $isAbs }}
-  {{- $img := partial "processed-image.html" (dict "path" $dest "width" 1200 "quality" 78) -}}
+  {{- $img := partial "processed-image.html" (dict "path" $dest "width" 1200 "quality" 78) | transform.Unmarshal -}}
   {{- $src = $img.src -}}
   {{- $width = $img.width -}}
   {{- $height = $img.height -}}

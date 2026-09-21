@@ -19,8 +19,8 @@
         </div>
       </div>
       {{ with $author.avatar }}
-        {{ $a144 := partial "processed-image.html" (dict "path" . "width" 144 "height" 144 "fill" true "quality" 80) }}
-        {{ $a224 := partial "processed-image.html" (dict "path" . "width" 224 "height" 224 "fill" true "quality" 80) }}
+        {{ $a144 := partial "processed-image.html" (dict "path" . "width" 144 "height" 144 "fill" true "quality" 80) | transform.Unmarshal }}
+        {{ $a224 := partial "processed-image.html" (dict "path" . "width" 224 "height" 224 "fill" true "quality" 80) | transform.Unmarshal }}
         <img
           class="hero-avatar"
           src="{{ $a224.src }}"
@@ -45,8 +45,8 @@
               <span class="run"><span class="pulse"></span> Running</span>
             </div>
             {{ $lcp := eq $i 0 }}
-            {{ $w480 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 480 "quality" 76) }}
-            {{ $w800 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 800 "quality" 76) }}
+            {{ $w480 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 480 "quality" 76) | transform.Unmarshal }}
+            {{ $w800 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 800 "quality" 76) | transform.Unmarshal }}
             <img
               src="{{ $w800.src }}"
               srcset="{{ $w480.src }} 480w, {{ $w800.src }} 800w"
