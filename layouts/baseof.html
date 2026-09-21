@@ -11,8 +11,8 @@
     {{ if .IsHome }}
       {{ with site.Data.youtube.recent_videos }}
         {{ with index . 0 }}
-          {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 76) }}
-          {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 76) }}
+          {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 76) | transform.Unmarshal }}
+          {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 76) | transform.Unmarshal }}
           <link
             rel="preload"
             as="image"
@@ -24,7 +24,7 @@
       {{ end }}
     {{ else if and .IsPage (eq .Section "posts") }}
       {{ with .Params.cover }}
-        {{ $cover := partial "processed-image.html" (dict "path" . "width" 1200 "quality" 78) }}
+        {{ $cover := partial "processed-image.html" (dict "path" . "width" 1200 "quality" 78) | transform.Unmarshal }}
         <link rel="preload" as="image" href="{{ $cover.src }}" fetchpriority="high" />
       {{ end }}
     {{ end }}
