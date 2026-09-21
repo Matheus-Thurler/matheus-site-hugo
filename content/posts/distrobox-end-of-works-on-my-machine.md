@@ -2,7 +2,7 @@
 title: "The End of 'It Works on My Machine': How Distrobox Saves Your PC!"
 date: 2026-03-16T10:00:00-03:00
 description: "Learn how to stop breaking your OS with conflicting packages. Use Distrobox to create isolated and perfectly integrated development environments."
-cover: /images/covers/distrobox-video.png
+cover: /images/covers/distrobox-video.webp
 readingTime: "5"
 katex: false
 mermaid: false

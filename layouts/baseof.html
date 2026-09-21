@@ -7,10 +7,34 @@
     <meta name="theme-color" content="{{ site.Params.themeColor | default `#0c1116` }}" />
     {{ partial "seo.html" . }}
     <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
-    {{ $syntax := resources.Get "css/syntax.css" }}
-    {{ $main := resources.Get "css/main.css" }}
-    {{ with slice $syntax $main | resources.Concat "css/site.css" | minify | fingerprint }}
-      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" />
+    <link rel="preload" href="/fonts/ibm-plex-mono-latin-500.woff2" as="font" type="font/woff2" crossorigin />
+    {{ if .IsHome }}
+      {{ with site.Data.youtube.recent_videos }}
+        {{ with index . 0 }}
+          {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 76) }}
+          {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 76) }}
+          <link
+            rel="preload"
+            as="image"
+            href="{{ $w480.src }}"
+            imagesrcset="{{ $w480.src }} 480w, {{ $w800.src }} 800w"
+            imagesizes="(min-width: 720px) 50vw, 92vw"
+            fetchpriority="high" />
+        {{ end }}
+      {{ end }}
+    {{ else if and .IsPage (eq .Section "posts") }}
+      {{ with .Params.cover }}
+        {{ $cover := partial "processed-image.html" (dict "path" . "width" 1200 "quality" 78) }}
+        <link rel="preload" as="image" href="{{ $cover.src }}" fetchpriority="high" />
+      {{ end }}
+    {{ end }}
+    {{ with resources.Get "css/main.css" | minify }}
+      <style>{{ .Content | safeCSS }}</style>
+    {{ end }}
+    {{ if and .IsPage (eq .Section "posts") }}
+      {{ with resources.Get "css/syntax.css" | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" />
+      {{ end }}
     {{ end }}
   </head>
   <body>

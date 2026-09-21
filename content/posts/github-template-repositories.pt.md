@@ -3,7 +3,7 @@ title: "Simplifique Seus Projetos: Como Usar Repositórios Template no GitHub"
 date: 2025-06-24
 slug: github-template-repositories
 description: "Cansado de configurar projetos do zero? Descubra como Repositórios Template no GitHub podem economizar horas de trabalho e garantir consistência em todos os seus projetos."
-cover: /images/covers/github-template-repositories.png
+cover: /images/covers/github-template-repositories.webp
 readingTime: "10"
 katex: false
 mermaid: false

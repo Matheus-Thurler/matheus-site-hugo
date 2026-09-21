@@ -2,7 +2,7 @@
 title: "How to Install Apache CloudStack with Ansible - Video Tutorial"
 date: 2026-01-28
 description: "Learn how to install and configure Apache CloudStack from scratch using Ansible in a complete video tutorial. Automate your entire homelab cloud infrastructure."
-cover: /images/covers/cloudstack-ansible-video.png
+cover: /images/covers/cloudstack-ansible-video.webp
 readingTime: "5"
 katex: false
 mermaid: false

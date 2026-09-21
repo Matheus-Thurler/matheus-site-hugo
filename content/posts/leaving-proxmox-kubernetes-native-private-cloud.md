@@ -2,7 +2,7 @@
 title: "I created VirtFoundry: a Kubernetes operator on a path to CNCF Sandbox"
 date: 2026-09-04
 description: "I created VirtFoundry — operator + CRDs + UI for private cloud on KubeVirt. Architecture, what works today, an honest comparison, and the road to CNCF Sandbox."
-cover: /images/covers/virtfoundry-logo-card.png
+cover: /images/covers/virtfoundry-logo-card.webp
 readingTime: "12"
 katex: false
 mermaid: false
@@ -18,7 +18,7 @@ The hypervisor is [KubeVirt](https://kubevirt.io/). Source of truth is not MySQL
 
 It is **not** a CNCF project yet. We are building the operator, charts, Terraform provider, and community so we can apply when the repo meets the maturity bar — not before.
 
-![VirtFoundry VM list](/images/covers/virtfoundry-ui-vms.png)
+![VirtFoundry VM list](/images/covers/virtfoundry-ui-vms.webp)
 
 ## The problem I wanted to solve
 
@@ -50,7 +50,7 @@ The control plane is an **operator**. The API group is `virtfoundry.io`. Product
 | **Terraform** | First-party provider on the [Registry](https://registry.terraform.io/providers/virtfoundry/virtfoundry) |
 | **Runtime** | KubeVirt (VM), Multus (tenant net), CSI (disks; Longhorn in the homelab) |
 
-![VirtFoundry dashboard in the homelab](/images/posts/virtfoundry-dashboard.png)
+![VirtFoundry dashboard in the homelab](/images/posts/virtfoundry-dashboard.webp)
 
 The design is **compose CNCF building blocks**, not reinvent the hypervisor or CSI. The operator reconciles `Tenant` (namespace + status) and `Instance` (phase, IP, KubeVirt name). Other kinds already exist as CRDs; controllers close the gap over time. GitOps comes free: Helm + Argo CD, CRs as source of truth.
 
@@ -60,9 +60,9 @@ The design is **compose CNCF building blocks**, not reinvent the hypervisor or C
 
 Current chart release: **0.7.0**. In the homelab that already covers the demo a TOC reviewer will click: VM + volume + snapshot + UI.
 
-![VM snapshots in VirtFoundry](/images/posts/virtfoundry-snapshots.png)
+![VM snapshots in VirtFoundry](/images/posts/virtfoundry-snapshots.webp)
 
-![Per-tenant networks and VPCs](/images/posts/virtfoundry-networks.png)
+![Per-tenant networks and VPCs](/images/posts/virtfoundry-networks.webp)
 
 | Capability | Status |
 |------------|--------|
@@ -110,7 +110,7 @@ Still open:
 
 Do not write “CNCF project”, “we are on the landscape”, or “we already applied”. The destination is Sandbox. Status today is Apache 2.0 open source, following foundation conventions.
 
-![CRD store: kubectl get crd | grep virtfoundry.io](/images/posts/virtfoundry-crds.png)
+![CRD store: kubectl get crd | grep virtfoundry.io](/images/posts/virtfoundry-crds.webp)
 
 ## Try it
 

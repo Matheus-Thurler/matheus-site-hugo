@@ -16,13 +16,17 @@ Configuração:
     YOUTUBE_CHANNEL_USERNAME=@matheusthurler
 """
 
+import io
 import os
 import json
 import sys
 import re
+import urllib.request
 from pathlib import Path
 from typing import List, Dict, Optional
 from datetime import datetime
+
+from PIL import Image
 
 try:
     import feedparser
@@ -45,6 +49,48 @@ SCRIPT_DIR = Path(__file__).parent
 PROJECT_ROOT = SCRIPT_DIR.parent
 DATA_DIR = PROJECT_ROOT / 'data'
 OUTPUT_FILE = DATA_DIR / 'youtube.json'
+THUMB_DIR = PROJECT_ROOT / 'static' / 'images' / 'youtube'
+
+
+def crop_center_16x9(im: Image.Image) -> Image.Image:
+    width, height = im.size
+    target_h = round(width * 9 / 16)
+    if height <= target_h:
+        return im
+    top = (height - target_h) // 2
+    return im.crop((0, top, width, top + target_h))
+
+
+def ensure_local_thumb(video_id: str) -> str:
+    """Download a YouTube thumbnail once and store a local WebP."""
+    dest = THUMB_DIR / f'{video_id}.webp'
+    local_url = f'/images/youtube/{video_id}.webp'
+    if dest.exists() and dest.stat().st_size > 1000:
+        return local_url
+
+    THUMB_DIR.mkdir(parents=True, exist_ok=True)
+    for name in ('maxresdefault.jpg', 'sddefault.jpg', 'hqdefault.jpg'):
+        url = f'https://i.ytimg.com/vi/{video_id}/{name}'
+        try:
+            with urllib.request.urlopen(url, timeout=20) as response:
+                data = response.read()
+        except Exception as exc:  # noqa: BLE001
+            print(f'⚠️  Falha ao baixar {url}: {exc}')
+            continue
+        try:
+            im = Image.open(io.BytesIO(data)).convert('RGB')
+        except Exception as exc:  # noqa: BLE001
+            print(f'⚠️  Thumb inválida {url}: {exc}')
+            continue
+        if im.width < 320 or im.height < 180:
+            continue
+        im = crop_center_16x9(im)
+        im.thumbnail((960, 960), Image.Resampling.LANCZOS)
+        im.save(dest, 'WEBP', quality=76, method=6)
+        print(f'🖼️  Thumb local: {dest.relative_to(PROJECT_ROOT)} ({dest.stat().st_size} bytes)')
+        return local_url
+
+    return f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg'
 
 
 def get_channel_id_from_username(username: str) -> str:
@@ -181,7 +227,7 @@ def get_latest_videos_from_rss(channel_identifier: str, max_results: int = 2) ->
                 'title': entry.title,
                 'description': description,
                 'published_at': published_date,
-                'thumbnail': f'https://i.ytimg.com/vi/{video_id}/hqdefault.jpg',
+                'thumbnail': ensure_local_thumb(video_id),
                 'embed_url': f'https://www.youtube.com/embed/{video_id}',
                 'watch_url': f'https://youtu.be/{video_id}'
             }

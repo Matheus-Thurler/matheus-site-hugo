@@ -3,7 +3,7 @@ title: "Is NGINX Ingress Controller Dead? Meet NGINX Gateway Fabric"
 date: 2025-12-06
 slug: nginx-gateway-api-kubernetes
 description: "The NGINX Ingress Controller has been deprecated, but NGINX isn't dead! Discover NGINX Gateway Fabric, how it implements the Kubernetes Gateway API, and why this change is a natural evolution that better separates infrastructure from development."
-cover: /images/covers/nginx-gateway-api.png
+cover: /images/covers/nginx-gateway-api.webp
 readingTime: "8"
 katex: false
 mermaid: false
@@ -69,7 +69,7 @@ See the problem? **Infrastructure and application configurations are mixed in th
 
 The **Gateway API** is the natural evolution of Ingress. It's an official Kubernetes specification (sig-network) that solves these problems through a **clear separation of responsibilities**.
 
-![Comparison between Ingress and Gateway API](/images/posts/ingress-vs-gateway-comparison.png)
+![Comparison between Ingress and Gateway API](/images/posts/ingress-vs-gateway-comparison.webp)
 
 ### The Gateway API Architecture
 

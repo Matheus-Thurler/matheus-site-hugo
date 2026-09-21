@@ -3,7 +3,7 @@ title: "DOMINE Reusable Workflows e Diga ADEUS ao Copia e Cola no seu CI/CD!"
 date: 2025-06-24
 slug: reusable-workflows-github-actions
 description: "Aprenda a usar Reusable Workflows no GitHub Actions para eliminar duplicação de código, centralizar a manutenção e escalar seus pipelines de CI/CD de forma profissional."
-cover: /images/covers/github-reusable-workflows.png
+cover: /images/covers/github-reusable-workflows.webp
 readingTime: "12"
 katex: false
 mermaid: false

@@ -6,7 +6,7 @@ author:
     name: "Matheus Thurler"
     title: "DevOps & Platform Engineer | Creator of VirtFoundry"
     description: "DevOps & Platform Engineer focado em Google Cloud, Infrastructure as Code e SRE. Criador do VirtFoundry — um control plane IaaS open-source, Kubernetes-native, em cima do KubeVirt."
-    avatar: "/images/avatar.png"
+    avatar: "/images/avatar.webp"
     social:
       - name: "GitHub"
         url: "https://github.com/Matheus-Thurler"

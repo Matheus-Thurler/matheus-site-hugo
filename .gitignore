@@ -1,5 +1,6 @@
 /public/
 /resources/_gen/
+.firebase/
 
 hugo.exe
 hugo.linux

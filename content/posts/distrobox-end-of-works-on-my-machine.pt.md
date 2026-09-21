@@ -2,7 +2,7 @@
 title: "O Fim do 'Na minha máquina funciona': Como o Distrobox Salva seu PC!"
 date: 2026-03-16T10:00:00-03:00
 description: "Aprenda a parar de quebrar seu sistema operacional com pacotes conflitantes. Use o Distrobox para criar ambientes de desenvolvimento isolados e perfeitamente integrados."
-cover: /images/covers/distrobox-video.png
+cover: /images/covers/distrobox-video.webp
 readingTime: "5"
 katex: false
 mermaid: false
