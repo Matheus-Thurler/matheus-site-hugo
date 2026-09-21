@@ -1,6 +1,7 @@
 ---
 title: "Sobre"
 layout: "about"
+description: "Matheus Thurler — DevOps & Platform Engineer, criador do VirtFoundry. Google Cloud, Kubernetes, IaC, SRE e homelab."
 ---
 ## Sobre Mim
 

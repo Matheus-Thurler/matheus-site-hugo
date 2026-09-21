@@ -1,64 +1,103 @@
-<!doctype html>
-<html lang="{{ site.LanguageCode }}" data-theme="{{ site.Params.colorScheme | default " default" }}">
-
-<head>
-  {{ partial "layout/head.html" . }}
-  <script>
-    // 主题初始化脚本
-    (function () {
-      const theme = localStorage.getItem('theme') || 'system';
-      const colorScheme = localStorage.getItem('colorScheme') || '{{ site.Params.colorScheme | default "shadcn" }}';
-
-      // 设置颜色主题
-      document.documentElement.setAttribute('data-theme', colorScheme);
-
-      // 设置明暗模式
-      function applyTheme() {
-        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      }
-
-      applyTheme();
-
-      // 监听系统主题变化
-      if (theme === 'system') {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
-      }
-    })();
-  </script>
-</head>
-
-<body class="bg-background text-foreground min-h-screen antialiased google-anno-skip"
-  google-side-rail-overlap="false">
-  <!-- 阅读进度条 -->
-  {{ partial "ui/reading-progress.html" . }}
-
-  {{ partial "navigation/header.html" . }}
-
-  <main class="mx-auto max-w-4xl px-4 py-6">
-    {{ block "main" . }}{{ end }}
-  </main>
-
-  {{ partial "layout/footer.html" . }}
-
-  <!-- 底部 Dock -->
-  {{ partial "ui/dock.html" . }}
-
-  <!-- 目录卡片 - 只在有目录的页面显示 -->
-  {{- if and .IsPage .TableOfContents }}
-  {{ partial "ui/toc-card.html" . }}
-  {{- end }}
-  {{ partial "features/katex.html" . }}
-  {{ partial "features/mermaid.html" . }}
-
-  <!-- 搜索组件 -->
-  {{ partial "ui/search-modal.html" . }}
-
-  <!-- Cookie Consent -->
-  {{ partial "features/cookie-consent.html" . }}
-</body>
-
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="{{ site.Params.themeColor | default `#0c1116` }}" />
+    {{ partial "seo.html" . }}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet" />
+    {{ $syntax := resources.Get "css/syntax.css" }}
+    {{ $main := resources.Get "css/main.css" }}
+    {{ with slice $syntax $main | resources.Concat "css/site.css" | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" />
+    {{ end }}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{{ i18n "skip_content" }}</a>
+    {{ if .IsHome }}
+      {{ partial "boot.html" . }}
+    {{ end }}
+    <canvas id="mesh" aria-hidden="true"></canvas>
+    {{ partial "cluster-bar.html" . }}
+    <header class="site-header wrap">
+      <a class="wordmark" href="{{ site.Home.RelPermalink }}">
+        <span class="prompt">control-plane/</span>{{ site.Title | anchorize }}
+      </a>
+      <nav class="nav" aria-label="{{ i18n "nav_main" }}">
+        {{ with site.GetPage "/posts" }}
+          <a href="{{ .RelPermalink }}" {{ if eq $.Section "posts" }}class="is-active"{{ end }}>
+            {{ i18n "nav.posts" }}
+          </a>
+        {{ end }}
+        {{ with site.GetPage "/about" }}
+          <a href="{{ .RelPermalink }}" {{ if eq $.RelPermalink .RelPermalink }}class="is-active"{{ end }}>
+            {{ i18n "nav.about" }}
+          </a>
+        {{ end }}
+        <div class="lang" aria-label="{{ i18n "nav_language" }}">
+          {{ range .AllTranslations }}
+            <a href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode }}" {{ if eq .Lang $.Lang }}class="is-active" aria-current="true"{{ end }}>{{ .Lang }}</a>
+          {{ end }}
+        </div>
+      </nav>
+    </header>
+    <main id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer class="site-footer wrap">
+      <nav class="footer-nav" aria-label="{{ i18n "nav_footer" }}">
+        {{ with site.GetPage "/about" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.about" }}</a>
+        {{ end }}
+        {{ with site.GetPage "/archives" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.archives" }}</a>
+        {{ end }}
+        {{ with site.GetPage "/links" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.links" }}</a>
+        {{ end }}
+        {{ with site.GetPage "/privacy" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.privacy" }}</a>
+        {{ end }}
+        {{ with site.GetPage "/terms" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.terms" }}</a>
+        {{ end }}
+        {{ with site.Params.email }}
+          <a href="{{ . }}">{{ i18n "nav.contact" }}</a>
+        {{ end }}
+        {{ with site.Home.OutputFormats.Get "RSS" }}
+          <a href="{{ .RelPermalink }}">{{ i18n "nav.rss" }}</a>
+        {{ end }}
+      </nav>
+      <div class="footer-meta">
+        <span class="mono">{{ site.Title | anchorize }}.{{ i18n "ctx" }}</span>
+        <span>{{ i18n "footer_note" }}</span>
+      </div>
+    </footer>
+    {{ partial "consent.html" . }}
+    {{ $adsense := site.Params.googleAdsenseId }}
+    {{ if and $adsense (not (hasPrefix $adsense "ca-")) }}
+      {{ $adsense = printf "ca-%s" $adsense }}
+    {{ end }}
+    {{ $gaId := "" }}
+    {{ if and site.Params.analytics.enabled site.Params.analytics.google.enabled }}
+      {{ $gaId = site.Params.analytics.google.id }}
+    {{ end }}
+    <script>
+      window.__siteConsent = {{ dict "gaId" $gaId "adsense" $adsense | jsonify | safeJS }};
+    </script>
+    {{ $scripts := slice }}
+    {{ if .IsHome }}{{ $scripts = $scripts | append "js/boot.js" }}{{ end }}
+    {{ $scripts = $scripts | append "js/copy.js" "js/newsletter.js" "js/consent.js" "js/cluster.js" }}
+    {{ range $scripts }}
+      {{ with resources.Get . }}
+        {{ $js := . | minify | fingerprint }}
+        <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer></script>
+      {{ end }}
+    {{ end }}
+  </body>
 </html>

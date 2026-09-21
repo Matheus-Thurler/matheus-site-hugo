@@ -3,188 +3,83 @@ languageCode: en-US
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 title: Matheus Thurler
-theme: "hugo-narrow"
-
 
 hasCJKLanguage: false
 enableEmoji: true
+enableRobotsTXT: true
+enableGitInfo: true
 timeZone: "America/Sao_Paulo"
 
 permalinks:
   posts: /posts/:slug/
   pages: /:slug/
-  
-# pagination
+
 pagination:
   pagerSize: 6
   path: "page"
-
-languages:
-  en:
-    languageCode: en-US
-    languageName: "English"
-    weight: 1
-  pt:
-    languageCode: pt-BR
-    languageName: "Português"
-    weight: 2
-    menus:
-      main:
-        - name: nav.posts
-          pageRef: /posts
-          weight: 10
-          params:
-            icon: posts
-        - name: nav.categories
-          pageRef: /categories
-          weight: 20
-          params:
-            icon: categories
-        - name: nav.tags
-          pageRef: /tags
-          weight: 30
-          params:
-            icon: tags
-        - name: nav.archives
-          pageRef: /archives
-          weight: 40
-          params:
-            icon: archive
-        - name: nav.about
-          pageRef: /about
-          weight: 50
-          params:
-            icon: about
-      footer:
-        - name: Sobre
-          pageRef: /about
-          weight: 10
-          params:
-            icon: about
-        - name: Contato
-          url: mailto:matheus@matheusthurler.com.br
-          weight: 20
-          params:
-            icon: contact
-        - name: Feed RSS
-          url: /index.xml
-          weight: 30
-          params:
-            icon: rss
-        - name: Privacidade
-          pageRef: /privacy
-          weight: 40
-          params:
-            icon: info-circle
-        - name: Termos
-          pageRef: /terms
-          weight: 50
-          params:
-            icon: info-circle
 
 taxonomies:
   category: categories
   tag: tags
 
-menus:
-  main:
-    - name: nav.posts
-      pageRef: /posts
-      weight: 10
-      params:
-        icon: posts
-    - name: nav.categories
-      pageRef: /categories
-      weight: 20
-      params:
-        icon: categories
-    - name: nav.tags
-      pageRef: /tags
-      weight: 30
-      params:
-        icon: tags
-    - name: nav.archives
-      pageRef: /archives
-      weight: 40
-      params:
-        icon: archive
-    - name: nav.about
-      pageRef: /about
+related:
+  includeNewer: true
+  threshold: 10
+  toLower: true
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
       weight: 50
-      params:
-        icon: about
-    # - name: RSS Feed
-    #   url: /index.xml
-    #   weight: 60
-    #   params:
-    #     icon: rss
 
-  footer:
-    - name: About
-      pageRef: /about
-      weight: 10
-      params:
-        icon: about
-    - name: Contact
-      url: mailto:matheus@matheusthurler.com.br
-      weight: 20
-      params:
-        icon: contact
-    - name: RSS Feed
-      url: /index.xml
-      weight: 30
-      params:
-        icon: rss
-    - name: Privacy
-      pageRef: /privacy
-      weight: 40
-      params:
-        icon: info-circle
-    - name: Terms
-      pageRef: /terms
-      weight: 50
-      params:
-        icon: info-circle
+sitemap:
+  changefreq: weekly
+  filename: sitemap.xml
+  priority: 0.5
 
-  # footer social link
-  # social:
-  #   - name: GitHub
-  #     url: https://github.com/Matheus-Thurler
-  #     weight: 10
-  #     params:
-  #       icon: github
-  #   - name: Twitter
-  #     url: https://twitter.com/username
-  #     weight: 20
-  #     params:
-  #       icon: twitter
-  #   - name: LinkedIn
-  #     url: https://linkedin.com/in/username
-  #     weight: 30
-  #     params:
-  #       icon: linkedin
-  #   - name: Email
-  #     url: mailto:your.email@example.com
-  #     weight: 40
-  #     params:
-  #       icon: email
+privacy:
+  youtube:
+    privacyEnhanced: true
+    disable: false
+
+languages:
+  en:
+    languageCode: en-US
+    languageName: "English"
+    languageDirection: ltr
+    weight: 1
+    params:
+      locale: en_US
+      description: "Matheus Thurler — DevOps & Platform Engineer focused on Google Cloud. Tutorials and articles about Kubernetes, Terraform, CI/CD, SRE, and Platform Engineering."
+  pt:
+    languageCode: pt-BR
+    languageName: "Português"
+    languageDirection: ltr
+    weight: 2
+    params:
+      locale: pt_BR
+      description: "Matheus Thurler — DevOps & Platform Engineer focado em Google Cloud. Tutoriais e artigos sobre Kubernetes, Terraform, CI/CD, SRE e Platform Engineering."
 
 params:
-  # Basic site info with SEO
   description: "Matheus Thurler — DevOps & Platform Engineer focused on Google Cloud. Tutorials, articles, and content about Kubernetes, Terraform, CI/CD, SRE, and Platform Engineering."
-  keywords: ["DevOps", "Google Cloud", "GCP", "Kubernetes", "Terraform", "Platform Engineering", "SRE", "CI/CD", "Matheus Thurler", "Infrastructure as Code"]
+  keywords: ["DevOps", "Google Cloud", "GCP", "Kubernetes", "Terraform", "Platform Engineering", "SRE", "CI/CD", "Matheus Thurler", "Infrastructure as Code", "VirtFoundry"]
   defaultAuthor: "Matheus Thurler"
   language: "en-US"
-  shortName: "Matheus Thurler"  # PWA
+  shortName: "Matheus Thurler"
   images:
-  - "/images/avatar.png"
+    - "/images/avatar.png"
+  youtube: "https://youtube.com/@matheusthurler"
+  virtfoundry: "https://github.com/virtfoundry"
+  github: "https://github.com/Matheus-Thurler"
+  linkedin: "https://linkedin.com/in/matheusthurler"
+  email: "mailto:matheus@matheusthurler.com.br"
+  themeColor: "#0c1116"
 
   logo:
-    image: "/images/logo.svg"  # Logo path rel to static folder, leave empty use site title and primary color
-    link: "/"                  # click to home page
+    image: "/images/logo.svg"
+    link: "/"
   favicon:
-    svg: "/favicon.svg"        # SVG format favicon (recommended)
-
+    svg: "/favicon.svg"
 
   virtfoundryUrl: "https://github.com/virtfoundry"
 
@@ -193,113 +88,29 @@ params:
     title: "DevOps & Platform Engineer | Creator of VirtFoundry"
     description: "DevOps & Platform Engineer focused on Google Cloud, Infrastructure as Code, and SRE. Creator of VirtFoundry — an open-source Kubernetes-native IaaS control plane on KubeVirt."
     avatar: "/images/avatar.png"
-    social:
-      - name: "GitHub"
-        url: "https://github.com/Matheus-Thurler"
-        icon: "github"
-      - name: "YouTube"
-        url: "https://youtube.com/@matheusthurler"
-        icon: "youtube"
-      - name: "LinkedIn"
-        url: "https://linkedin.com/in/matheusthurler"
-        icon: "linkedin"
-      - name: "Email"
-        url: "mailto:matheus@matheusthurler.com.br"
-        icon: "email"
-
-  # UI Components Control
-  showThemeSwitch: true      # Set to false to hide theme style switcher (palette icon)
-  showDarkModeSwitch: true   # Set to false to hide dark mode switcher (sun/moon icon)
-  showLanguageSwitch: true   # Set to false to hide language switcher
-  languageSwitchMode: "dropdown"  # Language switch mode: "dropdown" (show panel) or "cycle" (direct cycle)
-
-  # Header sticky effect
-  stickyHeader: true  # Set to true to enable sticky navigation bar
-
-  # Dock display mode
-  # Options: "scroll" (show on scroll up), "always" (always visible), "float" (floating button)
-  dock: "float"
-
-  # default color scheme
-  colorScheme: "nord"
-  themes:
-    default:
-      name: "Default"
-      order: 1
-    # claude:
-    #   name: "Claude"
-    #   order: 2
-    # bumblebee:
-    #   name: "Bumblebee"
-    #   order: 3
-    # emerald:
-    #   name: "Emerald"
-    #   order: 4
-    nord:
-      name: "Nord"
-      order: 5
-    # sunset:
-    #   name: "Sunset"
-    #   order: 6
-    # abyss:
-    #   name: "Abyss"
-    #   order: 7
-    # dracula:
-    #   name: "Dracula"
-    #   order: 8
-    # amethyst:
-    #   name: "Amethyst"
-    #   order: 9
-    # slate:
-    #   name: "Slate"
-    #   order: 10
-    # twitter:
-    #   name: "Twitter"
-    #   order: 11
-
-  home:
-    recentPostsCount: 5 # Number of recent posts to show on the home page
+    jobTitle: "DevOps & Platform Engineer"
+    sameAs:
+      - "https://github.com/Matheus-Thurler"
+      - "https://youtube.com/@matheusthurler"
+      - "https://linkedin.com/in/matheusthurler"
 
   newsletter:
     subscribeUrl: "https://us-central1-matheus-cloud-pessoal.cloudfunctions.net/subscribe"
 
-  # custom partials files should be placed at "~/layouts/_partials/content/" folder.
-  home_custom:
-    enabled: true
-    files:
-      - custom_1.html
-      - custom_2.html
-
-  post:
-    showRelated: true           # show related posts
-    relatedPostsCount: 3        # posts number
-  
-    license:
-      show: false
-      author: "Hugo Narrow"
-      name: "CC BY-NC-SA 4.0"
-      description: "This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. Please attribute the source, use non-commercially, and maintain the same license."
-      url: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-      displayName: "CC BY-NC-SA 4.0"
-
-  # comments
   comments:
     enabled: true
-    # giscus, disqus, utterances, waline, artalk, twikoo
     system: "giscus"
     giscus:
-      repo: "Matheus-Thurler/matheus-site-hugo"           # GitHub repository
-      repoId: "R_kgDOQYHuEQ"                # Repository ID
-      category: "Announcements"  
-      categoryId: "DIC_kwDOQYHuEc4Cx73e"       # Category ID
-      mapping: "pathname"            # Mapping method
-      strict: "0"                    # Strict matching
-      reactionsEnabled: "1"          # Enable reactions
-      emitMetadata: "0"             # Metadata
-      inputPosition: "bottom"        # Input box position
-      theme: "preferred_color_scheme" # Theme
-      lang: "en"                    # Langu
-
+      repo: "Matheus-Thurler/matheus-site-hugo"
+      repoId: "R_kgDOQYHuEQ"
+      category: "Announcements"
+      categoryId: "DIC_kwDOQYHuEc4Cx73e"
+      mapping: "pathname"
+      strict: "0"
+      reactionsEnabled: "1"
+      emitMetadata: "0"
+      inputPosition: "bottom"
+      theme: "transparent_dark"
 
   analytics:
     enabled: true
@@ -307,70 +118,7 @@ params:
       enabled: true
       id: "G-G73F8VFQNC"
 
-  # Google AdSense
   googleAdsenseId: "pub-3348120452456400"
-  # Slot numérico de unidade in-article (AdSense → Anúncios → Por unidade). Sem isso, só Auto ads in-page.
-  # googleAdsenseInArticleSlot: ""
-
-
-  katex:
-    enabled: true
-    delimiters:
-      - left: "$$"
-        right: "$$"
-        display: true
-      - left: "$"
-        right: "$"
-        display: false
-      - left: "\\("
-        right: "\\)"
-        display: false
-      - left: "\\["
-        right: "\\]"
-        display: true
-      
-  mermaid:
-    enabled: true
-
-  # GLightbox
-  lightbox:
-    enabled: false
-    loop: true
-    width: 80vw
-    height: 80vh
-    touchNavigation: true
-    draggable: true
-    zoomable: true
-    preload: true
-    descPosition: bottom
-
-  # Justified Gallery
-  justified_gallery:
-    enabled: false
-    rowHeight: 300
-    gutter: 30
-    lastRow: center
-    transitionDuration: 0.3s
-    resizeDebounce: 100
-    rowHeightTolerance: 0.25
-    maxRowsCount: 999999
-    calculateItemsHeight: false
-
-
-  codeblock:
-    collapse:
-      enabled: true
-      defaultState: expanded  # expanded, collapsed
-      autoCollapseLines: 30
-      autoCollapseHeight: 400
-      collapsedHeight: 120
-
-  readingProgress:
-    enabled: true
-    height: 3
-    showOnHomepage: false
-    smoothScroll: true
-    hideOnComplete: false
 
 markup:
   tableOfContents:
@@ -391,19 +139,23 @@ markup:
         subscript:
           enable: false
         superscript:
-          enable: false   
-      strikethrough: false 
+          enable: false
+      strikethrough: false
   highlight:
     codeFences: true
-    guessSyntax: false
+    guessSyntax: true
     lineNos: false
-    lineNumbersInTable: false # Set to false
+    lineNumbersInTable: false
     noClasses: false
-    style: github # No need to change
+    style: github-dark
     tabWidth: 2
 
 outputs:
-  home: ["HTML", "RSS", "JSON", "WebAppManifest"]
+  home: ["HTML", "RSS", "WebAppManifest"]
+  section: ["HTML", "RSS"]
+  taxonomy: ["HTML", "RSS"]
+  term: ["HTML", "RSS"]
+  page: ["HTML"]
 
 outputFormats:
   WebAppManifest:
@@ -418,5 +170,5 @@ module:
 
 deployment:
   targets:
-  - name: production
-    url: s3://matheus-site-nuxt?region=us-east-1
+    - name: production
+      url: s3://matheus-site-nuxt?region=us-east-1

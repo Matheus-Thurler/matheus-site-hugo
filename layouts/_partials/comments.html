@@ -1,0 +1,26 @@
+{{- $cfg := site.Params.comments -}}
+{{- if and $cfg.enabled (not .Params.comments_disabled) (eq .Section "posts") -}}
+  {{- $g := $cfg.giscus -}}
+  {{- $lang := cond (eq .Lang "pt") "pt" "en" -}}
+  <section class="comments">
+    <h2 class="kubectl">{{ i18n "comments" }}</h2>
+    <div class="giscus-wrap">
+      <script
+        src="https://giscus.app/client.js"
+        data-repo="{{ $g.repo }}"
+        data-repo-id="{{ $g.repoId }}"
+        data-category="{{ $g.category }}"
+        data-category-id="{{ $g.categoryId }}"
+        data-mapping="{{ $g.mapping | default "pathname" }}"
+        data-strict="{{ $g.strict | default "0" }}"
+        data-reactions-enabled="{{ $g.reactionsEnabled | default "1" }}"
+        data-emit-metadata="{{ $g.emitMetadata | default "0" }}"
+        data-input-position="{{ $g.inputPosition | default "bottom" }}"
+        data-theme="{{ $g.theme | default "transparent_dark" }}"
+        data-lang="{{ $lang }}"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async></script>
+    </div>
+  </section>
+{{- end -}}

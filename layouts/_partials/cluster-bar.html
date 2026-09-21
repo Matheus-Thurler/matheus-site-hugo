@@ -1,0 +1,33 @@
+{{ $posts := where site.RegularPages "Section" "posts" }}
+{{ $n := len $posts }}
+{{ $ctx := "home" }}
+{{ if .IsHome }}
+  {{ $ctx = "home" }}
+{{ else if and (eq .Section "posts") (eq .Kind "section") }}
+  {{ $ctx = "posts" }}
+{{ else if eq .Section "posts" }}
+  {{ $ctx = "posts" }}
+{{ else if in .RelPermalink "404" }}
+  {{ $ctx = "404" }}
+{{ else }}
+  {{ with .File }}
+    {{ $ctx = .ContentBaseName }}
+  {{ else }}
+    {{ $ctx = $.Title | anchorize }}
+  {{ end }}
+{{ end }}
+<div class="cluster-bar" data-cluster-bar>
+  <span class="cluster-ready">
+    <span class="pulse" aria-hidden="true"></span>
+    {{ i18n "ready" }}
+  </span>
+  <span class="cluster-sep" aria-hidden="true">│</span>
+  <span class="cluster-ctx"><span class="k">ctx</span> {{ $ctx }}</span>
+  <span class="cluster-sep" aria-hidden="true">│</span>
+  <span><span class="k">{{ i18n "ns" }}</span> {{ .Lang }}</span>
+  <span class="cluster-sep hide-sm" aria-hidden="true">│</span>
+  <span class="hide-sm"><span class="k">api</span> {{ i18n "api" }}</span>
+  <span class="cluster-sep hide-sm" aria-hidden="true">│</span>
+  <span class="hide-sm"><span class="k">workloads</span> {{ $n }}/{{ $n }}</span>
+  <span class="cluster-clock hide-sm" data-cluster-clock></span>
+</div>

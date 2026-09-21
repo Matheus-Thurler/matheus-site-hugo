@@ -4,6 +4,7 @@ date: 2024-01-01
 layout: "page"
 comments_disabled: true
 url: /privacy/
+description: "Privacy policy for matheusthurler.com.br — cookies, analytics, ads, and how visitor data is used."
 ---
 
 **Last updated: November 19, 2025**

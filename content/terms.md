@@ -4,6 +4,7 @@ date: 2024-01-01
 layout: "page"
 url: /terms/
 comments_disabled: true
+description: "Terms of service for matheusthurler.com.br."
 ---
 
 **Last updated: November 19, 2025**

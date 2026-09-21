@@ -1,0 +1,14 @@
+{{ $kind := .kind | default "Deployment" }}
+{{ $name := .name | default "resource" }}
+<div class="yaml-meta" aria-hidden="true">
+  <div><span class="yk">apiVersion</span>: platform.thurler.io/v1</div>
+  <div><span class="yk">kind</span>: {{ $kind }}</div>
+  <div><span class="yk">metadata</span>:</div>
+  <div class="yi"><span class="yk">name</span>: {{ $name }}</div>
+  {{ with .page }}
+    {{ if .Date }}
+      <div><span class="yk">status</span>:</div>
+      <div class="yi"><span class="yk">phase</span>: <span class="ok">Available</span></div>
+    {{ end }}
+  {{ end }}
+</div>

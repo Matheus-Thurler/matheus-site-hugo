@@ -1,0 +1,20 @@
+{{ $rowName := .Title }}
+{{ with .File }}{{ $rowName = .ContentBaseName }}{{ end }}
+{{ $age := 0 }}
+{{ with .Date }}{{ $age = div (sub now.Unix .Unix) 86400 }}{{ end }}
+<tr>
+  <td>
+    <div class="row-main">
+      {{ with .Params.cover }}
+        <img class="row-cover" src="{{ . }}" alt="" width="96" height="64" loading="lazy" />
+      {{ end }}
+      <div class="row-copy">
+        <a href="{{ $.RelPermalink }}">{{ $rowName }}</a>
+        <div class="row-title">{{ $.Title }}</div>
+      </div>
+    </div>
+  </td>
+  <td class="col-ready">1/1</td>
+  <td class="col-status"><span class="ok">Available</span></td>
+  <td>{{ if not .Date }}—{{ else if lt $age 1 }}&lt;1d{{ else }}{{ $age }}d{{ end }}</td>
+</tr>

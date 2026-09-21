@@ -1,0 +1,11 @@
+{{ $url := site.Params.newsletter.subscribeUrl | default "#" }}
+<section class="newsletter" data-newsletter>
+  <h2 class="kubectl">{{ i18n "newsletter_title" }}</h2>
+  <p class="lede">{{ i18n "newsletter_desc" }}</p>
+  <form class="newsletter-form" action="{{ $url }}" method="post">
+    <input type="email" name="email" required placeholder="{{ i18n "newsletter_email" }}" aria-label="{{ i18n "newsletter_email" }}" />
+    <input type="text" name="name" required placeholder="{{ i18n "newsletter_name" }}" aria-label="{{ i18n "newsletter_name" }}" />
+    <button type="submit" class="btn btn-primary">{{ i18n "newsletter_subscribe" }}</button>
+  </form>
+  <p class="newsletter-msg" hidden data-ok="{{ i18n "newsletter_success" }}" data-err="{{ i18n "newsletter_error" }}"></p>
+</section>

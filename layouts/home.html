@@ -1,106 +1,74 @@
 {{ define "main" }}
-  <div class="mx-auto max-w-4xl">
-    <!-- 作者信息区域 -->
-    {{/* 优先使用页面配置，否则回退站点配置 */}}
-    {{ $author := .Params.author | default site.Params.author }}
-    
-    {{ if $author }}
-      {{ $vfUrl := site.Params.virtfoundryUrl | default "https://github.com/virtfoundry" }}
-      {{ $vfLink := printf `<a href="%s" target="_blank" rel="noopener noreferrer" class="virtfoundry-link text-primary font-semibold underline decoration-2 underline-offset-4 decoration-primary/70 hover:decoration-primary">VirtFoundry</a>` $vfUrl }}
-      <section class="author-section mb-12">
-        <div class="bg-card border-border rounded-xl border p-8 shadow-sm md:p-10">
-          <div class="mx-auto flex max-w-2xl flex-col items-center text-center">
-            <div class="mb-5">
-              {{ if $author.avatar }}
-                <img
-                  src="{{ $author.avatar }}"
-                  alt="{{ $author.name | default site.Title }}"
-                  width="112"
-                  height="112"
-                  decoding="async"
-                  fetchpriority="high"
-                  class="hero-avatar border-primary/20 mx-auto h-28 w-28 rounded-full border-4 object-cover shadow-lg" />
-              {{ else }}
-                <div
-                  class="hero-avatar bg-primary text-primary-foreground mx-auto flex h-28 w-28 items-center justify-center rounded-full text-3xl font-bold shadow-lg">
-                  {{ substr ($author.name | default site.Title) 0 1 | upper }}
-                </div>
-              {{ end }}
-            </div>
-
-            <h1 class="text-foreground mb-2 text-3xl font-bold md:text-4xl">
-              {{ $author.name | default site.Title }}
-            </h1>
-
-            {{ with $author.title }}
-              <p class="text-muted-foreground mb-4 text-lg">
-                {{ replace . "VirtFoundry" $vfLink | safeHTML }}
-              </p>
-            {{ end }}
-
-            {{ with $author.description }}
-              <p class="text-foreground mb-6 max-w-xl text-base leading-relaxed">
-                {{ replace . "VirtFoundry" $vfLink | safeHTML }}
-              </p>
-            {{ end }}
-
-            {{ with $author.social }}
-              <div class="flex flex-wrap justify-center gap-3">
-                {{ range . }}
-                  <a
-                    href="{{ .url }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="bg-muted text-muted-foreground hover:text-primary hover:bg-muted/60 inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-colors"
-                    title="{{ .name }}">
-                    {{ if .icon }}
-                      {{ partial "features/icon.html" (dict "name" .icon "size" "sm" "ariaLabel" .name) }}
-                    {{ end }}
-                    <span>{{ .name }}</span>
-                  </a>
-                {{ end }}
-              </div>
-            {{ end }}
-          </div>
-        </div>
-      </section>
-    {{ end }}
-
-    {{/*  自定义内容模板引入  */}}
-    {{ if site.Params.home_custom.enabled }}
-      {{ $customFiles := site.Params.home_custom.files }}
-      {{ if $customFiles }}
-        <section class="custom-content-section mb-12">
-          {{ range $customFiles }}
-            {{ $partialPath := printf "content/%s" . }}
-            {{ partial $partialPath $ }}
+  {{ $author := .Params.author | default site.Params.author }}
+  {{ $posts := where site.RegularPages "Section" "posts" }}
+  <section class="hero wrap">
+    {{ partial "yaml-meta.html" (dict "kind" (i18n "kind_home") "name" "matheus-thurler" "page" .) }}
+    <p class="shell-line" aria-hidden="true">$ kubectl get controlplane matheus-thurler -o wide</p>
+    <div class="hero-identity">
+      <div class="hero-copy">
+        <h1>{{ with $author.name }}{{ . }}{{ else }}{{ site.Title }}{{ end }}</h1>
+        <p class="lede">
+          {{ with $author.description }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}
+        </p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="{{ site.Params.youtube }}">{{ i18n "hero_cta_youtube" }}</a>
+          <a class="btn btn-ghost" href="{{ site.Params.virtfoundry }}">{{ i18n "hero_cta_virtfoundry" }}</a>
+          {{ with site.GetPage "/posts" }}
+            <a class="btn btn-ghost" href="{{ .RelPermalink }}">{{ i18n "hero_cta_posts" }}</a>
           {{ end }}
-        </section>
-      {{ end }}
-    {{ end }}
-
-
-    <!-- 最近文章区域 -->
-    {{ $recentPostsCount := site.Params.home.recentPostsCount | default 5 }}
-    {{ $posts := where site.RegularPages "Section" "posts" | first $recentPostsCount }}
-
-    {{ partial "content/post-list.html" (dict
-      "posts" $posts
-      "title" (i18n "home.recent_posts" | default "最近文章")
-      "showTitle" true
-      "showViewAll" true
-      "viewAllUrl" ("/posts/" | relLangURL)
-      )
-    }}
-
-    <!-- 页面内容 -->
-    {{ if .Content }}
-      <section class="page-content mt-12">
-        <div class="prose max-w-none">
-          {{ .Content }}
         </div>
-      </section>
-    {{ end }}
+      </div>
+      {{ with $author.avatar }}
+        <img class="hero-avatar" src="{{ . }}" alt="{{ $author.name }}" width="112" height="112" />
+      {{ end }}
+    </div>
+  </section>
 
+  {{ with site.Data.youtube.recent_videos }}
+    <section class="section wrap">
+      <h2 class="kubectl">{{ i18n "videos" }}</h2>
+      <div class="videos">
+        {{ range . }}
+          <a class="video-card" href="{{ .watch_url }}">
+            <div class="card-chrome">
+              <span class="kind-tag">{{ i18n "kind_video" }}</span>
+              <span class="run"><span class="pulse"></span> Running</span>
+            </div>
+            <img src="{{ .thumbnail }}" alt="" width="480" height="270" />
+            <div class="meta">
+              <h3>{{ .title }}</h3>
+              <p>{{ i18n "watch" }} · {{ .id }}</p>
+            </div>
+          </a>
+        {{ end }}
+      </div>
+    </section>
+  {{ end }}
+
+  <section class="section wrap">
+    <h2 class="kubectl">{{ i18n "posts" }}</h2>
+    <div class="kube-table-wrap">
+      <table class="kube-table">
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <th class="col-ready">READY</th>
+            <th class="col-status">STATUS</th>
+            <th>AGE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range ($posts | first 6) }}
+            {{ partial "post-row.html" . }}
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+    {{ with site.GetPage "/posts" }}
+      <a class="more" href="{{ .RelPermalink }}">{{ i18n "all_posts" }}</a>
+    {{ end }}
+  </section>
+  <div class="wrap">
+    {{ partial "newsletter.html" . }}
   </div>
 {{ end }}

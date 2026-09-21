@@ -1,0 +1,13 @@
+<div id="consent" class="consent" hidden role="dialog" aria-live="polite">
+  <p>
+    {{ i18n "cookie_message" }}
+    {{ with site.GetPage "/terms" }}
+      <a href="{{ .RelPermalink }}">{{ i18n "cookie_terms" }}</a>
+    {{ end }}
+    ·
+    {{ with site.GetPage "/privacy" }}
+      <a href="{{ .RelPermalink }}">{{ i18n "cookie_privacy" }}</a>
+    {{ end }}
+  </p>
+  <button type="button" id="consent-accept" class="btn btn-primary">{{ i18n "cookie_accept" }}</button>
+</div>

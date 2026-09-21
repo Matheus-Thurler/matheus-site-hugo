@@ -4,6 +4,7 @@ date: 2024-01-01
 layout: "page"
 url: /pt/terms/
 comments_disabled: true
+description: "Termos de uso de matheusthurler.com.br."
 ---
 
 **Última atualização: 19 de Novembro de 2025**
