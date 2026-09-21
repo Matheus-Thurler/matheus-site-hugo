@@ -1,0 +1,144 @@
+{{- $is404 := eq .Kind "404" -}}
+{{- $author := site.Params.author.name | default site.Params.defaultAuthor | default site.Title -}}
+{{- with .Params.author -}}
+  {{- if reflect.IsMap . -}}
+    {{- with .name }}{{ $author = . }}{{ end -}}
+  {{- else -}}
+    {{- $author = . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $desc := "" -}}
+{{- with .Description }}{{ $desc = . | plainify | chomp }}{{ end -}}
+{{- if not $desc }}{{ with .Params.summary }}{{ $desc = . | plainify | chomp }}{{ end }}{{ end -}}
+{{- if not $desc }}{{ with site.Params.description }}{{ $desc = . | plainify | chomp }}{{ end }}{{ end -}}
+{{- if not $desc }}{{ with .Summary }}{{ $desc = . | plainify | chomp }}{{ end }}{{ end -}}
+{{- $desc = $desc | truncate 160 -}}
+
+{{- $title := site.Title -}}
+{{- if .IsHome -}}
+  {{- $title = printf "%s | DevOps & Platform Engineer" site.Title -}}
+{{- else if $is404 -}}
+  {{- $title = printf "404 | %s" site.Title -}}
+{{- else -}}
+  {{- $title = printf "%s · %s" .Title site.Title -}}
+{{- end -}}
+
+{{- $canonical := .Permalink -}}
+{{- $pageNo := 0 -}}
+{{- if or (and (eq .Kind "section") (eq .Section "posts")) (eq .Kind "term") -}}
+  {{- with .Paginator -}}
+    {{- $pageNo = .PageNumber -}}
+    {{- $canonical = .URL | absURL -}}
+    {{- if gt .PageNumber 1 -}}
+      {{- $title = printf "%s · %s %d · %s" $.Title (i18n "page") .PageNumber site.Title -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $img := "" -}}
+{{- with .Params.cover }}{{ $img = . }}{{ end -}}
+{{- if not $img }}{{ with .Params.images }}{{ $img = index . 0 }}{{ end }}{{ end -}}
+{{- if not $img }}{{ with site.Params.images }}{{ $img = index . 0 }}{{ end }}{{ end -}}
+{{- if and $img (not (hasPrefix $img "http://")) (not (hasPrefix $img "https://")) (not (hasPrefix $img "//")) -}}
+  {{- $img = $img | absURL -}}
+{{- end -}}
+
+{{- $robots := "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" -}}
+{{- if $is404 -}}
+  {{- $robots = "noindex, nofollow" -}}
+{{- else -}}
+  {{- with .Params.robots }}{{ $robots = . }}{{ end -}}
+{{- end -}}
+
+{{- $keywords := site.Params.keywords -}}
+{{- with .Params.tags }}{{ $keywords = . }}{{ end -}}
+{{- $locale := replaceRE "-" "_" (or site.Params.locale site.Language.LanguageCode) -}}
+
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}" />
+{{- with $keywords }}
+<meta name="keywords" content="{{ delimit . `, ` }}" />
+{{- end }}
+<meta name="author" content="{{ $author }}" />
+<meta name="robots" content="{{ $robots }}" />
+<link rel="canonical" href="{{ $canonical }}" />
+
+{{- with site.Params.favicon.svg }}
+<link rel="icon" type="image/svg+xml" href="{{ . | relURL }}" />
+{{- else }}
+<link rel="icon" type="image/svg+xml" href="{{ `favicon.svg` | relURL }}" />
+{{- end }}
+<link rel="apple-touch-icon" href="{{ `/images/avatar.png` | absURL }}" />
+<link rel="manifest" href="{{ `site.webmanifest` | relLangURL }}" />
+
+{{- with site.Home.OutputFormats.Get "RSS" }}
+<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .Permalink }}" />
+{{- end }}
+{{- if and (eq .Section "posts") (not .IsPage) }}
+  {{- with .OutputFormats.Get "RSS" }}
+<link rel="alternate" type="application/rss+xml" title="{{ $.Title }} · {{ site.Title }}" href="{{ .Permalink }}" />
+  {{- end }}
+{{- end }}
+
+{{- $defaultPermalink := $canonical -}}
+{{- range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}" />
+  {{- if eq .Lang "en" }}{{ $defaultPermalink = .Permalink }}{{ end }}
+{{- end }}
+<link rel="alternate" hreflang="x-default" href="{{ $defaultPermalink }}" />
+
+{{- if or (and (eq .Kind "section") (eq .Section "posts")) (eq .Kind "term") }}
+  {{- with .Paginator }}
+    {{- if .HasPrev }}
+<link rel="prev" href="{{ .Prev.URL | absURL }}" />
+    {{- end }}
+    {{- if .HasNext }}
+<link rel="next" href="{{ .Next.URL | absURL }}" />
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+<meta property="og:site_name" content="{{ site.Title }}" />
+<meta property="og:locale" content="{{ $locale }}" />
+{{- range .Translations }}
+  {{- $altLocale := replaceRE "-" "_" (or .Site.Params.locale .Language.LanguageCode) }}
+<meta property="og:locale:alternate" content="{{ $altLocale }}" />
+{{- end }}
+<meta property="og:type" content="{{ if and .IsPage (eq .Section `posts`) }}article{{ else }}website{{ end }}" />
+<meta property="og:title" content="{{ $title }}" />
+<meta property="og:description" content="{{ $desc }}" />
+<meta property="og:url" content="{{ $canonical }}" />
+{{- with $img }}
+<meta property="og:image" content="{{ . }}" />
+<meta property="og:image:alt" content="{{ $title }}" />
+{{- end }}
+
+{{- if and .IsPage (eq .Section "posts") }}
+<meta property="article:published_time" content="{{ .Date.Format `2006-01-02T15:04:05-07:00` }}" />
+<meta property="article:modified_time" content="{{ .Lastmod.Format `2006-01-02T15:04:05-07:00` }}" />
+<meta property="article:author" content="{{ $author }}" />
+  {{- with .Params.categories }}
+    {{- range first 1 . }}
+<meta property="article:section" content="{{ . }}" />
+    {{- end }}
+  {{- end }}
+  {{- range .Params.tags }}
+<meta property="article:tag" content="{{ . }}" />
+  {{- end }}
+{{- end }}
+
+<meta name="twitter:card" content="{{ if $img }}summary_large_image{{ else }}summary{{ end }}" />
+<meta name="twitter:title" content="{{ $title }}" />
+<meta name="twitter:description" content="{{ $desc }}" />
+{{- with $img }}
+<meta name="twitter:image" content="{{ . }}" />
+<meta name="twitter:image:alt" content="{{ $title }}" />
+{{- end }}
+
+{{- with $adsense := site.Params.googleAdsenseId }}
+  {{- if not (hasPrefix $adsense "ca-") }}{{ $adsense = printf "ca-%s" $adsense }}{{ end }}
+<meta name="google-adsense-account" content="{{ $adsense }}" />
+{{- end }}
+
+{{ partial "jsonld.html" (dict "page" . "title" $title "desc" $desc "canonical" $canonical "img" $img "author" $author "is404" $is404) }}

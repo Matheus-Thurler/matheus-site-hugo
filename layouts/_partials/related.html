@@ -1,0 +1,26 @@
+{{ $related := slice }}
+{{ with site.RegularPages.Related . }}
+  {{ $related = . | first 3 }}
+{{ end }}
+{{ if $related }}
+  <section class="related">
+    <h2 class="kubectl">{{ i18n "related" }}</h2>
+    <div class="kube-table-wrap">
+      <table class="kube-table">
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <th class="col-ready">READY</th>
+            <th class="col-status">STATUS</th>
+            <th>AGE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range $related }}
+            {{ partial "post-row.html" . }}
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{{ end }}

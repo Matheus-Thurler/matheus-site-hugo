@@ -1,0 +1,24 @@
+{{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {{- range .Data.Pages }}
+    {{- if and (ne .Kind "404") (ne .Kind "robotsTXT") (ne .Kind "sitemap") }}
+  <url>
+    <loc>{{ .Permalink }}</loc>
+      {{- with .Lastmod }}
+    <lastmod>{{ .Format "2006-01-02T15:04:05-07:00" }}</lastmod>
+      {{- end }}
+    <changefreq>{{ if .IsHome }}daily{{ else if eq .Section "posts" }}weekly{{ else }}monthly{{ end }}</changefreq>
+    <priority>{{ if .IsHome }}1.0{{ else if and (eq .Kind "page") (eq .Section "posts") }}0.8{{ else if eq .Kind "section" }}0.6{{ else }}0.4{{ end }}</priority>
+      {{- $en := "" }}
+      {{- range .AllTranslations }}
+    <xhtml:link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}" />
+        {{- if eq .Lang "en" }}{{ $en = .Permalink }}{{ end }}
+      {{- end }}
+      {{- if $en }}
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ $en }}" />
+      {{- end }}
+  </url>
+    {{- end }}
+  {{- end }}
+</urlset>

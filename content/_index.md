@@ -1,5 +1,6 @@
 ---
 title: "Home"
+description: "Matheus Thurler — DevOps & Platform Engineer focused on Google Cloud. Creator of VirtFoundry. Kubernetes, Terraform, CI/CD, SRE, and homelab."
 
 author:
     name: "Matheus Thurler"

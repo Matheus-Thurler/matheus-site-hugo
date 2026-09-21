@@ -1,0 +1,16 @@
+{{ define "main" }}
+  <article class="article wrap-narrow">
+    <header>
+      {{ $name := "page" }}
+      {{ with .File }}{{ $name = .ContentBaseName }}{{ end }}
+      {{ partial "yaml-meta.html" (dict "kind" (i18n "kind_page") "name" $name "page" .) }}
+      <p class="shell-line" aria-hidden="true">
+        $ kubectl get policy {{ $name }} -n {{ .Lang }} -o yaml
+      </p>
+      <h1>{{ .Title }}</h1>
+    </header>
+    <div class="prose">
+      {{ .Content }}
+    </div>
+  </article>
+{{ end }}

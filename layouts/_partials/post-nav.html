@@ -1,0 +1,18 @@
+{{- $prev := .PrevInSection -}}
+{{- $next := .NextInSection -}}
+{{- if or $prev $next -}}
+<nav class="post-nav" aria-label="{{ i18n `post_nav` }}">
+  <div>
+    {{- with $next }}
+      <span class="k">{{ i18n "next_post" }}</span>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- end }}
+  </div>
+  <div class="post-nav-newer">
+    {{- with $prev }}
+      <span class="k">{{ i18n "prev_post" }}</span>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    {{- end }}
+  </div>
+</nav>
+{{- end -}}

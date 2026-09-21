@@ -1,0 +1,87 @@
+{{- $p := .page -}}
+{{- $siteID := printf "%s#website" site.BaseURL -}}
+{{- $personID := printf "%s#person" site.BaseURL -}}
+{{- $author := dict
+  "@type" "Person"
+  "@id" $personID
+  "name" site.Params.author.name
+  "url" site.BaseURL
+  "jobTitle" (site.Params.author.jobTitle | default site.Params.author.title)
+  "image" ((site.Params.author.avatar | default "/images/avatar.png") | absURL)
+  "sameAs" (site.Params.author.sameAs | default slice)
+-}}
+{{- $website := dict
+  "@type" "WebSite"
+  "@id" $siteID
+  "url" site.BaseURL
+  "name" site.Title
+  "description" (or site.Params.description "")
+  "inLanguage" site.Language.LanguageCode
+  "publisher" (dict "@id" $personID)
+-}}
+{{- $graph := slice $website $author -}}
+
+{{- if not .is404 -}}
+  {{- $webpage := dict
+    "@type" "WebPage"
+    "@id" (printf "%s#webpage" .canonical)
+    "url" .canonical
+    "name" .title
+    "description" .desc
+    "isPartOf" (dict "@id" $siteID)
+    "inLanguage" site.Language.LanguageCode
+  -}}
+  {{- if $p.Date }}
+    {{- $webpage = merge $webpage (dict "datePublished" ($p.Date.Format "2006-01-02T15:04:05-07:00")) -}}
+  {{- end }}
+  {{- if $p.Lastmod }}
+    {{- $webpage = merge $webpage (dict "dateModified" ($p.Lastmod.Format "2006-01-02T15:04:05-07:00")) -}}
+  {{- end }}
+  {{- $graph = $graph | append $webpage -}}
+{{- end -}}
+
+{{- if and $p.IsPage (eq $p.Section "posts") -}}
+  {{- $article := dict
+    "@type" "BlogPosting"
+    "@id" (printf "%s#article" .canonical)
+    "mainEntityOfPage" (dict "@id" (printf "%s#webpage" .canonical))
+    "headline" $p.Title
+    "description" .desc
+    "datePublished" ($p.Date.Format "2006-01-02T15:04:05-07:00")
+    "dateModified" ($p.Lastmod.Format "2006-01-02T15:04:05-07:00")
+    "author" (dict "@id" $personID)
+    "publisher" (dict "@id" $personID)
+    "inLanguage" site.Language.LanguageCode
+    "url" .canonical
+  -}}
+  {{- with .img }}{{ $article = merge $article (dict "image" .) }}{{ end -}}
+  {{- with $p.Params.tags }}{{ $article = merge $article (dict "keywords" .) }}{{ end -}}
+  {{- $wordCount := $p.WordCount -}}
+  {{- if $wordCount }}{{ $article = merge $article (dict "wordCount" $wordCount) }}{{ end -}}
+  {{- $graph = $graph | append $article -}}
+
+  {{- $crumbs := slice
+    (dict "@type" "ListItem" "position" 1 "name" site.Title "item" site.Home.Permalink)
+  -}}
+  {{- with site.GetPage "/posts" }}
+    {{- $crumbs = $crumbs | append (dict "@type" "ListItem" "position" 2 "name" .Title "item" .Permalink) -}}
+  {{- end }}
+  {{- $crumbs = $crumbs | append (dict "@type" "ListItem" "position" 3 "name" $p.Title "item" .canonical) -}}
+  {{- $graph = $graph | append (dict
+    "@type" "BreadcrumbList"
+    "@id" (printf "%s#breadcrumb" .canonical)
+    "itemListElement" $crumbs
+  ) -}}
+{{- else if $p.IsHome -}}
+  {{- $graph = $graph | append (dict
+    "@type" "ProfilePage"
+    "@id" (printf "%s#profile" .canonical)
+    "url" .canonical
+    "name" .title
+    "mainEntity" (dict "@id" $personID)
+  ) -}}
+{{- end -}}
+
+<script type="application/ld+json">
+{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeJS }}
+</script>

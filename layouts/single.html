@@ -1,23 +1,31 @@
 {{ define "main" }}
-  <!-- 面包屑导航 -->
-  {{ partial "navigation/breadcrumb.html" . }}
-
-
-  <!-- 页面标题 -->
-  <header class="mb-8">
-    <h1 class="text-foreground mb-4 text-3xl font-bold md:text-4xl">
-      {{ .Title }}
-    </h1>
-    {{ if .Params.summary }}
-      <div class="text-muted-foreground mb-6 text-lg leading-relaxed">
-        {{ .Params.summary | plainify }}
-      </div>
+  <article class="article wrap-narrow">
+    <header>
+      {{ $kind := cond (eq .Section "posts") (i18n "kind_post") (i18n "kind_page") }}
+      {{ $name := "page" }}
+      {{ with .File }}{{ $name = .ContentBaseName }}{{ end }}
+      {{ partial "yaml-meta.html" (dict "kind" $kind "name" $name "page" .) }}
+      <p class="shell-line" aria-hidden="true">
+        $ kubectl describe {{ $kind | lower }} {{ $name }} -n {{ .Lang }}
+      </p>
+      <h1>{{ .Title }}</h1>
+      {{ if .Date }}
+        {{ $age := div (sub now.Unix .Date.Unix) 86400 }}
+        <p class="byline">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+          · AGE {{ if lt $age 1 }}&lt;1d{{ else }}{{ $age }}d{{ end }}
+          · <span class="ok">Available</span>
+        </p>
+      {{ end }}
+    </header>
+    <div class="prose">
+      {{ .Content }}
+    </div>
+    {{ if eq .Section "posts" }}
+      {{ partial "post-nav.html" . }}
+      {{ partial "newsletter.html" . }}
+      {{ partial "related.html" . }}
+      {{ partial "comments.html" . }}
     {{ end }}
-  </header>
-
-  <!-- 页面内容 -->
-  <article class="prose prose-neutral dark:prose-invert max-w-none">
-    {{ .Content }}
   </article>
-  {{ partial "features/comments.html" . }}
 {{ end }}
