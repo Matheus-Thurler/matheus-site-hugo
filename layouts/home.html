@@ -19,8 +19,8 @@
         </div>
       </div>
       {{ with $author.avatar }}
-        {{ $a144 := partial "processed-image.html" (dict "path" . "width" 144 "height" 144 "fill" true "quality" 80) | transform.Unmarshal }}
-        {{ $a224 := partial "processed-image.html" (dict "path" . "width" 224 "height" 224 "fill" true "quality" 80) | transform.Unmarshal }}
+        {{ $a144 := partial "processed-image.html" (dict "path" . "width" 144 "quality" 80) | transform.Unmarshal }}
+        {{ $a224 := partial "processed-image.html" (dict "path" . "width" 224 "quality" 80) | transform.Unmarshal }}
         <img
           class="hero-avatar"
           src="{{ $a224.src }}"

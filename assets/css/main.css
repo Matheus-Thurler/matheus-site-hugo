@@ -209,6 +209,7 @@ img {
   height: 7rem;
   border-radius: 999px;
   object-fit: cover;
+  object-position: center 42%;
   flex-shrink: 0;
   align-self: center;
   border: 3px solid color-mix(in srgb, var(--ice) 40%, transparent);
