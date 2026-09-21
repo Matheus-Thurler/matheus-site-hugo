@@ -3,7 +3,7 @@ title: "Internal Developer Platform (IDP): What It Is and How to Build on Kubern
 date: 2025-12-05
 slug: internal-developer-platform-kubernetes
 description: "Discover what an Internal Developer Platform (IDP) is, why your company needs one, and how to build or adopt a platform that accelerates development without sacrificing security."
-cover: /images/covers/idp-kubernetes.png
+cover: /images/covers/idp-kubernetes.webp
 readingTime: "12"
 katex: false
 draft: true

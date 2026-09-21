@@ -19,14 +19,7 @@
         </p>
       {{ end }}
       {{ with .Params.cover }}
-        <img
-          class="post-cover"
-          src="{{ . }}"
-          alt="{{ $.Title }}"
-          width="1200"
-          height="630"
-          fetchpriority="high"
-          decoding="async" />
+        {{ partial "img.html" (dict "path" . "alt" $.Title "class" "post-cover" "width" 1200 "quality" 78 "fetchpriority" "high") }}
       {{ end }}
     </header>
     <div class="prose">

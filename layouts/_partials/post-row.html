@@ -6,7 +6,7 @@
   <td>
     <div class="row-main">
       {{ with .Params.cover }}
-        <img class="row-cover" src="{{ . }}" alt="" width="96" height="64" loading="lazy" />
+        {{ partial "img.html" (dict "path" . "alt" "" "class" "row-cover" "width" 144 "height" 96 "fill" true "quality" 70 "lazy" true) }}
       {{ end }}
       <div class="row-copy">
         <a href="{{ $.RelPermalink }}">{{ $rowName }}</a>

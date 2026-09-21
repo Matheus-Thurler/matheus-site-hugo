@@ -19,7 +19,17 @@
         </div>
       </div>
       {{ with $author.avatar }}
-        <img class="hero-avatar" src="{{ . }}" alt="{{ $author.name }}" width="112" height="112" />
+        {{ $a144 := partial "processed-image.html" (dict "path" . "width" 144 "height" 144 "fill" true "quality" 80) }}
+        {{ $a224 := partial "processed-image.html" (dict "path" . "width" 224 "height" 224 "fill" true "quality" 80) }}
+        <img
+          class="hero-avatar"
+          src="{{ $a224.src }}"
+          srcset="{{ $a144.src }} 144w, {{ $a224.src }} 224w"
+          sizes="(min-width: 640px) 112px, 72px"
+          alt="{{ $author.name }}"
+          width="{{ $a224.width }}"
+          height="{{ $a224.height }}"
+          decoding="async" />
       {{ end }}
     </div>
   </section>
@@ -28,16 +38,27 @@
     <section class="section wrap">
       <h2 class="kubectl">{{ i18n "videos" }}</h2>
       <div class="videos">
-        {{ range . }}
-          <a class="video-card" href="{{ .watch_url }}">
+        {{ range $i, $video := . }}
+          <a class="video-card" href="{{ $video.watch_url }}">
             <div class="card-chrome">
               <span class="kind-tag">{{ i18n "kind_video" }}</span>
               <span class="run"><span class="pulse"></span> Running</span>
             </div>
-            <img src="{{ .thumbnail }}" alt="{{ .title }}" width="480" height="270" loading="lazy" decoding="async" />
+            {{ $lcp := eq $i 0 }}
+            {{ $w480 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 480 "quality" 76) }}
+            {{ $w800 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 800 "quality" 76) }}
+            <img
+              src="{{ $w800.src }}"
+              srcset="{{ $w480.src }} 480w, {{ $w800.src }} 800w"
+              sizes="(min-width: 720px) 50vw, 92vw"
+              alt="{{ $video.title }}"
+              width="{{ $w800.width }}"
+              height="{{ $w800.height }}"
+              {{- if $lcp }} fetchpriority="high"{{ else }} loading="lazy"{{ end }}
+              decoding="async" />
             <div class="meta">
-              <h3>{{ .title }}</h3>
-              <p>{{ i18n "watch" }} · {{ .id }}</p>
+              <h3>{{ $video.title }}</h3>
+              <p>{{ i18n "watch" }} · {{ $video.id }}</p>
             </div>
           </a>
         {{ end }}

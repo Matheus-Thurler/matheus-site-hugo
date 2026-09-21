@@ -7,7 +7,7 @@
   "name" site.Params.author.name
   "url" site.BaseURL
   "jobTitle" (site.Params.author.jobTitle | default site.Params.author.title)
-  "image" ((site.Params.author.avatar | default "/images/avatar.png") | absURL)
+  "image" ((site.Params.author.avatar | default "/images/avatar.webp") | absURL)
   "sameAs" (site.Params.author.sameAs | default slice)
 -}}
 {{- $website := dict

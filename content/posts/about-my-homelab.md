@@ -3,7 +3,7 @@ title: "Goodbye Proxmox? Why I Migrated My Homelab to Apache CloudStack"
 date: 2025-11-24
 slug: about-my-homelab
 description: "Discover the technical and career reasons that led me to migrate my Homelab from Proxmox and OpenStack to Apache CloudStack. Learn about my physical topology and how it simulates a real Datacenter environment."
-cover: /images/covers/cloudstack-migration.png
+cover: /images/covers/cloudstack-migration.webp
 readingTime: "10"
 katex: false
 mermaid: false
@@ -105,7 +105,7 @@ Here's how I structured my homelab with CloudStack:
 
 ### Physical Infrastructure
 
-![Diagram of my homelab physical infrastructure with CloudStack](/images/placeholder/diagrama-homelab.png)
+![Diagram of my homelab physical infrastructure with CloudStack](/images/placeholder/diagrama-homelab.webp)
 
 ### Components
 

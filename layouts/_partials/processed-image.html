@@ -1,0 +1,23 @@
+{{- $path := .path | default "" -}}
+{{- $fallback := dict "src" $path "width" (.width | default 0) "height" (.height | default 0) -}}
+{{- if or (not $path) (hasPrefix $path "http://") (hasPrefix $path "https://") (hasPrefix $path "//") (strings.HasSuffix $path ".svg") -}}
+  {{- return $fallback -}}
+{{- end -}}
+{{- $rel := strings.TrimPrefix "/" $path -}}
+{{- $img := resources.Get $rel -}}
+{{- if not $img -}}
+  {{- return $fallback -}}
+{{- end -}}
+{{- $quality := .quality | default 75 -}}
+{{- $processed := $img -}}
+{{- if .fill -}}
+  {{- $h := .height | default .width -}}
+  {{- $processed = $img.Fill (printf "%dx%d webp q%d" .width $h $quality) -}}
+{{- else if .width -}}
+  {{- if gt $img.Width .width -}}
+    {{- $processed = $img.Resize (printf "%dx webp q%d" .width $quality) -}}
+  {{- else -}}
+    {{- $processed = $img.Resize (printf "%dx webp q%d" $img.Width $quality) -}}
+  {{- end -}}
+{{- end -}}
+{{- return dict "src" $processed.RelPermalink "width" $processed.Width "height" $processed.Height -}}

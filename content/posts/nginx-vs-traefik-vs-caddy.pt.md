@@ -2,7 +2,7 @@
 title: "Nginx vs Traefik vs Caddy: Qual Reverse Proxy Escolher?"
 date: 2025-11-26
 description: "Uma comparação completa entre os três reverse proxies mais populares para Homelabs e Produção: Nginx, Traefik e Caddy."
-cover: /images/covers/nginx-traefik-caddy.png
+cover: /images/covers/nginx-traefik-caddy.webp
 readingTime: "10"
 katex: false
 mermaid: false

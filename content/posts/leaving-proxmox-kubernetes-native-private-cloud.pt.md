@@ -2,7 +2,7 @@
 title: "Criei o VirtFoundry: operator Kubernetes rumo ao CNCF Sandbox"
 date: 2026-09-04
 description: "Eu criei o VirtFoundry — operator + CRDs + UI para nuvem privada no KubeVirt. Arquitetura, o que já funciona, comparação honesta e o caminho até o CNCF Sandbox."
-cover: /images/covers/virtfoundry-logo-card.png
+cover: /images/covers/virtfoundry-logo-card.webp
 readingTime: "12"
 katex: false
 mermaid: false
@@ -18,7 +18,7 @@ O hypervisor é o [KubeVirt](https://kubevirt.io/). A fonte da verdade não é M
 
 Ainda **não** é um projeto da CNCF. Estamos construindo operator, charts, provider Terraform e comunidade para submeter quando o repositório completar a maturidade mínima — não antes.
 
-![Lista de VMs no VirtFoundry](/images/covers/virtfoundry-ui-vms.png)
+![Lista de VMs no VirtFoundry](/images/covers/virtfoundry-ui-vms.webp)
 
 ## O problema que eu queria resolver
 
@@ -50,7 +50,7 @@ O control plane é um **operator**. O grupo de API é `virtfoundry.io`. Hoje o s
 | **Terraform** | Provider de primeira parte no [Registry](https://registry.terraform.io/providers/virtfoundry/virtfoundry) |
 | **Runtime** | KubeVirt (VM), Multus (rede de tenant), CSI (disco; Longhorn no homelab) |
 
-![Dashboard do VirtFoundry no homelab](/images/posts/virtfoundry-dashboard.png)
+![Dashboard do VirtFoundry no homelab](/images/posts/virtfoundry-dashboard.webp)
 
 A ideia é **compor blocos CNCF**, não reinventar hypervisor nem CSI. O operator reconcilia `Tenant` (namespace + status) e `Instance` (fase, IP, nome KubeVirt). Os outros kinds já existem como CRD; os controllers vão fechando o gap. GitOps entra de graça: Helm + Argo CD, CR como fonte da verdade.
 
@@ -60,9 +60,9 @@ A ideia é **compor blocos CNCF**, não reinventar hypervisor nem CSI. O operato
 
 Release atual dos charts: **0.7.0**. No homelab isso já cobre o ciclo que o TOC vai perguntar num demo: VM + volume + snapshot + UI.
 
-![Snapshots de VM no VirtFoundry](/images/posts/virtfoundry-snapshots.png)
+![Snapshots de VM no VirtFoundry](/images/posts/virtfoundry-snapshots.webp)
 
-![Redes e VPCs por tenant](/images/posts/virtfoundry-networks.png)
+![Redes e VPCs por tenant](/images/posts/virtfoundry-networks.webp)
 
 | Recurso | Estado |
 |---------|--------|
@@ -110,7 +110,7 @@ O que **não** está:
 
 Não escreva “projeto da CNCF”, “estamos no landscape” nem “já submetemos”. O destino é o Sandbox. O status hoje é open source Apache 2.0, alinhado às convenções da fundação.
 
-![Store em CRD: kubectl get crd \| grep virtfoundry.io](/images/posts/virtfoundry-crds.png)
+![Store em CRD: kubectl get crd \| grep virtfoundry.io](/images/posts/virtfoundry-crds.webp)
 
 ## Como experimentar
 

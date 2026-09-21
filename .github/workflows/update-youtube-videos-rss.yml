@@ -46,7 +46,7 @@ jobs:
           git checkout -b "$BRANCH_NAME"
 
           if [[ -n "$(git status --porcelain)" ]]; then
-            git add data/youtube.json
+            git add data/youtube.json static/images/youtube
             git commit -m "chore(youtube): update recent videos via RSS"
             git push origin "$BRANCH_NAME"
             echo "has_changes=true" >> "$GITHUB_OUTPUT"

@@ -1,0 +1,10 @@
+{{- $img := partial "processed-image.html" . -}}
+<img
+  src="{{ $img.src }}"
+  alt="{{ .alt }}"
+  {{- with .class }} class="{{ . }}"{{ end }}
+  {{- if $img.width }} width="{{ $img.width }}"{{ end }}
+  {{- if $img.height }} height="{{ $img.height }}"{{ end }}
+  {{- if .lazy }} loading="lazy"{{ end }}
+  {{- with .fetchpriority }} fetchpriority="{{ . }}"{{ end }}
+  decoding="{{ or .decoding `async` }}" />
