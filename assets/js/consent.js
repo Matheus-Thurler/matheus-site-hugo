@@ -31,6 +31,27 @@
     document.head.appendChild(script);
   };
 
+  // Auto ads land inside .hero-copy and stretch that column, so the avatar
+  // centers on the ad instead of the name. Keep those units below the intro.
+  const parkHeroAds = () => {
+    const identity = document.querySelector(".hero-identity");
+    if (!identity) return;
+    const relocate = () => {
+      identity.querySelectorAll(".google-auto-placed").forEach((ad) => {
+        identity.after(ad);
+      });
+    };
+    relocate();
+    new MutationObserver(relocate).observe(identity, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  };
+
+  parkHeroAds();
+
   const enableTracking = () => {
     window.gtag("consent", "update", {
       ad_storage: "granted",
