@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,7 +9,7 @@
     <link rel="preload" href="/fonts/ibm-plex-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/ibm-plex-mono-latin-500.woff2" as="font" type="font/woff2" crossorigin />
     {{ if .IsHome }}
-      {{ with site.Data.youtube.recent_videos }}
+      {{ with hugo.Data.youtube.recent_videos }}
         {{ with index . 0 }}
           {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 76) | transform.Unmarshal }}
           {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 76) | transform.Unmarshal }}
@@ -62,7 +62,7 @@
           {{ end }}
           <div class="lang" aria-label="{{ i18n "nav_language" }}">
             {{ range .AllTranslations }}
-              <a href="{{ .RelPermalink }}" hreflang="{{ .Language.LanguageCode }}" {{ if eq .Lang $.Lang }}class="is-active" aria-current="true"{{ end }}>{{ .Lang }}</a>
+              <a href="{{ .RelPermalink }}" hreflang="{{ .Language.Locale }}" {{ if eq .Lang $.Lang }}class="is-active" aria-current="true"{{ end }}>{{ .Lang }}</a>
             {{ end }}
           </div>
         </nav>

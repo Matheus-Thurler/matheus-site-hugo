@@ -53,7 +53,7 @@
 
 {{- $keywords := site.Params.keywords -}}
 {{- with .Params.tags }}{{ $keywords = . }}{{ end -}}
-{{- $locale := replaceRE "-" "_" (or site.Params.locale site.Language.LanguageCode) -}}
+{{- $locale := replaceRE "-" "_" (or site.Params.locale site.Language.Locale) -}}
 
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $desc }}" />
@@ -83,7 +83,7 @@
 
 {{- $defaultPermalink := $canonical -}}
 {{- range .AllTranslations }}
-<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}" />
+<link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
   {{- if eq .Lang "en" }}{{ $defaultPermalink = .Permalink }}{{ end }}
 {{- end }}
 <link rel="alternate" hreflang="x-default" href="{{ $defaultPermalink }}" />
@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="{{ site.Title }}" />
 <meta property="og:locale" content="{{ $locale }}" />
 {{- range .Translations }}
-  {{- $altLocale := replaceRE "-" "_" (or .Site.Params.locale .Language.LanguageCode) }}
+  {{- $altLocale := replaceRE "-" "_" (or .Site.Params.locale .Language.Locale) }}
 <meta property="og:locale:alternate" content="{{ $altLocale }}" />
 {{- end }}
 <meta property="og:type" content="{{ if and .IsPage (eq .Section `posts`) }}article{{ else }}website{{ end }}" />

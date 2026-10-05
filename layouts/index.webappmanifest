@@ -12,7 +12,7 @@
   "background_color" $themeColor
   "theme_color" $themeColor
   "orientation" "portrait-primary"
-  "lang" site.Language.LanguageCode
+  "lang" site.Language.Locale
   "dir" "ltr"
   "scope" "/"
   "categories" (slice "blog" "technology" "education")

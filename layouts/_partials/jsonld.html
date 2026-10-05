@@ -16,7 +16,7 @@
   "url" site.BaseURL
   "name" site.Title
   "description" (or site.Params.description "")
-  "inLanguage" site.Language.LanguageCode
+  "inLanguage" site.Language.Locale
   "publisher" (dict "@id" $personID)
 -}}
 {{- $graph := slice $website $author -}}
@@ -29,7 +29,7 @@
     "name" .title
     "description" .desc
     "isPartOf" (dict "@id" $siteID)
-    "inLanguage" site.Language.LanguageCode
+    "inLanguage" site.Language.Locale
   -}}
   {{- if $p.Date }}
     {{- $webpage = merge $webpage (dict "datePublished" ($p.Date.Format "2006-01-02T15:04:05-07:00")) -}}
@@ -51,7 +51,7 @@
     "dateModified" ($p.Lastmod.Format "2006-01-02T15:04:05-07:00")
     "author" (dict "@id" $personID)
     "publisher" (dict "@id" $personID)
-    "inLanguage" site.Language.LanguageCode
+    "inLanguage" site.Language.Locale
     "url" .canonical
   -}}
   {{- with .img }}{{ $article = merge $article (dict "image" .) }}{{ end -}}

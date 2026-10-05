@@ -1,5 +1,5 @@
 baseURL: https://matheusthurler.com.br/
-languageCode: en-US
+locale: en-US
 defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 title: Matheus Thurler
@@ -45,17 +45,17 @@ privacy:
 
 languages:
   en:
-    languageCode: en-US
-    languageName: "English"
-    languageDirection: ltr
+    locale: en-US
+    label: "English"
+    direction: ltr
     weight: 1
     params:
       locale: en_US
       description: "Matheus Thurler — DevOps & Platform Engineer focused on Google Cloud. Tutorials and articles about Kubernetes, Terraform, CI/CD, SRE, and Platform Engineering."
   pt:
-    languageCode: pt-BR
-    languageName: "Português"
-    languageDirection: ltr
+    locale: pt-BR
+    label: "Português"
+    direction: ltr
     weight: 2
     params:
       locale: pt_BR
@@ -185,8 +185,3 @@ module:
       target: static
     - source: static/images
       target: assets/images
-
-deployment:
-  targets:
-    - name: production
-      url: s3://matheus-site-nuxt?region=us-east-1
