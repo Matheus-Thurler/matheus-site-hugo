@@ -5,3 +5,5 @@
 hugo.exe
 hugo.linux
 hugo.darwin
+.env
+.hugo_build.lock

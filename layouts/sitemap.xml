@@ -12,7 +12,7 @@
     <priority>{{ if .IsHome }}1.0{{ else if and (eq .Kind "page") (eq .Section "posts") }}0.8{{ else if eq .Kind "section" }}0.6{{ else }}0.4{{ end }}</priority>
       {{- $en := "" }}
       {{- range .AllTranslations }}
-    <xhtml:link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}" />
+    <xhtml:link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
         {{- if eq .Lang "en" }}{{ $en = .Permalink }}{{ end }}
       {{- end }}
       {{- if $en }}
