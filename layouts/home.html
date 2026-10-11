@@ -45,8 +45,8 @@
               <span class="run"><span class="pulse"></span> Running</span>
             </div>
             {{ $lcp := eq $i 0 }}
-            {{ $w480 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 480 "quality" 76) | transform.Unmarshal }}
-            {{ $w800 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 800 "quality" 76) | transform.Unmarshal }}
+            {{ $w480 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 480 "quality" 68) | transform.Unmarshal }}
+            {{ $w800 := partial "processed-image.html" (dict "path" $video.thumbnail "width" 800 "quality" 68) | transform.Unmarshal }}
             <img
               src="{{ $w800.src }}"
               srcset="{{ $w480.src }} 480w, {{ $w800.src }} 800w"

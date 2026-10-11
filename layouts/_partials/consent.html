@@ -1,5 +1,5 @@
-<div id="consent" class="consent" hidden role="dialog" aria-live="polite">
-  <p>
+<div id="consent" class="consent" hidden role="dialog" aria-labelledby="consent-msg" aria-live="polite">
+  <p id="consent-msg">
     {{ i18n "cookie_message" }}
     {{ with site.GetPage "/terms" }}
       <a href="{{ .RelPermalink }}">{{ i18n "cookie_terms" }}</a>

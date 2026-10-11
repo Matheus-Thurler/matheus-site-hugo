@@ -11,8 +11,8 @@
     {{ if .IsHome }}
       {{ with hugo.Data.youtube.recent_videos }}
         {{ with index . 0 }}
-          {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 76) | transform.Unmarshal }}
-          {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 76) | transform.Unmarshal }}
+          {{ $w480 := partial "processed-image.html" (dict "path" .thumbnail "width" 480 "quality" 68) | transform.Unmarshal }}
+          {{ $w800 := partial "processed-image.html" (dict "path" .thumbnail "width" 800 "quality" 68) | transform.Unmarshal }}
           <link
             rel="preload"
             as="image"

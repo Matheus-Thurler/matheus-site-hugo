@@ -17,5 +17,5 @@
 
   overlay.removeAttribute("hidden");
   overlay.querySelector("[data-boot-skip]")?.addEventListener("click", finish);
-  window.setTimeout(finish, 3000);
+  window.setTimeout(finish, 1400);
 })();
