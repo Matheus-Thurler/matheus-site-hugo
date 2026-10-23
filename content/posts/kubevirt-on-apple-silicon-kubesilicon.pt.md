@@ -6,7 +6,7 @@ cover: /images/covers/kubesilicon-card.webp
 readingTime: "6"
 katex: false
 mermaid: false
-draft: true
+draft: false
 slug: kubevirt-on-apple-silicon-kubesilicon
 tags: ['kubernetes', 'kubevirt', 'kubesilicon', 'apple-silicon', 'macos', 'kind', 'virtfoundry', 'golang', 'opensource']
 categories: ['kubernetes']
