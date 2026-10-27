@@ -45,17 +45,20 @@ Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e ti
 - O catálogo de trilhas pode ser atualizado a partir do CDN/site do projeto (`thurler-it-consultancy.web.app` ou equivalente).
 - Tipografia pode ser baixada em runtime via Google Fonts quando a rede estiver disponível.
 
+### Compras e assinaturas
+
+O app oferece (ou passará a oferecer) assinatura paga pelo **Google Play Billing**. O pagamento é processado pelo Google: **não recebemos nem guardamos número de cartão ou dados de pagamento**. Podemos guardar o estado da assinatura (produto, ativa/expirada e token de compra) associado ao seu UID para liberar o conteúdo pago. Você gerencia ou cancela a assinatura em Play Store → Pagamentos e assinaturas.
+
 ## O que **não** fazemos (hoje)
 
 - Não exibimos anúncios e **não** usamos Advertising ID
 - Não vendemos seus dados
 - Não pedimos localização, contatos, microfone ou câmera
-- Não há compras in-app / Play Billing nesta versão
 - Labs de prática são **simulados** no app (não executam shell real no dispositivo)
 
 ## Compartilhamento
 
-Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore) conforme as políticas desses produtos. Não compartilhamos dados com redes de anúncio.
+Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing) conforme as políticas desses produtos. Não compartilhamos dados com redes de anúncio.
 
 ## Exclusão de conta
 
