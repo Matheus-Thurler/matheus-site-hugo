@@ -7,7 +7,7 @@ comments_disabled: true
 description: "Política de privacidade do aplicativo Trilha Ops (Android): dados coletados, compartilhamento, retenção e exclusão de conta."
 ---
 
-**Última atualização:** 25 de setembro de 2026  
+**Última atualização:** 28 de outubro de 2026  
 **Idioma:** português (Brasil)
 
 Esta política descreve, de forma honesta, quais dados o aplicativo **Trilha Ops** (pacote `br.com.matheusthurler.trilha_ops`) trata. O app é um produto educacional de estudo DevOps no celular.
@@ -40,6 +40,10 @@ Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e ti
 - Preferências (ex.: animações de acerto, nome de exibição local)
 - Cache de conteúdo de estudo (trilhas/módulos)
 
+### Anúncios (Google AdMob)
+
+O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Você pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
+
 ### Conteúdo e fontes
 
 - O catálogo de trilhas pode ser atualizado a partir do CDN/site do projeto (`thurler-it-consultancy.web.app` ou equivalente).
@@ -51,14 +55,13 @@ O app oferece (ou passará a oferecer) assinatura paga pelo **Google Play Billin
 
 ## O que **não** fazemos (hoje)
 
-- Não exibimos anúncios e **não** usamos Advertising ID
 - Não vendemos seus dados
 - Não pedimos localização, contatos, microfone ou câmera
 - Labs de prática são **simulados** no app (não executam shell real no dispositivo)
 
 ## Compartilhamento
 
-Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing) conforme as políticas desses produtos. Não compartilhamos dados com redes de anúncio.
+Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing) conforme as políticas desses produtos. Os dados descritos em “Anúncios” são compartilhados com o Google AdMob.
 
 ## Exclusão de conta
 
