@@ -7,7 +7,7 @@ comments_disabled: true
 description: "Política de privacidade do aplicativo Trilha Ops (Android): dados coletados, compartilhamento, retenção e exclusão de conta."
 ---
 
-**Última atualização:** 28 de outubro de 2026  
+**Última atualização:** 30 de outubro de 2026  
 **Idioma:** português (Brasil)
 
 Esta política descreve, de forma honesta, quais dados o aplicativo **Trilha Ops** (pacote `br.com.matheusthurler.trilha_ops`) trata. O app é um produto educacional de estudo DevOps no celular.
@@ -44,6 +44,18 @@ Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e ti
 
 O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Você pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
 
+### Análise de uso e falhas (Firebase Analytics e Crashlytics)
+
+Usamos o **Firebase Analytics** para entender como o app é usado e melhorá-lo: eventos como módulo aberto, quiz concluído (trilha, módulo, acertos), além de dados técnicos do aparelho (modelo, versão do Android, idioma) e um identificador da instalação do app. Usamos o **Firebase Crashlytics** para receber relatórios de falhas (tipo do erro, versão do app, modelo do aparelho). Não usamos esses dados para vender nem para identificar você pelo nome; eles ficam associados à instalação do app. Tanto o Analytics quanto o Crashlytics são serviços do Google.
+
+### Lembrete diário
+
+Se você ativar, o app agenda um **lembrete local** de estudo no próprio aparelho, no horário escolhido. Ele não envia dados para a nuvem. Você pode desligar em Perfil ou nas configurações de notificações do Android.
+
+### Consentimento de anúncios
+
+Antes dos anúncios, o app pode exibir a mensagem de consentimento do Google (UMP), quando exigida, para você escolher como seus dados são usados em anúncios.
+
 ### Conteúdo e fontes
 
 - O catálogo de trilhas pode ser atualizado a partir do CDN/site do projeto (`thurler-it-consultancy.web.app` ou equivalente).
@@ -61,7 +73,7 @@ O app oferece (ou passará a oferecer) assinatura paga pelo **Google Play Billin
 
 ## Compartilhamento
 
-Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing) conforme as políticas desses produtos. Os dados descritos em “Anúncios” são compartilhados com o Google AdMob.
+Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing, Firebase Analytics, Firebase Crashlytics) conforme as políticas desses produtos. Os dados descritos em “Anúncios” são compartilhados com o Google AdMob, e os de “Análise de uso e falhas”, com o Google (Firebase).
 
 ## Exclusão de conta
 
@@ -81,7 +93,7 @@ Você também pode solicitar exclusão pelo e-mail de suporte.
 
 ## Crianças
 
-O app não é direcionado a menores de 13 anos. Se você for responsável legal e acreditar que uma criança nos enviou dados, escreva para o e-mail de suporte.
+O app não é direcionado a menores de 16 anos. Se você for responsável legal e acreditar que uma criança nos enviou dados, escreva para o e-mail de suporte.
 
 ## Alterações
 
