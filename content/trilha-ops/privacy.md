@@ -27,7 +27,7 @@ Ao tocar em “Continuar com Google”, o Firebase Authentication recebe o login
 - nome de exibição (quando a Google fornece)
 - URL da foto de perfil (quando a Google fornece)
 
-Esses dados existem para **identificar você** no app. **O progresso de estudo (módulos concluídos, notas de quiz e sequência/streak) fica neste aparelho** (armazenamento local) e **ainda não é sincronizado na nuvem**.
+Esses dados existem para **identificar você** no app. **O progresso de estudo (módulos concluídos, melhores notas de quiz e sequência/streak) é guardado neste aparelho e também no seu perfil no Firestore**, para você recuperá-lo ao trocar de celular ou reinstalar o app. Só você acessa esses dados (regras de acesso por conta).
 
 ### Perfil no Firestore
 
