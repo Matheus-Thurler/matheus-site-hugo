@@ -543,6 +543,32 @@ body.has-consent {
   color: #d5dee6;
 }
 
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.4rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--line);
+}
+
+.prose th,
+.prose td {
+  padding: 0.55rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid var(--line);
+}
+
+.prose th {
+  color: var(--muted);
+  font-weight: 500;
+  background: rgb(20 27 34 / 0.65);
+}
+
+.prose tbody tr:hover td {
+  background: var(--ice-dim);
+}
+
 .prose pre {
   overflow-x: auto;
   padding: 1rem;
