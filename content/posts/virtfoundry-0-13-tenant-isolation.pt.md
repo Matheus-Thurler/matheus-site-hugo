@@ -7,7 +7,7 @@ cover: /images/covers/virtfoundry-tenant-isolation.webp
 readingTime: "6"
 katex: false
 mermaid: false
-draft: true
+draft: false
 tags: ['kubernetes', 'kubevirt', 'multus', 'networking', 'security', 'virtfoundry', 'homelab']
 categories: ['kubernetes']
 ---
