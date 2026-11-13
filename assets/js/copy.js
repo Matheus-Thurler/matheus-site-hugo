@@ -12,16 +12,7 @@
       await navigator.clipboard.writeText(text);
       return true;
     } catch {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.top = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      const ok = document.execCommand("copy");
-      ta.remove();
-      return ok;
+      return false;
     }
   };
 
