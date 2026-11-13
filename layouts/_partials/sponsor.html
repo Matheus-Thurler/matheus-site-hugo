@@ -1,0 +1,14 @@
+{{- /* Sponsor call to action on posts about my open source projects, picked by tag. */ -}}
+{{- $repo := "" -}}
+{{- if in .Params.tags "kubesilicon" }}{{ $repo = "https://github.com/Matheus-Thurler/KubeSilicon" }}
+{{- else if in .Params.tags "virtfoundry" }}{{ $repo = site.Params.virtfoundryUrl }}{{ end -}}
+{{- with $repo }}
+<section class="newsletter sponsor">
+  <h2 class="kubectl">{{ i18n "sponsor_title" }}</h2>
+  <p class="lede">{{ i18n "sponsor_desc" }}</p>
+  <div class="ctas">
+    <a class="btn btn-primary" href="https://github.com/sponsors/Matheus-Thurler" rel="noopener">{{ i18n "sponsor_button" }}</a>
+    <a class="btn btn-ghost" href="{{ . }}" rel="noopener">{{ i18n "sponsor_star" }}</a>
+  </div>
+</section>
+{{- end }}
