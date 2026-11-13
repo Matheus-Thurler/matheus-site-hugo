@@ -102,7 +102,7 @@ Quando funcionou, perguntei o que acontece quando o Mac faz o que Macs fazem.
 ## O que ele não é
 
 - **Não é uma barreira de segurança.** Os jobs rodam dentro do `sandbox-exec` (escrita só no diretório do job, sem leitura da sua home), mas a Apple o marcou como deprecado e a rede continua aberta. Não rode código em que você não confia.
-- **Um job de GPU por vez.** Os outros esperam como `Pending`. Não há limite de memória por job, porque o macOS não tem cgroups.
+- **Um job de GPU por vez.** Os outros esperam como `Pending`. Não há limite de memória por job, porque o macOS não tem cgroups. *Atualização: a v0.4 roda jobs em paralelo com limite de memória por job, veja [o próximo post](/pt/posts/parallel-gpu-jobs-mac-kubesilicon/).*
 - **Sem GPU para as VMs.** Continua valendo.
 - **O Katib está deprecado.** Eu queria busca de hiperparâmetros, mas a documentação do Kubeflow agora aponta para o `OptimizationJob` do Kubeflow Trainer, que é alpha. Ainda não testei.
 - **Dashboard sem login.** O Dashboard do meu lab não tem autenticação nem tema escuro.
