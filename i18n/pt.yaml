@@ -61,3 +61,7 @@ cookie_accept: Aceitar
 cookie_terms: Termos
 cookie_privacy: Privacidade
 archives_empty: Ainda não há posts.
+sponsor_title: kubectl apply -f sponsor.yaml
+sponsor_desc: Este projeto é open source e feito no meu tempo livre. Se ele te poupa tempo, o patrocínio mantém o projeto andando.
+sponsor_button: Patrocinar no GitHub
+sponsor_star: Dar estrela no repo
