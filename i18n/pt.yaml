@@ -50,6 +50,7 @@ comments: kubectl get events
 newsletter_title: kubectl apply -f newsletter.yaml
 newsletter_desc: DevOps, GCP, Kubernetes e AI no seu e-mail. Sem spam.
 newsletter_email: seu@email.com
+newsletter_email_label: E-mail
 newsletter_name: Seu nome
 newsletter_subscribe: Apply
 newsletter_success: Inscrito com sucesso.

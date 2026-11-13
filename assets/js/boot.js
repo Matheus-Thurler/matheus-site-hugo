@@ -15,6 +15,11 @@
     window.setTimeout(() => overlay.remove(), 420);
   };
 
+  if (!CSS.supports("animation-delay: calc(sibling-index() * 0.1s)")) {
+    overlay.querySelectorAll(".line").forEach((el) =>
+      el.style.setProperty("--sibling-index", [...el.parentElement.children].indexOf(el) + 1));
+  }
+
   overlay.removeAttribute("hidden");
   overlay.querySelector("[data-boot-skip]")?.addEventListener("click", finish);
   window.setTimeout(finish, 1400);
