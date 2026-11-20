@@ -7,14 +7,15 @@ comments_disabled: true
 description: "Política de privacidade do aplicativo Trilha Ops (Android): dados coletados, compartilhamento, retenção e exclusão de conta."
 ---
 
-**Última atualização:** 30 de outubro de 2026  
+**Última atualização:** 20 de novembro de 2026  
 **Idioma:** português (Brasil)
 
 Esta política descreve, de forma honesta, quais dados o aplicativo **Trilha Ops** (pacote `br.com.matheusthurler.trilha_ops`) trata. O app é um produto educacional de estudo DevOps no celular.
 
+
 ## Quem somos
 
-Trilha Ops é mantido por Thurler IT / Matheus Thurler. Contato de suporte: **contato@matheusthurler.com.br**.
+Trilha Ops é mantido por Thurler IT / Matheus Thurler. Controlador dos dados: Matheus Thurler (Thurler IT). Encarregado e canal para exercer seus direitos: **contato@matheusthurler.com.br**.
 
 ## Quais dados coletamos
 
@@ -29,6 +30,14 @@ Ao tocar em “Continuar com Google”, o Firebase Authentication recebe o login
 
 Esses dados existem para **identificar você** no app. **O progresso de estudo (módulos concluídos, melhores notas de quiz e sequência/streak) é guardado neste aparelho e também no seu perfil no Firestore**, para você recuperá-lo ao trocar de celular ou reinstalar o app. Só você acessa esses dados (regras de acesso por conta).
 
+### Estudar sem conta
+
+Dá para estudar o primeiro módulo (O que é Linux) e fazer o quiz sem entrar. Nesse caso nada vai para a nuvem: o progresso fica só neste aparelho até você entrar com Google. Ao entrar, ele passa a fazer parte do seu perfil. Se entrar com uma conta diferente da que usou antes neste aparelho, o progresso local anterior é apagado para não ir parar na conta errada.
+
+### Certificado
+
+O certificado por nível concluído é uma tela dentro do app, gerada no aparelho com o nome da sua conta Google e a data. Não é enviado a ninguém e não tem validade oficial.
+
 ### Perfil no Firestore
 
 Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e timestamps de criação / último login.
@@ -42,11 +51,11 @@ Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e ti
 
 ### Anúncios (Google AdMob)
 
-O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Você pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
+O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Por padrão pedimos anúncios **não personalizados**; você pode ligar a personalização em Perfil → Anúncios personalizados. Também pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
 
 ### Análise de uso e falhas (Firebase Analytics e Crashlytics)
 
-Usamos o **Firebase Analytics** para entender como o app é usado e melhorá-lo: eventos como módulo aberto, quiz concluído (trilha, módulo, acertos), além de dados técnicos do aparelho (modelo, versão do Android, idioma) e um identificador da instalação do app. Usamos o **Firebase Crashlytics** para receber relatórios de falhas (tipo do erro, versão do app, modelo do aparelho). Não usamos esses dados para vender nem para identificar você pelo nome; eles ficam associados à instalação do app. Tanto o Analytics quanto o Crashlytics são serviços do Google.
+Usamos o **Firebase Analytics** para entender como o app é usado e melhorá-lo: eventos como módulo aberto, quiz concluído (trilha, módulo, acertos), além de dados técnicos do aparelho (modelo, versão do Android, idioma) e um identificador da instalação do app. Usamos o **Firebase Crashlytics** para receber relatórios de falhas (tipo do erro, versão do app, modelo do aparelho). Não usamos esses dados para vender nem para identificar você pelo nome; eles ficam associados à instalação do app. A base legal é o nosso legítimo interesse em manter e melhorar o app. Você pode desligar quando quiser em Perfil → Dados de uso e falhas; o Google guarda esses dados pelos prazos padrão do Firebase. Tanto o Analytics quanto o Crashlytics são serviços do Google.
 
 ### Lembrete diário
 
@@ -63,7 +72,15 @@ Antes dos anúncios, o app pode exibir a mensagem de consentimento do Google (UM
 
 ### Compras e assinaturas
 
-O app oferece (ou passará a oferecer) assinatura paga pelo **Google Play Billing**. O pagamento é processado pelo Google: **não recebemos nem guardamos número de cartão ou dados de pagamento**. Podemos guardar o estado da assinatura (produto, ativa/expirada e token de compra) associado ao seu UID para liberar o conteúdo pago. Você gerencia ou cancela a assinatura em Play Store → Pagamentos e assinaturas.
+O app oferece assinatura paga (mensal, anual e vitalício) pelo **Google Play Billing**. O pagamento é processado pelo Google: **não recebemos nem guardamos número de cartão ou dados de pagamento**. Podemos guardar o estado da assinatura (produto, ativa/expirada e token de compra) associado ao seu UID para liberar o conteúdo pago. Você gerencia ou cancela a assinatura em Play Store → Pagamentos e assinaturas.
+
+## Transferência internacional
+
+Google (Firebase, AdMob, Play) pode processar dados fora do Brasil, sob os contratos e salvaguardas do próprio Google.
+
+## Seus direitos
+
+Pela LGPD (art. 18) você pode pedir confirmação, acesso, correção, portabilidade, eliminação e informação sobre compartilhamento. Escreva para **contato@matheusthurler.com.br**; respondemos em até 15 dias.
 
 ## O que **não** fazemos (hoje)
 
@@ -83,6 +100,8 @@ No app: **Perfil → Excluir conta**. O fluxo:
 2. apaga o documento `users/{uid}` no Firestore;
 3. solicita a exclusão da conta no Firebase Authentication (pode pedir para entrar de novo com o Google se a sessão estiver antiga);
 4. limpa progresso e preferências locais neste aparelho.
+
+O registro de assinatura (`entitlements`) e o vínculo do token de compra com a sua conta também são apagados. Excluir a conta não cancela a assinatura no Google Play.
 
 Você também pode solicitar exclusão pelo e-mail de suporte.
 
