@@ -12,7 +12,7 @@ tags: ['google-adk', 'ai-agents', 'python', 'tools', 'tutorial', 'video']
 categories: ['python']
 ---
 
-{{< youtube VIDEO_ID_EP02 >}}
+{{< youtube 5CJIcKP0Xf4 >}}
 
 In the [first episode](/posts/adk-primeiro-agent/) we built an agent that only talks. Now it gets **tools**: nothing more than Python functions. The model reads the question, picks which function to call and uses the result to answer. This is the second video of the series **ADK, from beginner to advanced**, and the code is in the [repository](https://github.com/Matheus-Thurler/youtube-projects/tree/master/ADK-Iniciante%20ao%20Avancado/02-tool-agent).
 
