@@ -1,0 +1,73 @@
+# Publica posts de vídeo sozinho: PR aberto com o label "agendado" é mergeado quando o vídeo
+# do shortcode {{< youtube ID >}} fica público (oEmbed do YouTube responde 200), e o site é publicado.
+# Merge feito com GITHUB_TOKEN não dispara outros workflows, por isso o deploy roda aqui mesmo.
+
+name: Publicar posts agendados
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'Só mostra o que faria'
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency: publicar-agendado
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      DRY: ${{ inputs.dry && '1' || '' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Mergear PRs com vídeo público
+        id: merge
+        run: |
+          merged=0
+          # mais antigo primeiro: o post novo linka para o anterior
+          for pr in $(gh pr list --label agendado --state open --json number --jq 'sort_by(.number) | .[].number'); do
+            id=$(gh pr diff "$pr" | grep -oP '^\+\{\{< youtube \K[A-Za-z0-9_-]{11}(?= >\}\})' | head -1 || true)
+            if [ -z "$id" ]; then echo "#$pr: sem ID de vídeo definitivo"; continue; fi
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://www.youtube.com/oembed?format=json&url=https://youtu.be/$id")
+            if [ "$code" != 200 ]; then echo "#$pr: vídeo $id ainda não público ($code)"; continue; fi
+            echo "#$pr: vídeo $id público"
+            [ -n "$DRY" ] && continue
+            gh pr ready "$pr" || true
+            gh pr merge "$pr" --merge --delete-branch
+            merged=1
+          done
+          echo "merged=$merged" >> "$GITHUB_OUTPUT"
+
+      - name: Atualizar checkout
+        if: steps.merge.outputs.merged == '1'
+        run: git pull --ff-only origin master
+
+      - name: Install Hugo with deploy support
+        if: steps.merge.outputs.merged == '1'
+        run: |
+          curl -L -o hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v0.167.0/hugo_extended_withdeploy_0.167.0_linux-amd64.tar.gz
+          tar -xvf hugo.tar.gz
+          sudo mv hugo /usr/local/bin/
+
+      - name: Build
+        if: steps.merge.outputs.merged == '1'
+        run: hugo --minify
+
+      - name: Authenticate to Google Cloud
+        if: steps.merge.outputs.merged == '1'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MATHEUS_CLOUD_PESSOAL }}
+
+      - name: Deploy to Firebase Hosting
+        if: steps.merge.outputs.merged == '1'
+        run: bash scripts/firebase-deploy.sh
