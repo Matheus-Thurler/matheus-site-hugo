@@ -12,7 +12,7 @@ tags: ['google-adk', 'ai-agents', 'python', 'litellm', 'lm-studio', 'tutorial', 
 categories: ['python']
 ---
 
-{{< youtube VIDEO_ID_ep03 >}}
+{{< youtube 7-A_wcjxBr0 >}}
 
 O ADK é do Google, mas o agente não precisa usar o Gemini. No [episódio anterior](/posts/adk-tool-agent/) o agente ganhou ferramentas; agora ele roda com um **modelo local**, servido pelo LM Studio na minha máquina, sem chave de API e sem custo por chamada. Este é o terceiro vídeo da série **ADK, do iniciante ao avançado**, e o código está no [repositório](https://github.com/Matheus-Thurler/youtube-projects/tree/master/ADK-Iniciante%20ao%20Avancado/03-other-llm-agent).
 
