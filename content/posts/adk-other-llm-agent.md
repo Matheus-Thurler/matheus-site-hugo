@@ -12,7 +12,7 @@ tags: ['google-adk', 'ai-agents', 'python', 'litellm', 'lm-studio', 'tutorial', 
 categories: ['python']
 ---
 
-{{< youtube WMG5NNi3sK0 >}}
+{{< youtube 0JEAWbpLbag >}}
 
 ADK is made by Google, but your agent does not have to use Gemini. In the [previous episode](/posts/adk-tool-agent/) the agent got tools; now it runs on a **local model**, served by LM Studio on my machine, with no API key and no per-call cost. This is the third video of the series **ADK, from beginner to advanced** (in Portuguese), and the code is in the [repository](https://github.com/Matheus-Thurler/youtube-projects/tree/master/ADK-Iniciante%20ao%20Avancado/03-other-llm-agent).
 
