@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>TikTok · autorização</title>
+<style>body{font:18px system-ui;background:#0B0F17;color:#E8EDF5;display:grid;place-items:center;min-height:100vh;margin:0}
+main{max-width:640px;padding:24px}code{display:block;word-break:break-all;background:#101826;border:1px solid #26344A;padding:16px;border-radius:8px;color:#5EB1FF}
+button{margin-top:16px;padding:10px 18px;font:inherit;border:0;border-radius:8px;background:#5EB1FF;color:#0B0F17;cursor:pointer}</style></head>
+<body><main><h1>Autorização do TikTok</h1><p id="m">Conta autorizada. Copie o código abaixo e cole no terminal.</p>
+<code id="c"></code><button id="b">Copiar código</button></main>
+<script>const p=new URLSearchParams(location.search),c=p.get('code'),e=p.get('error_description')||p.get('error');
+document.getElementById('c').textContent=c||'';if(!c){document.getElementById('m').textContent=e?'Erro: '+e:'Nenhum código recebido.';document.getElementById('b').hidden=true}
+document.getElementById('b').onclick=()=>navigator.clipboard.writeText(c)</script></body></html>
