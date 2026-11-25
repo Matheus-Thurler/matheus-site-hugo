@@ -12,7 +12,7 @@ tags: ['google-adk', 'ai-agents', 'python', 'tools', 'tutorial', 'video']
 categories: ['python']
 ---
 
-{{< youtube 5CJIcKP0Xf4 >}}
+{{< youtube EI9kTlUM7KY >}}
 
 No [primeiro episódio](/posts/adk-primeiro-agent/) criamos um agente que só conversa. Agora ele ganha **tools**: ferramentas que nada mais são do que funções Python. O modelo lê a pergunta, escolhe qual função chamar e usa o retorno para responder. Este é o segundo vídeo da série **ADK, do iniciante ao avançado**, e o código está no [repositório](https://github.com/Matheus-Thurler/youtube-projects/tree/master/ADK-Iniciante%20ao%20Avancado/02-tool-agent).
 
