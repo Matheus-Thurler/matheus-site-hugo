@@ -100,7 +100,7 @@ Early on, guests crashed at random: kernel Oops and `SIGILL` in 3 of 4 boots wit
 
 - One Mac, one worker. Multiple Macs as nodes is a design goal, not a feature.
 - The Service has no ports. Use the VM IP or ping.
-- A VM whose launcher process died is not restarted automatically.
+- A VM whose launcher process died is not restarted automatically. *Update: [v0.5 adds `restartPolicy`](/posts/kubevirt-ideas-vm-readiness-kubesilicon/).*
 - Linux ARM64 guests only. macOS guests are out of scope.
 - API `v1` in name only. It will change.
 

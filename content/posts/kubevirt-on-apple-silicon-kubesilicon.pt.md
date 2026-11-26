@@ -100,7 +100,7 @@ No começo, os guests quebravam aleatoriamente: kernel Oops e `SIGILL` em 3 de 4
 
 - Um Mac, um worker. Vários Macs como nós é meta de design, não recurso.
 - O Service não tem portas. Use o IP da VM ou ping.
-- Uma VM cujo processo launcher morreu não é reiniciada automaticamente.
+- Uma VM cujo processo launcher morreu não é reiniciada automaticamente. *Atualização: [a v0.5 traz o `restartPolicy`](/pt/posts/kubevirt-ideas-vm-readiness-kubesilicon/).*
 - Só guests Linux ARM64. Guests macOS estão fora do escopo.
 - API `v1` só no nome. Vai mudar.
 
