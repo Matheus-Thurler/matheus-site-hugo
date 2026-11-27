@@ -7,15 +7,17 @@ comments_disabled: true
 description: "Política de privacidade do aplicativo Trilha Ops (Android): dados coletados, compartilhamento, retenção e exclusão de conta."
 ---
 
-**Última atualização:** 20 de novembro de 2026  
+**Última atualização:** 25 de novembro de 2026  
 **Idioma:** português (Brasil)
 
 Esta política descreve, de forma honesta, quais dados o aplicativo **Trilha Ops** (pacote `br.com.matheusthurler.trilha_ops`) trata. O app é um produto educacional de estudo DevOps no celular.
 
-
 ## Quem somos
 
-Trilha Ops é mantido por Thurler IT / Matheus Thurler. Controlador dos dados: Matheus Thurler (Thurler IT). Encarregado e canal para exercer seus direitos: **contato@matheusthurler.com.br**.
+Trilha Ops é mantido por Thurler IT Consultancy.
+
+- **Controlador dos dados:** MATHEUS ANTONIO THURLER DA SILVA CONSULTORIA EM TECNOLOGIA DA INFORMAÇÃO LTDA (nome fantasia: Thurler IT Consultancy), CNPJ 52.195.603/0001-90, com sede na Rua Visconde de Pirajá, 414, Sala 718, Ipanema, Rio de Janeiro/RJ, CEP 22410-002.
+- **Encarregado pelo tratamento de dados pessoais:** Matheus Antonio Thurler da Silva, canal para exercer seus direitos: **contato@matheusthurler.com.br**.
 
 ## Quais dados coletamos
 
@@ -51,7 +53,7 @@ Criamos/atualizamos o documento `users/{uid}` com os campos de perfil acima e ti
 
 ### Anúncios (Google AdMob)
 
-O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Por padrão pedimos anúncios **não personalizados**; você pode ligar a personalização em Perfil → Anúncios personalizados. Também pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
+O app exibe anúncios de banner do **Google AdMob**. Para exibi-los e medir resultados, o AdMob pode usar o **ID de publicidade** do aparelho e coletar **localização aproximada**, dados de **diagnóstico** (ex.: falhas) e de **interação** com os anúncios. Por padrão pedimos anúncios **não personalizados**. A personalização só pode ser ligada em Perfil → Anúncios personalizados por quem confirmar ter **18 anos ou mais**; essa confirmação fica só no seu aparelho e não é enviada a ninguém. Também pode redefinir ou desativar o ID de publicidade em Configurações do Android → Google → Anúncios. Detalhes: https://policies.google.com/technologies/ads.
 
 ### Análise de uso e falhas (Firebase Analytics e Crashlytics)
 
@@ -68,11 +70,11 @@ Antes dos anúncios, o app pode exibir a mensagem de consentimento do Google (UM
 ### Conteúdo e fontes
 
 - O catálogo de trilhas pode ser atualizado a partir do CDN/site do projeto (`thurler-it-consultancy.web.app` ou equivalente).
-- Tipografia pode ser baixada em runtime via Google Fonts quando a rede estiver disponível.
+- As fontes do app são baixadas do Google Fonts quando há rede; nessa requisição o Google recebe o endereço IP do aparelho.
 
 ### Compras e assinaturas
 
-O app oferece assinatura paga (mensal, anual e vitalício) pelo **Google Play Billing**. O pagamento é processado pelo Google: **não recebemos nem guardamos número de cartão ou dados de pagamento**. Podemos guardar o estado da assinatura (produto, ativa/expirada e token de compra) associado ao seu UID para liberar o conteúdo pago. Você gerencia ou cancela a assinatura em Play Store → Pagamentos e assinaturas.
+O app oferece assinatura paga (mensal, anual e vitalício) pelo **Google Play Billing**. O pagamento é processado pelo Google: **não recebemos nem guardamos número de cartão ou dados de pagamento**. Guardamos o estado da assinatura (produto, ativa/expirada, validade e o token de compra do Google Play) no documento `entitlements/{uid}`, e um vínculo entre o token (guardado como hash) e o seu UID em `purchaseTokens`, para liberar o conteúdo pago e impedir que a mesma compra seja usada em outra conta. Você gerencia ou cancela a assinatura em Play Store → Pagamentos e assinaturas.
 
 ## Transferência internacional
 
@@ -92,6 +94,8 @@ Pela LGPD (art. 18) você pode pedir confirmação, acesso, correção, portabil
 
 Dados de autenticação e perfil transitam pelos serviços da **Google** (Google Sign-In, Firebase Authentication, Cloud Firestore, Google Play Billing, Firebase Analytics, Firebase Crashlytics) conforme as políticas desses produtos. Os dados descritos em “Anúncios” são compartilhados com o Google AdMob, e os de “Análise de uso e falhas”, com o Google (Firebase).
 
+<a id="exclusao-de-conta"></a>
+
 ## Exclusão de conta
 
 No app: **Perfil → Excluir conta**. O fluxo:
@@ -110,14 +114,14 @@ Você também pode solicitar exclusão pelo e-mail de suporte.
 - Perfil na nuvem: enquanto a conta existir
 - Dados locais: até você limpar o armazenamento do app, desinstalar, ou excluir a conta pelo fluxo acima
 
-## Crianças
+## Crianças e adolescentes
 
-O app não é direcionado a menores de 16 anos. Se você for responsável legal e acreditar que uma criança nos enviou dados, escreva para o e-mail de suporte.
+O Trilha Ops não é direcionado a menores de 18 anos e não tem rede social, chat nem conteúdo gerado por usuários. Não pedimos a idade no cadastro. Por precaução (Lei 15.211/2025, ECA Digital): anúncios personalizados ficam desligados e só se ligam depois da confirmação de que a pessoa tem 18 anos ou mais; não montamos perfil de interesses para publicidade a partir dos seus dados. Se você for responsável legal e acreditar que uma criança ou adolescente nos enviou dados, escreva para **contato@matheusthurler.com.br** e apagamos a conta.
 
 ## Alterações
 
-Podemos atualizar esta política. A data no topo indica a versão vigente. Mudanças relevantes serão refletidas no app e, quando a URL pública existir, na página hospedada.
+Podemos atualizar esta política. A data no topo indica a versão vigente. Mudanças relevantes serão refletidas no app e na página hospedada na URL pública acima.
 
 ## Contato
 
-Dúvidas sobre privacidade: **contato@matheusthurler.com.br**.
+Dúvidas sobre privacidade: **contato@matheusthurler.com.br** (Encarregado: Matheus Antonio Thurler da Silva).
