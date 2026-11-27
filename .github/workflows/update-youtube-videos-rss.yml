@@ -5,6 +5,9 @@ on:
     - cron: '0 0 * * *' # Roda todo dia à meia-noite UTC
   workflow_dispatch:
 
+# mesmo grupo do publicar-agendado: um deploy não sobrescreve o outro
+concurrency: site-deploy
+
 permissions:
   contents: write
   pull-requests: write
@@ -23,7 +26,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.12' # 3.x virou 3.15, sem wheel do pillow
 
       - name: Install dependencies
         run: |
