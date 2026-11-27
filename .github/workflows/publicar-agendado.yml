@@ -17,7 +17,7 @@ permissions:
   contents: write
   pull-requests: write
 
-concurrency: publicar-agendado
+concurrency: site-deploy
 
 jobs:
   publicar:
