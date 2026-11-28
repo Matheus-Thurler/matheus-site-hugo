@@ -2,7 +2,7 @@
   "recent_videos": [
     {
       "id": "0JEAWbpLbag",
-      "title": "Google ADK com Modelo Local: Rode Agentes Sem API Paga (LM Studio)",
+      "title": "Agente de IA local grátis: Google ADK com LM Studio (sem API paga)",
       "description": "Aprenda a rodar agentes de IA do Google ADK usando modelos locais no LM Studio, sem depender do Gemini nem pagar por API.\nDescubra como configurar o LiteLLM com o LlmAgent, ajustar o .env e testar seu...",
       "published_at": "2026-11-27T15:00:23+00:00",
       "thumbnail": "/images/youtube/0JEAWbpLbag.webp",
@@ -11,7 +11,7 @@
     },
     {
       "id": "EI9kTlUM7KY",
-      "title": "Tool Agent no Google ADK: Dando Ferramentas em Python ao Agente",
+      "title": "Como criar agente de IA com ferramentas (Google ADK em Python)",
       "description": "Aprenda a criar um Tool Agent no Google ADK e dê superpoderes ao seu agente usando funções em Python para consultar APIs reais de clima e horário.\nNeste segundo episódio, veja na prática como o modelo...",
       "published_at": "2026-11-25T15:02:23+00:00",
       "thumbnail": "/images/youtube/EI9kTlUM7KY.webp",
@@ -19,7 +19,7 @@
       "watch_url": "https://youtu.be/EI9kTlUM7KY"
     }
   ],
-  "last_updated": "2026-11-27T13:31:07.830768",
+  "last_updated": "2026-11-28T05:02:17.872215",
   "total_videos": 2,
   "source": "rss_feed"
 }
